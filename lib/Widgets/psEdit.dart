@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:holding_gesture/holding_gesture.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 enum powerSource { source1, source2, source3, source4 }
 
@@ -22,9 +23,10 @@ class PowerSourceTile extends StatefulWidget {
 class _PowerSourceTileState extends State<PowerSourceTile> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new Container(
-        width: 180,
-        height: 200,
+        width: SizeConfig.blockSizeHorizontal * 44,
+        height: SizeConfig.blockSizeVertical * 24.3,
         decoration: BoxDecoration(
             border: Border.all(
                 color: Color.fromARGB(255, 52, 152, 199), width: 1.2),
@@ -62,8 +64,8 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                 child: new Row(
                   children: [
                     new Container(
-                        width: 115,
-                        height: 71,
+                        width: SizeConfig.blockSizeHorizontal * 28,
+                        height: SizeConfig.blockSizeVertical * 9,
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(3))),
@@ -98,8 +100,8 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                     Column(
                       children: [
                         new Container(
-                            width: 30,
-                            height: 30,
+                            width: SizeConfig.blockSizeHorizontal * 7.30,
+                            height: SizeConfig.blockSizeVertical * 3.33,
                             child: HoldDetector(
                               onHold: upHoldCounter,
                               holdTimeout: Duration(milliseconds: 100),
@@ -110,8 +112,8 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                             )),
                         SizedBox(height: 5),
                         new Container(
-                            width: 30,
-                            height: 30,
+                            width: SizeConfig.blockSizeHorizontal * 7.30,
+                            height: SizeConfig.blockSizeVertical * 3.33,
                             child: HoldDetector(
                               onHold: downHoldCounter,
                               holdTimeout: Duration(milliseconds: 100),
@@ -184,7 +186,7 @@ class LowerSectionPS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 20, left: 90),
+        margin: EdgeInsets.only(top: 20, left: 80),
         child: Row(
           children: [
             isNegativeRated

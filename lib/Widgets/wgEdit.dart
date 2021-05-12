@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 class WaveGeneratorTile extends StatefulWidget {
   final String sourceName;
@@ -16,9 +17,10 @@ class WaveGeneratorTile extends StatefulWidget {
 class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return new Container(
-        width: 379,
-        height: 223,
+        width: SizeConfig.blockSizeHorizontal * 92.2,
+        height: SizeConfig.blockSizeVertical * 27.1,
         decoration: BoxDecoration(
             border: Border.all(
                 color: Color.fromARGB(255, 52, 152, 219), width: 1.2),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 class MultimeterTile extends StatefulWidget {
   String channelName;
@@ -20,9 +21,10 @@ class _MultimeterTileState extends State<MultimeterTile> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Container(
-        width: 373,
-        height: 205,
+        width: SizeConfig.blockSizeHorizontal * 92.2,
+        height: SizeConfig.blockSizeVertical * 27.1,
         decoration: BoxDecoration(
             border: Border.all(
                 color: Color.fromARGB(255, 52, 152, 219), width: borderWidth),
@@ -60,8 +62,8 @@ class _MultimeterTileState extends State<MultimeterTile> {
                 border: Border.all(
                     width: 1, color: Color.fromARGB(255, 151, 151, 151)),
                 borderRadius: BorderRadius.all(Radius.circular(5))),
-            width: 274,
-            height: 100,
+            width: SizeConfig.blockSizeHorizontal * 66.7,
+            height: SizeConfig.blockSizeVertical * 12.2,
             margin: EdgeInsets.only(top: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +77,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                           fontSize: 50)),
                 ),
                 Container(
-                  margin: EdgeInsets.only(left: 20, top: 12, right: 20),
+                  margin: EdgeInsets.only(left: 10, top: 12, right: 20),
                   child: Text(
                     widget.unit,
                     style: TextStyle(
