@@ -45,6 +45,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                   border: Border.all(
                       color: Color.fromARGB(150, 30, 87, 125), width: 1.2),
                   borderRadius: BorderRadius.all(Radius.circular(10))),
+              child: SfCartesianChart(
+                primaryXAxis: CategoryAxis(),
+                legend: Legend(isVisible: true),
+              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 10, left: 10),
@@ -75,11 +79,11 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                   color: Color.fromARGB(150, 30, 87, 125), width: 1.2),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 8),
-                width: 90,
-                height: 86,
+                width: SizeConfig.blockSizeVertical * 21.9,
+                height: SizeConfig.blockSizeHorizontal * 10.44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: LinearGradient(colors: [
@@ -88,9 +92,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     ])),
               ),
               Container(
-                margin: EdgeInsets.only(top: 6),
-                width: 90,
-                height: 86,
+                width: SizeConfig.blockSizeVertical * 21.9,
+                height: SizeConfig.blockSizeHorizontal * 10.44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: LinearGradient(colors: [
@@ -99,9 +102,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     ])),
               ),
               Container(
-                margin: EdgeInsets.only(top: 6),
-                width: 90,
-                height: 86,
+                width: SizeConfig.blockSizeVertical * 21.9,
+                height: SizeConfig.blockSizeHorizontal * 10.44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: LinearGradient(colors: [
@@ -110,9 +112,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     ])),
               ),
               Container(
-                margin: EdgeInsets.only(top: 6),
-                width: 90,
-                height: 86,
+                width: SizeConfig.blockSizeVertical * 21.9,
+                height: SizeConfig.blockSizeHorizontal * 10.44,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     gradient: LinearGradient(colors: [
