@@ -6,8 +6,8 @@ class WaveGeneratorScreen extends StatelessWidget {
   //Private variables
   final double _barHeight = 50;
   final int _marginColor = 13948116;
-  final _sourceTile1 = new WaveGeneratorTile("Source 1");
-  final _sourceTile2 = new WaveGeneratorTile("Source 2");
+  final _sourceTile1 = new WaveGeneratorTile("Source 1", 1);
+  final _sourceTile2 = new WaveGeneratorTile("Source 2", 2);
   //-----------------
   @override
   Widget build(BuildContext context) {

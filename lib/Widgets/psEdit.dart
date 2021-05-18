@@ -13,11 +13,45 @@ class PowerSourceTile extends StatefulWidget {
   bool _isTurnedOn = false;
   var _valueFormat = NumberFormat("#0.00#", "en-US");
   double _value = 0.0;
+  final int source;
 
-  PowerSourceTile(this.sourceNamePS, this.ratingPS, this.plusMinus);
+  PowerSourceTile(
+      this.sourceNamePS, this.source, this.ratingPS, this.plusMinus);
 
   @override
   _PowerSourceTileState createState() => _PowerSourceTileState();
+
+  String getSourceName() {
+    return sourceNamePS;
+  }
+
+  int getSource() {
+    return source;
+  }
+
+  double getRating() {
+    return ratingPS;
+  }
+
+  bool getType() {
+    return plusMinus;
+  }
+
+  bool getState() {
+    return _isTurnedOn;
+  }
+
+  double getValue() {
+    return _value;
+  }
+
+  void setState(bool state) {
+    _isTurnedOn = state;
+  }
+
+  void setValue(double value) {
+    _value = value;
+  }
 }
 
 class _PowerSourceTileState extends State<PowerSourceTile> {
@@ -28,8 +62,8 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
         width: SizeConfig.blockSizeHorizontal * 44,
         height: SizeConfig.blockSizeVertical * 24.3,
         decoration: BoxDecoration(
-            border: Border.all(
-                color: Color.fromARGB(255, 52, 152, 199), width: 1.2),
+            border:
+                Border.all(color: Color.fromARGB(255, 70, 70, 70), width: 3),
             borderRadius: BorderRadius.all(Radius.circular(22))),
         child: new Column(
           children: [
@@ -53,6 +87,13 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                       onToggle: (value) {
                         setState(() {
                           widget._isTurnedOn = value;
+                          //getSource
+                          //getValue
+                          //sendCommandPacket
+                          //ACK
+                          //showDialog
+                          //NACK
+                          //showDialog
                         });
                       },
                     ),
@@ -186,7 +227,7 @@ class LowerSectionPS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 20, left: 80),
+        margin: EdgeInsets.only(top: 10, left: 80),
         child: Row(
           children: [
             isNegativeRated

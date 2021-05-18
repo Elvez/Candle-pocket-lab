@@ -8,15 +8,39 @@ class MultimeterTile extends StatefulWidget {
   bool isTurnedOn = false;
   double fieldValue = 0;
   final String unit;
-  var valueM = NumberFormat("00.000", "en-US");
+  var valueM = NumberFormat("##00.00", "en-US");
   MultimeterTile(this.channelName, this.unit);
 
   @override
   _MultimeterTileState createState() => _MultimeterTileState();
+
+  String getChannelName() {
+    return channelName;
+  }
+
+  bool getState() {
+    return isTurnedOn;
+  }
+
+  double getFieldVal() {
+    return fieldValue;
+  }
+
+  String getUnit() {
+    return unit;
+  }
+
+  void setChannelName(String name) {
+    channelName = name;
+  }
+
+  void setState(bool state) {
+    isTurnedOn = state;
+  }
 }
 
 class _MultimeterTileState extends State<MultimeterTile> {
-  double borderWidth = 1.2;
+  double borderWidth = 3;
   double value = 0.0;
 
   @override
@@ -27,7 +51,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
         height: SizeConfig.blockSizeVertical * 27.1,
         decoration: BoxDecoration(
             border: Border.all(
-                color: Color.fromARGB(255, 52, 152, 219), width: borderWidth),
+                color: Color.fromARGB(255, 80, 80, 80), width: borderWidth),
             borderRadius: BorderRadius.all(Radius.circular(24))),
         margin: EdgeInsets.only(top: 15),
         child: Column(children: [
@@ -45,14 +69,19 @@ class _MultimeterTileState extends State<MultimeterTile> {
                   ),
                   FlutterSwitch(
                     duration: Duration(milliseconds: 200),
-                    activeColor: Color.fromARGB(255, 52, 152, 219),
+                    activeColor: Color.fromARGB(255, 52, 152, 199),
                     width: 50,
                     height: 30,
                     value: widget.isTurnedOn,
                     onToggle: (value) {
                       setState(() {
                         widget.isTurnedOn = value;
+                        //sendCommand
                       });
+                      //if ACK
+                      loopValues();
+                      //if NACK
+                      //showError
                     },
                   ),
                 ],
@@ -90,5 +119,14 @@ class _MultimeterTileState extends State<MultimeterTile> {
             ),
           )
         ]));
+  }
+
+  Future<void> loopValues() async {
+    while (widget.isTurnedOn) {
+      setState(() {
+        //getVal and assign value.
+      });
+      await Future.delayed(Duration(milliseconds: 17));
+    }
   }
 }

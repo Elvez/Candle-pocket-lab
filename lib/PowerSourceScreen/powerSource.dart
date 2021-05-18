@@ -6,6 +6,10 @@ class PowerSourceScreen extends StatelessWidget {
   //Private variables
   final double _barHeight = 50;
   final int _marginColor = 13948116;
+  final _psTile1 = new PowerSourceTile("Source 1", 1, 3.3, true);
+  final _psTile2 = new PowerSourceTile("Source 2", 2, 5.0, true);
+  final _psTile3 = new PowerSourceTile("Source 3", 3, 3.3, false);
+  final _psTile4 = new PowerSourceTile("Source 4", 4, 3.3, false);
   //-----------------
   @override
   Widget build(BuildContext context) {
@@ -34,18 +38,12 @@ class PowerSourceScreen extends StatelessWidget {
           HeaderBar("Power source", 54, 219, 112, 52, 54, 255, 199, 0),
           SizedBox(height: 15),
           Row(
-            children: [
-              new PowerSourceTile("Source 1", 3.3, true),
-              new PowerSourceTile("Source 2", 5.0, true)
-            ],
+            children: [_psTile1, _psTile2],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
           SizedBox(height: 15),
           Row(
-            children: [
-              new PowerSourceTile("Source 3", 3.3, false),
-              new PowerSourceTile("Source 4", 3.3, false)
-            ],
+            children: [_psTile3, _psTile4],
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
         ]),
