@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.candle_pocketlab">
    <application
-        android:label="candle_pocketlab"
+        android:label="Candle lab"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
