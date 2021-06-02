@@ -10,6 +10,7 @@ class Device {
   int deviceState;
   List<BluetoothDevice> devicesList = [];
   bool isDisconnecting = false;
+  String address;
 
   Device() {
     // Get current state
@@ -46,9 +47,16 @@ class Device {
   void tryConnect() async {
     for (int iter = 0; iter < devicesList.length; iter++) {
       print(devicesList[iter].name);
+      if (devicesList[iter].name == "CandlePL") {
+        address = devicesList[iter].address;
+      }
     }
-    await BluetoothConnection.toAddress(devicesList[0].address);
-    print("Connected");
+    if (!isConnected()) {
+      await BluetoothConnection.toAddress(address);
+      print("Connected");
+    } else {
+      print("Device either already connected or process timed out!");
+    }
   }
 
   bool isConnected() {
