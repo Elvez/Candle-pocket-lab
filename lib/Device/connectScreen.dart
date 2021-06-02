@@ -33,7 +33,9 @@ class StartScreen extends StatelessWidget {
                 IconButton(
                     icon: Icon(Icons.arrow_forward_ios,
                         color: Color.fromARGB(255, 52, 152, 199)),
-                    onPressed: () {})
+                    onPressed: () {
+                      candle.tryConnect();
+                    })
               ],
             ),
           ),
