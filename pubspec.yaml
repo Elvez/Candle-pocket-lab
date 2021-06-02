@@ -38,8 +38,7 @@ dependencies:
   syncfusion_flutter_charts: ^19.1.59
   back_button_interceptor: ^5.0.0
   page_transition: "^2.0.2"
-  flutter_bluetooth_serial: ^0.2.2
-
+  usb_serial: ^0.2.4
 
 
 

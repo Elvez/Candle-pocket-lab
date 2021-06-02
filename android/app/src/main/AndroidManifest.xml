@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.candle_pocketlab">
    <application
         android:label="Candle lab"
@@ -39,4 +40,6 @@
             android:value="2" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-sdk tools:overrideLibrary="io.github.edufolly.flutterbluetoothserial"/>
+    
 </manifest>

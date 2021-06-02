@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/HomeScreen/homescreen.dart';
+import 'package:flutter/services.dart';
+import 'package:candle_pocketlab/Device/device.dart';
 
 class StartScreen extends StatelessWidget {
+  final Device candle = Device();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,8 +34,7 @@ class StartScreen extends StatelessWidget {
                     icon: Icon(Icons.arrow_forward_ios,
                         color: Color.fromARGB(255, 52, 152, 199)),
                     onPressed: () {
-                      Navigator.push(
-                          context, MyRoute(builder: (context) => HomeScreen()));
+                      candle.tryConnect();
                     })
               ],
             ),
@@ -42,4 +44,7 @@ class StartScreen extends StatelessWidget {
       ),
     ));
   }
+
+  //Public methods
+
 }
