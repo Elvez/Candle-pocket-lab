@@ -14,6 +14,7 @@ class HomeScreenTile extends StatelessWidget {
     SizeConfig().init(context);
     return Container(
         decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey[800], width: 2),
             gradient: LinearGradient(colors: [
               Color.fromARGB(
                   150, _tileColor.red, _tileColor.green, _tileColor.blue),

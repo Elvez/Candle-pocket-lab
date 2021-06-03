@@ -13,22 +13,22 @@ class HomeScreen extends StatelessWidget {
   final int _marginColor = 13948116;
   final _oscTile = new HomeScreenTile(
       "Oscilloscope",
-      TileColor(52, 152, 199),
+      TileColor(200, 200, 255),
       new Image.asset('images/osc.png',
           alignment: Alignment.bottomLeft, width: 100, height: 88));
   final _mulTile = new HomeScreenTile(
       "Multimeter",
-      TileColor(52, 152, 199),
+      TileColor(210, 210, 255),
       new Image.asset('images/multimeter.png',
           alignment: Alignment.bottomLeft, width: 90, height: 77));
   final _wgTile = new HomeScreenTile(
       "Wave generator",
-      TileColor(52, 152, 199),
+      TileColor(220, 220, 255),
       new Image.asset('images/waveIcon.png',
           alignment: Alignment.bottomLeft, width: 85, height: 82));
   final _psTile = new HomeScreenTile(
       "Power source",
-      TileColor(52, 152, 199),
+      TileColor(230, 230, 255),
       new Image.asset('images/powerSource.png',
           alignment: Alignment.bottomLeft, width: 62, height: 69));
   //-----------------

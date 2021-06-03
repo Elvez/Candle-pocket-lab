@@ -32,7 +32,7 @@ class Device {
 
   Future<bool> tryConnect() async {
     Future<bool> result;
-    if (devicesList.isNotEmpty) {
+    if (devicesList.isNotEmpty && devicesList != null) {
       for (int iter = 0; iter < devicesList.length; iter++) {
         print(devicesList[iter].name);
         if (devicesList[iter].name == "CandlePL") {
