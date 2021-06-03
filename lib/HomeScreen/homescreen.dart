@@ -34,90 +34,102 @@ class HomeScreen extends StatelessWidget {
   //-----------------
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: Scaffold(
-      appBar: AppBar(
-          automaticallyImplyLeading: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios,
-                color: Color.fromARGB(255, 52, 152, 199)),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          toolbarHeight: _barHeight,
-          bottom: PreferredSize(
-              child: Container(
-                color: Colors.grey,
-                height: 1.0,
+    return WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          appBar: AppBar(
+              automaticallyImplyLeading: true,
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios,
+                    color: Color.fromARGB(255, 52, 152, 199)),
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
               ),
-              preferredSize: Size.fromHeight(4.0)),
-          backgroundColor: Color(_marginColor),
-          elevation: 0),
-      body: SingleChildScrollView(
-        child: Column(children: [
-          new HeaderBar("Pocket lab", 75, 52, 152, 199, 125, 52, 152, 199),
-          Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: InkWell(
-                      splashColor: Colors.black.withAlpha(50),
-                      child: _oscTile,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MyRoute(
-                                builder: (context) => OscilloscopeScreen()));
-                        SystemChrome.setPreferredOrientations(
-                            [DeviceOrientation.landscapeLeft]);
-                      }))),
-          Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: InkWell(
-                      splashColor: Colors.black.withAlpha(50),
-                      child: _mulTile,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      onTap: () {
-                        Navigator.push(context,
-                            MyRoute(builder: (context) => MultimeterScreen()));
-                      }))),
-          Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: InkWell(
-                      splashColor: Colors.black.withAlpha(50),
-                      child: _wgTile,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MyRoute(
-                                builder: (context) => WaveGeneratorScreen()));
-                      }))),
-          Container(
-              margin: EdgeInsets.only(top: 15),
-              child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10))),
-                  child: InkWell(
-                      splashColor: Colors.black.withAlpha(50),
-                      child: _psTile,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      onTap: () {
-                        Navigator.push(context,
-                            MyRoute(builder: (context) => PowerSourceScreen()));
-                      })))
-        ]),
-      ),
-    ));
+              toolbarHeight: _barHeight,
+              bottom: PreferredSize(
+                  child: Container(
+                    color: Colors.grey,
+                    height: 1.0,
+                  ),
+                  preferredSize: Size.fromHeight(4.0)),
+              backgroundColor: Color(_marginColor),
+              elevation: 0),
+          body: SingleChildScrollView(
+            child: Column(children: [
+              new HeaderBar("Pocket lab", 75, 52, 152, 199, 125, 52, 152, 199),
+              Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: InkWell(
+                          splashColor: Colors.black.withAlpha(50),
+                          child: _oscTile,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MyRoute(
+                                    builder: (context) =>
+                                        OscilloscopeScreen()));
+                            SystemChrome.setPreferredOrientations(
+                                [DeviceOrientation.landscapeLeft]);
+                          }))),
+              Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: InkWell(
+                          splashColor: Colors.black.withAlpha(50),
+                          child: _mulTile,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MyRoute(
+                                    builder: (context) => MultimeterScreen()));
+                          }))),
+              Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: InkWell(
+                          splashColor: Colors.black.withAlpha(50),
+                          child: _wgTile,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MyRoute(
+                                    builder: (context) =>
+                                        WaveGeneratorScreen()));
+                          }))),
+              Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: InkWell(
+                          splashColor: Colors.black.withAlpha(50),
+                          child: _psTile,
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MyRoute(
+                                    builder: (context) => PowerSourceScreen()));
+                          })))
+            ]),
+          ),
+        ));
+  }
+
+  Future<bool> _onWillPop() {
+    SystemNavigator.pop();
+    return Future.value(true);
   }
 }
 

@@ -30,15 +30,8 @@ class Device {
     });
   }
 
-  void dispose() {
-    if (isConnected()) {
-      isDisconnecting = true;
-      connection.dispose();
-      connection = null;
-    }
-  }
-
-  void tryConnect() async {
+  Future<bool> tryConnect() async {
+    Future<bool> result;
     if (devicesList.isNotEmpty) {
       for (int iter = 0; iter < devicesList.length; iter++) {
         print(devicesList[iter].name);
@@ -48,15 +41,25 @@ class Device {
       }
     }
     if (!isConnected()) {
-      await BluetoothConnection.toAddress(address).then((_connection) {
-        connection = _connection;
-        print("Connected!");
-      });
-    } else {
-      tryDisconnect();
-      print(
-          "Device either already connected or process timed out! Disconnecting device...");
+      try {
+        await BluetoothConnection.toAddress(address)
+            .timeout(Duration(seconds: 5), onTimeout: () {
+          print("Timeout occured!");
+          result = Future.value(false);
+        }).then((_connection) {
+          connection = _connection;
+          if (result == null) {
+            print("Connected!");
+            result = Future.value(true);
+          }
+        }).catchError((error) {
+          print("Error");
+        });
+      } on PlatformException {
+        print("Error");
+      }
     }
+    return result;
   }
 
   void tryDisconnect() async {

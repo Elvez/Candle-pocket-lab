@@ -33,8 +33,36 @@ class StartScreen extends StatelessWidget {
                 IconButton(
                     icon: Icon(Icons.arrow_forward_ios,
                         color: Color.fromARGB(255, 52, 152, 199)),
-                    onPressed: () {
-                      candle.tryConnect();
+                    onPressed: () async {
+                      bool result = await candle.tryConnect();
+                      if (result) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()));
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: Text("Error",
+                                      style:
+                                          TextStyle(fontFamily: 'Ropa Sans')),
+                                  content: Text(
+                                      "Device cannot connect, try pairing with the device.",
+                                      style:
+                                          TextStyle(fontFamily: 'Ropa Sans')),
+                                  actions: [
+                                    TextButton(
+                                      child: Text("Ok",
+                                          style: TextStyle(
+                                              fontFamily: 'Ropa Sans')),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    )
+                                  ],
+                                ));
+                      }
                     })
               ],
             ),
