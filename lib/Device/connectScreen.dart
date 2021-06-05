@@ -18,8 +18,10 @@ class _StartScreenState extends State<StartScreen> {
         home: Scaffold(
       backgroundColor: Colors.white,
       body: isConnecting
-          ? CircularProgressIndicator(
-              strokeWidth: 2,
+          ? Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 5,
+              ),
             )
           : Column(
               children: [
@@ -46,18 +48,42 @@ class _StartScreenState extends State<StartScreen> {
                           icon: Icon(Icons.arrow_forward_ios,
                               color: Color.fromARGB(255, 52, 152, 199)),
                           onPressed: () async {
-                            setState(() {
-                              isConnecting = true;
-                            });
-                            bool result = await candle.tryConnect();
-                            setState(() {
-                              isConnecting = false;
-                            });
-                            if (result) {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()));
+                            if (await candle.isBTon()) {
+                              setState(() {
+                                isConnecting = true;
+                              });
+                              bool result = await candle.tryConnect();
+                              setState(() {
+                                isConnecting = false;
+                              });
+                              if (result) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen()));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                          title: Text("Error",
+                                              style: TextStyle(
+                                                  fontFamily: 'Ropa Sans')),
+                                          content: Text(
+                                              "Device cannot connect, try pairing with the device.",
+                                              style: TextStyle(
+                                                  fontFamily: 'Ropa Sans')),
+                                          actions: [
+                                            TextButton(
+                                              child: Text("Ok",
+                                                  style: TextStyle(
+                                                      fontFamily: 'Ropa Sans')),
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                            )
+                                          ],
+                                        ));
+                              }
                             } else {
                               showDialog(
                                   context: context,
@@ -66,7 +92,7 @@ class _StartScreenState extends State<StartScreen> {
                                             style: TextStyle(
                                                 fontFamily: 'Ropa Sans')),
                                         content: Text(
-                                            "Device cannot connect, try pairing with the device.",
+                                            "Would you like to turn on bluetooth?",
                                             style: TextStyle(
                                                 fontFamily: 'Ropa Sans')),
                                         actions: [
@@ -75,6 +101,7 @@ class _StartScreenState extends State<StartScreen> {
                                                 style: TextStyle(
                                                     fontFamily: 'Ropa Sans')),
                                             onPressed: () {
+                                              candle.enableBluetooth();
                                               Navigator.pop(context);
                                             },
                                           )

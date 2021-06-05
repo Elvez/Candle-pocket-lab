@@ -62,6 +62,19 @@ class Device {
     return result;
   }
 
+  Future<bool> isBTon() async {
+    bluetoothState = await FlutterBluetoothSerial.instance.state;
+
+    if (bluetoothState == BluetoothState.STATE_OFF) {
+      return Future.value(false);
+    }
+    if (bluetoothState == BluetoothState.STATE_ON) {
+      return Future.value(true);
+    } else {
+      return Future.value(false);
+    }
+  }
+
   void tryDisconnect() async {
     await connection.close();
     print('Device disconnected');

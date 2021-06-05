@@ -129,7 +129,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                 ),
                 new Container(
                   margin: EdgeInsets.only(left: 7, right: 7, top: 7, bottom: 7),
-                  width: SizeConfig.blockSizeVertical * 23,
+                  width: SizeConfig.blockSizeVertical * 20,
                   height: SizeConfig.blockSizeHorizontal * 100,
                   decoration: BoxDecoration(
                       border: Border.all(
@@ -151,8 +151,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           });
                         },
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 20,
-                          height: SizeConfig.blockSizeHorizontal * 8.0,
+                          width: SizeConfig.blockSizeVertical * 18,
+                          height: SizeConfig.blockSizeHorizontal * 10.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -182,8 +182,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           });
                         },
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 20,
-                          height: SizeConfig.blockSizeHorizontal * 8.0,
+                          width: SizeConfig.blockSizeVertical * 18,
+                          height: SizeConfig.blockSizeHorizontal * 10.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -214,8 +214,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         },
                         splashColor: Colors.black.withAlpha(50),
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 20,
-                          height: SizeConfig.blockSizeHorizontal * 8.0,
+                          width: SizeConfig.blockSizeVertical * 18,
+                          height: SizeConfig.blockSizeHorizontal * 10.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -245,8 +245,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           });
                         },
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 20,
-                          height: SizeConfig.blockSizeHorizontal * 8.0,
+                          width: SizeConfig.blockSizeVertical * 18,
+                          height: SizeConfig.blockSizeHorizontal * 10.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -270,8 +270,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         splashColor: Colors.black.withAlpha(50),
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 20,
-                          height: SizeConfig.blockSizeHorizontal * 8.0,
+                          width: SizeConfig.blockSizeVertical * 18,
+                          height: SizeConfig.blockSizeHorizontal * 10.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
