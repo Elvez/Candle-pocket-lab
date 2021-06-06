@@ -30,6 +30,11 @@ class Device {
     });
   }
 
+  void sendPacket() async {
+    connection.output.add(utf8.encode("y"));
+    await connection.output.allSent;
+  }
+
   Future<bool> tryConnect() async {
     Future<bool> result;
     if (devicesList.isNotEmpty && devicesList != null) {
