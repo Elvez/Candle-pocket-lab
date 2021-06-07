@@ -3,6 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 
 enum powerSource { source1, source2, source3, source4 }
 

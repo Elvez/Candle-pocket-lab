@@ -7,25 +7,20 @@ class Device {
   BluetoothConnection connection;
   BluetoothState bluetoothState = BluetoothState.UNKNOWN;
   FlutterBluetoothSerial bluetooth = FlutterBluetoothSerial.instance;
-  int deviceState;
   List<BluetoothDevice> devicesList = [];
   bool isDisconnecting = false;
   String address;
 
-  Device() {
+  void initDevice() {
     FlutterBluetoothSerial.instance.state.then((state) {
       bluetoothState = state;
     });
-
-    deviceState = 0; // neutral
 
     enableBluetooth();
     FlutterBluetoothSerial.instance
         .onStateChanged()
         .listen((BluetoothState state) {
       bluetoothState = state;
-
-      // For retrieving the paired devices list
       getPairedDevices();
     });
   }

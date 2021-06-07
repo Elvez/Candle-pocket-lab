@@ -3,17 +3,19 @@ import 'package:candle_pocketlab/HomeScreen/homescreen.dart';
 import 'package:flutter/services.dart';
 import 'package:candle_pocketlab/Device/device.dart';
 
+Device candle = Device();
+
 class StartScreen extends StatefulWidget {
   @override
   _StartScreenState createState() => _StartScreenState();
 }
 
 class _StartScreenState extends State<StartScreen> {
-  final Device candle = Device();
   bool isConnecting = false;
 
   @override
   Widget build(BuildContext context) {
+    candle.initDevice();
     return MaterialApp(
         home: Scaffold(
       backgroundColor: Colors.white,

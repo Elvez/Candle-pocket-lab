@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
-import 'package:candle_pocketlab/Device/device.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 
 class MultimeterTile extends StatefulWidget {
   String channelName;
@@ -79,8 +79,9 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         widget.isTurnedOn = value;
                         //sendCommand
                       });
+                      candle.sendPacket();
                       //if ACK
-                      loopValues();
+                      //loopValues();
                       //if NACK
                       //showError
                     },
