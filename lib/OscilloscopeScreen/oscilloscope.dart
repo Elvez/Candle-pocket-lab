@@ -7,6 +7,7 @@ import 'package:candle_pocketlab/OscilloscopeScreen/channelTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/graphOpsTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/wavegenOSc.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 
 class OscilloscopeScreen extends StatefulWidget {
   final channelSetup = new ChannelDialog();

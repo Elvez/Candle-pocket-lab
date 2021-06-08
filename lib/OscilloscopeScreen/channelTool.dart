@@ -1,6 +1,7 @@
 import 'package:candle_pocketlab/OscilloscopeScreen/oscilloscope.dart';
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 
 class ChannelDialog extends StatefulWidget {

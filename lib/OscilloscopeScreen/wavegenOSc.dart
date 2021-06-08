@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/services.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 
 class WGDialog extends StatefulWidget {
   double _period = 100;
