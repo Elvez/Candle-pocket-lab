@@ -8,7 +8,7 @@ void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
     runApp(MaterialApp(
-      home: StartScreen(),
+      home: HomeScreen(),
     ));
   });
 }

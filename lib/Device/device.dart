@@ -1,7 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter/services.dart';
 import 'dart:typed_data';
 import 'dart:convert';
+import 'package:dart_native/dart_native.dart';
+import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
+
+enum Wave { sine, square, triang }
 
 class Device {
   BluetoothConnection connection;
@@ -25,9 +31,95 @@ class Device {
     });
   }
 
-  void sendPacket() async {
-    connection.output.add(utf8.encode("y"));
+  void sendPacket(String packet) async {
+    connection.output.add(packet.codeUnits);
     await connection.output.allSent;
+  }
+
+  void sendMulCommand(int source, String state) async {
+    String commandPacket;
+    commandPacket = "M" + source.toString() + state;
+    commandPacket = fillDummy(commandPacket);
+    sendPacket(commandPacket);
+  }
+
+  void sendWGCommand(int source, String state, Wave waveType, String period,
+      String amplitude) {
+    String commandPacket;
+    commandPacket = "W" + source.toString();
+    commandPacket += state;
+    if (state == "L") {
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+      return;
+    } else if (state == "H") {
+      switch (waveType) {
+        case Wave.sine:
+          commandPacket += "1";
+          break;
+        case Wave.square:
+          commandPacket += "2";
+          break;
+        case Wave.triang:
+          commandPacket += "3";
+          break;
+        default:
+          return;
+          break;
+      }
+
+      commandPacket += period;
+      commandPacket += amplitude;
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+    }
+  }
+
+  void sendPSCommand(int source, String state, String amplitude) {
+    String commandPacket;
+    commandPacket = "P" + source.toString();
+    commandPacket += state;
+
+    if (state == "L") {
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+      return;
+    } else if (state == "H") {
+      commandPacket += amplitude;
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+    }
+  }
+
+  void sendOSCCommmand(
+      int channel, String state, String rangeX, timeUnit unit) {
+    String commandPacket;
+    commandPacket = "O" + channel.toString();
+    commandPacket += state;
+
+    if (state == "L") {
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+      return;
+    } else if (state == "H") {
+      commandPacket += rangeX;
+      switch (unit) {
+        case timeUnit.micro:
+          commandPacket += "1";
+          break;
+        case timeUnit.milli:
+          commandPacket += "2";
+          break;
+        case timeUnit.second:
+          commandPacket += "3";
+          break;
+        default:
+          return;
+          break;
+      }
+      commandPacket = fillDummy(commandPacket);
+      sendPacket(commandPacket);
+    }
   }
 
   Future<bool> tryConnect() async {
@@ -107,5 +199,13 @@ class Device {
     }
 
     devicesList = devices;
+  }
+
+  String fillDummy(String command) {
+    int length = 20 - command.length;
+    for (int iter = 0; iter < length; iter++) {
+      command += "-";
+    }
+    return command;
   }
 }
