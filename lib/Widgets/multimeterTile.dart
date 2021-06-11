@@ -78,13 +78,8 @@ class _MultimeterTileState extends State<MultimeterTile> {
                     onToggle: (value) {
                       setState(() {
                         widget.isTurnedOn = value;
-                        //sendCommand
                       });
-                      //candle.sendCommand(Commands.START_MULTIMETER);
-                      //if ACK
-                      //loopValues();
-                      //if NACK
-                      //showError
+                      setMultimeter(value);
                     },
                   ),
                 ],
@@ -130,6 +125,22 @@ class _MultimeterTileState extends State<MultimeterTile> {
         //getVal and assign value.
       });
       await Future.delayed(Duration(milliseconds: 17));
+    }
+  }
+
+  void setMultimeter(bool state) {
+    if (state) {
+      if (widget.channelName == "Channel 1") {
+        candle.sendMulCommand(1, "H");
+      } else if (widget.channelName == "Channel 2") {
+        candle.sendMulCommand(2, "H");
+      }
+    } else {
+      if (widget.channelName == "Channel 1") {
+        candle.sendMulCommand(1, "L");
+      } else if (widget.channelName == "Channel 2") {
+        candle.sendMulCommand(2, "L");
+      }
     }
   }
 }

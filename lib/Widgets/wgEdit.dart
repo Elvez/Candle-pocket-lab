@@ -87,12 +87,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         setState(() {
                           widget.isTurnedOn = value;
                           validateInput();
-                          //sendCommandPacket
-                          //ACK
-                          //showDialog
-                          //NACK
-                          //showDialog
                         });
+                        setWaveGenerator(widget.isTurnedOn);
                       },
                     ),
                   ],
@@ -230,7 +226,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
   void validateInput() {
     String error =
-        "Invalid data, period must be less than 3000ms and amplitude less than 3.3V";
+        "Invalid data, period must be in (0-3000)ms and amplitude less than 3.3V";
 
     if (widget._amplitudeController.text.isEmpty ||
         widget._periodController.text.isEmpty) {
@@ -268,6 +264,26 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       setState(() {
         widget.isTurnedOn = false;
       });
+    }
+  }
+
+  void setWaveGenerator(bool state) {
+    if (state) {
+      if (widget.source == 1) {
+        candle.sendWGCommand(1, "H", widget.getWave(),
+            widget._periodController.text, widget._amplitudeController.text);
+      } else if (widget.source == 2) {
+        candle.sendWGCommand(2, "H", widget.getWave(),
+            widget._periodController.text, widget._amplitudeController.text);
+      }
+    } else {
+      if (widget.source == 1) {
+        candle.sendWGCommand(1, "L", widget.getWave(),
+            widget._periodController.text, widget._amplitudeController.text);
+      } else if (widget.source == 2) {
+        candle.sendWGCommand(2, "L", widget.getWave(),
+            widget._periodController.text, widget._amplitudeController.text);
+      }
     }
   }
 }

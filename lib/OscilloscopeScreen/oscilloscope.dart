@@ -267,6 +267,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           setState(() {
                             playPauseState = !playPauseState;
                           });
+                          setOscilloscope(playPauseState);
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         splashColor: Colors.black.withAlpha(50),
@@ -348,6 +349,24 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
     } else {
       widget.operationHandeler.setDiff(widget._isDiff);
       widget.operationHandeler.setFT(widget._isFT);
+    }
+  }
+
+  void setOscilloscope(bool state) {
+    if (state) {
+      if (widget.ch1Active) {
+        candle.sendOSCCommmand(
+            1, "H", widget.xAxis.range.toString(), widget.xAxis.unit);
+      }
+      if (widget.ch2Active) {
+        candle.sendOSCCommmand(
+            2, "H", widget.xAxis.range.toString(), widget.xAxis.unit);
+      }
+    } else {
+      candle.sendOSCCommmand(
+          1, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
+      candle.sendOSCCommmand(
+          2, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
     }
   }
 }

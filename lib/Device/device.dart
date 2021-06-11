@@ -7,8 +7,6 @@ import 'dart:convert';
 import 'package:dart_native/dart_native.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 
-enum Wave { sine, square, triang }
-
 class Device {
   BluetoothConnection connection;
   BluetoothState bluetoothState = BluetoothState.UNKNOWN;
@@ -43,8 +41,8 @@ class Device {
     sendPacket(commandPacket);
   }
 
-  void sendWGCommand(int source, String state, Wave waveType, String period,
-      String amplitude) {
+  void sendWGCommand(
+      int source, String state, int waveType, String period, String amplitude) {
     String commandPacket;
     commandPacket = "W" + source.toString();
     commandPacket += state;
@@ -54,13 +52,13 @@ class Device {
       return;
     } else if (state == "H") {
       switch (waveType) {
-        case Wave.sine:
+        case 1:
           commandPacket += "1";
           break;
-        case Wave.square:
+        case 2:
           commandPacket += "2";
           break;
-        case Wave.triang:
+        case 3:
           commandPacket += "3";
           break;
         default:

@@ -88,14 +88,14 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                       onToggle: (value) {
                         setState(() {
                           widget._isTurnedOn = value;
-                          //getSource
-                          //getValue
-                          //sendCommandPacket
-                          //ACK
-                          //showDialog
-                          //NACK
-                          //showDialog
                         });
+                        if (value) {
+                          candle.sendPSCommand(
+                              widget.source, "H", widget._value.toString());
+                        } else {
+                          candle.sendPSCommand(
+                              widget.source, "L", widget._value.toString());
+                        }
                       },
                     ),
                   ],
