@@ -39,6 +39,7 @@ dependencies:
   page_transition: "^2.0.2"
   flutter_bluetooth_serial: ^0.2.2
   dart_native: any
+  animated_text_kit: ^4.2.1
   
 
 
@@ -80,6 +81,7 @@ flutter:
     - images/aboutUs.png
     - images/experiments.png
     - images/logo.gif
+    - images/deviceIcon.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

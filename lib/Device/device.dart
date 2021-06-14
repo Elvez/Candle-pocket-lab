@@ -30,7 +30,7 @@ class Device {
   }
 
   void sendPacket(String packet) async {
-    connection.output.add(packet.codeUnits);
+    connection.output.add(utf8.encode(packet));
     await connection.output.allSent;
   }
 

@@ -12,7 +12,7 @@ class PowerSourceTile extends StatefulWidget {
   final double ratingPS;
   final bool plusMinus;
   bool _isTurnedOn = false;
-  var _valueFormat = NumberFormat("#0.00#", "en-US");
+  var _valueFormat = NumberFormat("#0.00", "en-US");
   double _value = 0.0;
   final int source;
 
@@ -91,7 +91,11 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                         });
                         if (value) {
                           candle.sendPSCommand(
-                              widget.source, "H", widget._value.toString());
+                              widget.source,
+                              "H",
+                              widget._valueFormat
+                                  .format(widget._value)
+                                  .toString());
                         } else {
                           candle.sendPSCommand(
                               widget.source, "L", widget._value.toString());
