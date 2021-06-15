@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/HomeScreen/homescreen.dart';
-import 'package:flutter/services.dart';
 import 'package:candle_pocketlab/Device/device.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -12,32 +11,68 @@ class StartScreen extends StatefulWidget {
 }
 
 class _StartScreenState extends State<StartScreen> {
+  //isConnecting is true when the app is trying to connect to the device
   bool isConnecting = false;
-  var colorizeColors = [
+
+  //Color array for the Connect device text
+  static var colorizeColors = [
     Colors.cyan[600],
     Colors.blue,
     Colors.blue[800],
     Colors.blue[900],
   ];
 
-  @override
+  //Background color
+  final Color _bgColor = Colors.white;
+
+  //Connecting progress indicator
+  final _working = new Center(
+    child: CircularProgressIndicator(
+      strokeWidth: 5,
+    ),
+  );
+
+  //Device image
+  final Widget _deviceIcon = new Center(
+    child: Image.asset('images/deviceIcon.png'),
+  );
+
+  //Animated text "Connect device!"
+  final _connectText = new AnimatedTextKit(
+    animatedTexts: [
+      ColorizeAnimatedText("Connect device!",
+          speed: Duration(milliseconds: 200),
+          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
+          colors: colorizeColors),
+      ColorizeAnimatedText("Connect device!",
+          speed: Duration(milliseconds: 200),
+          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
+          colors: colorizeColors),
+      ColorizeAnimatedText("Connect device!",
+          speed: Duration(milliseconds: 200),
+          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
+          colors: colorizeColors),
+    ],
+    isRepeatingAnimation: true,
+    repeatForever: true,
+    pause: Duration(milliseconds: 50),
+  );
+
+  //Connect button icon
+  final _connectIcon = new Icon(Icons.arrow_forward_ios,
+      color: Color.fromARGB(255, 52, 152, 199));
+
   Widget build(BuildContext context) {
     candle.initDevice();
     return MaterialApp(
         home: Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: _bgColor,
       body: isConnecting
-          ? Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 5,
-              ),
-            )
+          ? _working
           : Column(
               children: [
                 SizedBox(height: 80),
-                new Center(
-                  child: Image.asset('images/deviceIcon.png'),
-                ),
+                _deviceIcon,
                 SizedBox(height: 150),
                 Divider(),
                 Padding(
@@ -46,31 +81,9 @@ class _StartScreenState extends State<StartScreen> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      AnimatedTextKit(
-                        animatedTexts: [
-                          ColorizeAnimatedText("Connect device!",
-                              speed: Duration(milliseconds: 200),
-                              textStyle: TextStyle(
-                                  fontFamily: 'Ropa Sans', fontSize: 30),
-                              colors: colorizeColors),
-                          ColorizeAnimatedText("Connect device!",
-                              speed: Duration(milliseconds: 200),
-                              textStyle: TextStyle(
-                                  fontFamily: 'Ropa Sans', fontSize: 30),
-                              colors: colorizeColors),
-                          ColorizeAnimatedText("Connect device!",
-                              speed: Duration(milliseconds: 200),
-                              textStyle: TextStyle(
-                                  fontFamily: 'Ropa Sans', fontSize: 30),
-                              colors: colorizeColors),
-                        ],
-                        isRepeatingAnimation: true,
-                        repeatForever: true,
-                        pause: Duration(milliseconds: 50),
-                      ),
+                      _connectText,
                       IconButton(
-                          icon: Icon(Icons.arrow_forward_ios,
-                              color: Color.fromARGB(255, 52, 152, 199)),
+                          icon: _connectIcon,
                           onPressed: () async {
                             if (await candle.isBTon()) {
                               setState(() {
@@ -88,49 +101,12 @@ class _StartScreenState extends State<StartScreen> {
                               } else {
                                 showDialog(
                                     context: context,
-                                    builder: (context) => AlertDialog(
-                                          title: Text("Error",
-                                              style: TextStyle(
-                                                  fontFamily: 'Ropa Sans')),
-                                          content: Text(
-                                              "Device cannot connect, try pairing with the device.",
-                                              style: TextStyle(
-                                                  fontFamily: 'Ropa Sans')),
-                                          actions: [
-                                            TextButton(
-                                              child: Text("Ok",
-                                                  style: TextStyle(
-                                                      fontFamily: 'Ropa Sans')),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            )
-                                          ],
-                                        ));
+                                    builder: (context) => ErrorDialog());
                               }
                             } else {
                               showDialog(
                                   context: context,
-                                  builder: (context) => AlertDialog(
-                                        title: Text("Error",
-                                            style: TextStyle(
-                                                fontFamily: 'Ropa Sans')),
-                                        content: Text(
-                                            "Would you like to turn on bluetooth?",
-                                            style: TextStyle(
-                                                fontFamily: 'Ropa Sans')),
-                                        actions: [
-                                          TextButton(
-                                            child: Text("Ok",
-                                                style: TextStyle(
-                                                    fontFamily: 'Ropa Sans')),
-                                            onPressed: () {
-                                              candle.enableBluetooth();
-                                              Navigator.pop(context);
-                                            },
-                                          )
-                                        ],
-                                      ));
+                                  builder: (context) => BluetoothError());
                             }
                           })
                     ],
@@ -140,5 +116,66 @@ class _StartScreenState extends State<StartScreen> {
               ],
             ),
     ));
+  }
+}
+
+/* Error dialog for if bluetooth is not turned on.
+ * No methods
+ */
+class BluetoothError extends StatelessWidget {
+  //Title Text
+  final _title = new Text("Error", style: TextStyle(fontFamily: 'Ropa Sans'));
+
+  //Body text
+  final _bodyText = new Text("Would you like to turn on bluetooth?",
+      style: TextStyle(fontFamily: 'Ropa Sans'));
+
+  //Ok button text
+  final _okButton = new Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans'));
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: _title,
+      content: _bodyText,
+      actions: [
+        TextButton(
+          child: _okButton,
+          onPressed: () {
+            candle.enableBluetooth();
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
+  }
+}
+
+/* Error dialog for if device cannot connect.
+ * No methods
+ */
+class ErrorDialog extends StatelessWidget {
+  //Title text
+  final _title = new Text("Error", style: TextStyle(fontFamily: 'Ropa Sans'));
+
+  //Body text
+  final _bodyText = new Text(
+      "Device cannot connect, try pairing with the device.",
+      style: TextStyle(fontFamily: 'Ropa Sans'));
+
+  //Ok button text
+  final _okButton = new Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans'));
+
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: _title,
+      content: _bodyText,
+      actions: [
+        TextButton(
+          child: _okButton,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
   }
 }
