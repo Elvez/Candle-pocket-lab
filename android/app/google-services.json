@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "388438075310",
+    "project_id": "pocket-scope",
+    "storage_bucket": "pocket-scope.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388438075310:android:830252e637b41e00518a3f",
+        "android_client_info": {
+          "package_name": "com.innovatecraft.candle_pocketlab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388438075310-ngmireia4rv4go21q68mrro5qi3hta6c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.innovatecraft.candle_pocketlab",
+            "certificate_hash": "129b74b386473ee212b4659e6a01aca4f4bc9254"
+          }
+        },
+        {
+          "client_id": "388438075310-ia178id8oc2ighfhlv7uvji1vntk74c9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBovelp7IyuwSme_QeujIabyGrtQJqP72E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388438075310-ia178id8oc2ighfhlv7uvji1vntk74c9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

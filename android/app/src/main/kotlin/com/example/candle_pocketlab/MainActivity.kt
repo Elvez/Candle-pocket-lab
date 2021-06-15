@@ -1,4 +1,4 @@
-package com.example.candle_pocketlab
+package com.innovatecraft.candle_pocketlab
 
 import io.flutter.embedding.android.FlutterActivity
 
