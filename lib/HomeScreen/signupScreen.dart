@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:candle_pocketlab/HomeScreen/loginScreen.dart';
 
+/*
+ * Class name - SigninPage
+ * 
+ * Usage - This class is the login page UI of the app, it is the starting 
+ * screen of the app.
+ */
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -38,20 +44,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     controller: _usernameController,
     validator: (input) {
       if (input.isEmpty) {
-        return "Enter E-mail";
+        return "Enter name";
       }
 
       return null;
     },
     decoration: InputDecoration(
-        labelText: 'Username',
+        labelText: 'User name',
         labelStyle: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black),
         focusedBorder: OutlineInputBorder()),
   );
 
   //Username text field
   final _emailField = new TextFormField(
-    controller: _usernameController,
+    controller: _emailController,
     validator: (input) {
       if (input.isEmpty) {
         return "Enter E-mail";
@@ -151,6 +157,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  /*
+   * Go to login screen
+   *
+   * This function takes the app to the login screen.
+   *
+   * @param none
+   * @return none
+   */
   void login() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => SigninPage()));

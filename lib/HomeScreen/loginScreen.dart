@@ -1,24 +1,27 @@
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:candle_pocketlab/HomeScreen/signupScreen.dart';
 import 'package:flutter/services.dart';
 
+/*
+ * Class name - SigninPage
+ * 
+ * Usage - This class is the login page UI of the app, it is the starting 
+ * screen of the app.
+ */
 class SigninPage extends StatefulWidget {
   _SigninPageState createState() => _SigninPageState();
 }
 
 class _SigninPageState extends State<SigninPage> {
   //Form key for email and password fields
-  static var _usernameController = new TextEditingController();
+  static var _emailController = new TextEditingController();
   static var _passwordController = new TextEditingController();
 
   //Firebase instance
   static final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  //Email and password
-  String _email, _password;
 
   //Background gradient
   final Decoration _decoration = new BoxDecoration(
@@ -41,8 +44,8 @@ class _SigninPageState extends State<SigninPage> {
   );
 
   //Username text field
-  final _usernameField = new TextFormField(
-    controller: _usernameController,
+  final _emailField = new TextFormField(
+    controller: _emailController,
     validator: (input) {
       if (input.isEmpty) {
         return "Enter E-mail";
@@ -73,6 +76,14 @@ class _SigninPageState extends State<SigninPage> {
     obscureText: true,
   );
 
+  /*
+   * Initialize
+   *
+   * This function is called on the constructor, it check if the user is already logged-in.
+   *
+   * @param none
+   * @return none
+   */
   void initState() {
     super.initState();
     this.checkAuthentification();
@@ -98,7 +109,7 @@ class _SigninPageState extends State<SigninPage> {
                   padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      _usernameField,
+                      _emailField,
                       SizedBox(height: 10.0),
                       _passwordField,
                       SizedBox(height: 50.0),
@@ -145,22 +156,41 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
+  /*
+   * Check authentification
+   *
+   * This function runs when the app starts, it checks if the user is already signed-in or not.
+   * If the user is already signed in, jumps to the connect screen.
+   *
+   * @param none
+   * @return none
+   */
   void checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         print(user);
         print(" is Authenticated");
+
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => StartScreen()));
       }
     });
   }
 
+  /*
+   * Log a user in
+   *
+   * This function tries to log the user in when the "Sign-in" button is pressed.
+   *
+   * @param none
+   * @return none
+   */
   void login() async {
-    if (_usernameController.text.isNotEmpty &&
+    if (_emailController.text.isNotEmpty &&
         _passwordController.text.isNotEmpty) {
       try {
         await _auth.signInWithEmailAndPassword(
-            email: _usernameController.text,
-            password: _passwordController.text);
+            email: _emailController.text, password: _passwordController.text);
       } catch (e) {
         showError(e.message);
         print(e);
@@ -168,6 +198,14 @@ class _SigninPageState extends State<SigninPage> {
     }
   }
 
+  /*
+   * Show error by content
+   *
+   * This function shows the argument string as an error dialog.
+   *
+   * @param Error(String)
+   * @return none
+   */
   void showError(String errormessage) {
     showDialog(
         context: context,
@@ -190,11 +228,27 @@ class _SigninPageState extends State<SigninPage> {
         });
   }
 
+  /*
+   * Jump to the Sign-up screen.
+   *
+   * This function makes the app jump to the sign-up screen.
+   *
+   * @param none
+   * @return none
+   */
   void signUp() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => SignUpScreen()));
   }
 
+  /*
+   * Exit app on back pressed
+   *
+   * This function exits the app when back button is pressed. It is called by the "willPopScope"
+   *
+   * @param none
+   * @return Bool
+   */
   Future<bool> _onWillPop() {
     SystemNavigator.pop();
     return Future.value(true);

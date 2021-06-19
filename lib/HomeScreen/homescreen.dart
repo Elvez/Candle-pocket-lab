@@ -7,57 +7,93 @@ import 'package:candle_pocketlab/PowerSourceScreen/powerSource.dart';
 import 'package:candle_pocketlab/WaveGeneratorScreen/waveGenerator.dart';
 import 'package:flutter/services.dart';
 
+/*
+ * Class name - HomeScreen
+ * 
+ * Usage - This class is the Home page of the app, it has the tile buttons for,
+ *  - Multimeter
+ *  - Oscilloscope
+ *  - Wave generator
+ *  - Power source
+ * 
+ */
 class HomeScreen extends StatelessWidget {
-  //Private variables
+  //App bar height
   final double _barHeight = 50;
+
+  //App bar shadow color
   final int _marginColor = 13948116;
+
+  //Oscilloscope tile
   final _oscTile = new HomeScreenTile(
       "Oscilloscope",
       TileColor(180, 200, 255),
       new Image.asset('images/osc.png',
           alignment: Alignment.bottomLeft, width: 100, height: 88));
+
+  //Multimeter tile
   final _mulTile = new HomeScreenTile(
       "Multimeter",
       TileColor(180, 210, 255),
       new Image.asset('images/multimeter.png',
           alignment: Alignment.bottomLeft, width: 90, height: 77));
+
+  //Wave generator tile
   final _wgTile = new HomeScreenTile(
       "Wave generator",
       TileColor(180, 220, 255),
       new Image.asset('images/waveIcon.png',
           alignment: Alignment.bottomLeft, width: 85, height: 82));
+
+  //Power source tile
   final _psTile = new HomeScreenTile(
       "Power source",
       TileColor(180, 230, 255),
       new Image.asset('images/powerSource.png',
           alignment: Alignment.bottomLeft, width: 62, height: 69));
-  //-----------------
+
+  //Back button
+  final _backButton = new IconButton(
+    icon: Icon(Icons.arrow_back_ios, color: Color.fromARGB(255, 52, 152, 199)),
+    onPressed: () {
+      SystemNavigator.pop();
+    },
+  );
+
+  //Appbar shadow
+  final _shadow = new Container(
+    color: Colors.grey,
+    height: 1.0,
+  );
+
+  //Header bar "Pocket-lab"
+  final _header =
+      new HeaderBar("Pocket lab", 75, 52, 152, 199, 125, 52, 152, 199);
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+        //Back button interception
         onWillPop: _onWillPop,
+
+        //UI
         child: Scaffold(
+          //App bar
           appBar: AppBar(
               automaticallyImplyLeading: true,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios,
-                    color: Color.fromARGB(255, 52, 152, 199)),
-                onPressed: () {
-                  SystemNavigator.pop();
-                },
-              ),
+              leading: _backButton,
               toolbarHeight: _barHeight,
               bottom: PreferredSize(
-                  child: Container(
-                    color: Colors.grey,
-                    height: 1.0,
-                  ),
-                  preferredSize: Size.fromHeight(4.0)),
+                  child: _shadow, preferredSize: Size.fromHeight(4.0)),
               backgroundColor: Color(_marginColor),
               elevation: 0),
+
+          //Body
           body: SingleChildScrollView(
             child: Column(children: [
-              new HeaderBar("Pocket lab", 75, 52, 152, 199, 125, 52, 152, 199),
+              _header,
+
+              //Oscilloscope button
               Container(
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
@@ -76,6 +112,8 @@ class HomeScreen extends StatelessWidget {
                             SystemChrome.setPreferredOrientations(
                                 [DeviceOrientation.landscapeLeft]);
                           }))),
+
+              //Multimeter button
               Container(
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
@@ -91,6 +129,8 @@ class HomeScreen extends StatelessWidget {
                                 MyRoute(
                                     builder: (context) => MultimeterScreen()));
                           }))),
+
+              //Wave generator button
               Container(
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
@@ -107,6 +147,8 @@ class HomeScreen extends StatelessWidget {
                                     builder: (context) =>
                                         WaveGeneratorScreen()));
                           }))),
+
+              //Power source button
               Container(
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
@@ -127,6 +169,14 @@ class HomeScreen extends StatelessWidget {
         ));
   }
 
+  /*
+   * Exit app on back press
+   *
+   * This function exits the app on back press.
+   *
+   * @param none
+   * @return Bool
+   */
   Future<bool> _onWillPop() {
     SystemNavigator.pop();
     return Future.value(true);

@@ -3,8 +3,13 @@ import 'package:candle_pocketlab/HomeScreen/homescreen.dart';
 import 'package:candle_pocketlab/Device/device.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
+//Global bluetooth device instance
 Device candle = Device();
 
+/* Class name - StartScreen
+ * This class is the UI screen class for connect screen.
+ *
+ */
 class StartScreen extends StatefulWidget {
   @override
   _StartScreenState createState() => _StartScreenState();
