@@ -19,14 +19,6 @@ class _StartScreenState extends State<StartScreen> {
   //isConnecting is true when the app is trying to connect to the device
   bool isConnecting = false;
 
-  //Color array for the Connect device text
-  static var colorizeColors = [
-    Colors.cyan[600],
-    Colors.blue,
-    Colors.blue[800],
-    Colors.blue[900],
-  ];
-
   //Background color
   final Color _bgColor = Colors.white;
 
@@ -42,26 +34,9 @@ class _StartScreenState extends State<StartScreen> {
     child: Image.asset('images/deviceIcon.png'),
   );
 
-  //Animated text "Connect device!"
-  final _connectText = new AnimatedTextKit(
-    animatedTexts: [
-      ColorizeAnimatedText("Connect device!",
-          speed: Duration(milliseconds: 200),
-          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
-          colors: colorizeColors),
-      ColorizeAnimatedText("Connect device!",
-          speed: Duration(milliseconds: 200),
-          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
-          colors: colorizeColors),
-      ColorizeAnimatedText("Connect device!",
-          speed: Duration(milliseconds: 200),
-          textStyle: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30),
-          colors: colorizeColors),
-    ],
-    isRepeatingAnimation: true,
-    repeatForever: true,
-    pause: Duration(milliseconds: 50),
-  );
+  //Text "Connect device!"
+  final _connectText = new Text("Connect device!",
+      style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30));
 
   //Connect button icon
   final _connectIcon = new Icon(Icons.arrow_forward_ios,

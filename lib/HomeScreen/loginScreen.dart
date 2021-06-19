@@ -2,7 +2,6 @@ import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:candle_pocketlab/HomeScreen/signupScreen.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -17,10 +16,6 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  //Form key for email and password fields
-  static var _emailController = new TextEditingController();
-  static var _passwordController = new TextEditingController();
-
   //Firebase instance
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -29,6 +24,7 @@ class _SigninPageState extends State<SigninPage> {
 
   //Google instance
   final googleSignIn = new GoogleSignIn();
+
   //Background gradient
   final Decoration _decoration = new BoxDecoration(
       gradient: LinearGradient(
@@ -43,59 +39,17 @@ class _SigninPageState extends State<SigninPage> {
   final _header = new Container(
     padding: EdgeInsets.fromLTRB(15.0, 110.0, 0.0, 0.0),
     child: Text(
-      'Hello\nthere!',
+      'Just\nOne\nsmall\nstep!',
       style: TextStyle(
           fontSize: 80.0, fontWeight: FontWeight.bold, fontFamily: 'Ropa Sans'),
     ),
   );
 
-  //Username text field
-  final _emailField = new TextFormField(
-    controller: _emailController,
-    validator: (input) {
-      if (input.isEmpty) {
-        return "Enter E-mail";
-      }
-
-      return null;
-    },
-    decoration: InputDecoration(
-        labelText: 'Username',
-        labelStyle: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black),
-        focusedBorder: OutlineInputBorder()),
-  );
-
-  //Password text field
-  final _passwordField = new TextFormField(
-    controller: _passwordController,
-    validator: (input) {
-      if (input.length < 6) {
-        return 'Password should be at least 6 characters.';
-      }
-
-      return null;
-    },
-    decoration: InputDecoration(
-        labelText: 'Password ',
-        labelStyle: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black),
-        focusedBorder: OutlineInputBorder()),
-    obscureText: true,
-  );
-
-  //Or text
-  final _or = new Text(
-    "Or",
-    style: TextStyle(fontFamily: 'Ropa Sans', fontWeight: FontWeight.bold),
-  );
-
   //Sign-in with google text
   final _googleSignInText = new Text(
     'Sign in with Google.',
-    style: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Ropa Sans',
-        fontSize: 20),
+    style:
+        TextStyle(color: Colors.black, fontFamily: 'Ropa Sans', fontSize: 20),
   );
 
   //Connecting progress indicator
@@ -142,43 +96,12 @@ class _SigninPageState extends State<SigninPage> {
                             EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                         child: Column(
                           children: <Widget>[
-                            _emailField,
-                            SizedBox(height: 10.0),
-                            _passwordField,
                             SizedBox(height: 80.0),
-
-                            //Sign-in button
-                            new Container(
-                                height: 50.0,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  shadowColor: Colors.grey,
-                                  color: Colors.grey[100],
-                                  elevation: 7.0,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    onTap: login,
-                                    child: Center(
-                                      child: Text(
-                                        'Log-in',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Ropa Sans',
-                                            fontSize: 20),
-                                      ),
-                                    ),
-                                  ),
-                                )),
-
-                            SizedBox(height: 15),
-                            _or,
                             SizedBox(height: 15),
 
                             //Sign-in with google button
                             new Container(
-                                height: 40.0,
-                                width: 250,
+                                height: 50.0,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20.0),
                                   shadowColor: Colors.grey,
@@ -202,15 +125,6 @@ class _SigninPageState extends State<SigninPage> {
                                 )),
 
                             SizedBox(height: 10),
-
-                            //Sign-up button
-                            new TextButton(
-                                onPressed: signUp,
-                                child: Text("Don't have an account? Sign-up.",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontFamily: 'Ropa Sans',
-                                        fontSize: 15)))
                           ],
                         )),
                   ]),
@@ -239,27 +153,6 @@ class _SigninPageState extends State<SigninPage> {
             context, MaterialPageRoute(builder: (context) => StartScreen()));
       }
     });
-  }
-
-  /*
-   * Log a user in
-   *
-   * This function tries to log the user in when the "Sign-in" button is pressed.
-   *
-   * @param none
-   * @return none
-   */
-  void login() async {
-    if (_emailController.text.isNotEmpty &&
-        _passwordController.text.isNotEmpty) {
-      try {
-        await _auth.signInWithEmailAndPassword(
-            email: _emailController.text, password: _passwordController.text);
-      } catch (e) {
-        showError(e.message);
-        print(e);
-      }
-    }
   }
 
   /*
@@ -326,19 +219,6 @@ class _SigninPageState extends State<SigninPage> {
             ],
           );
         });
-  }
-
-  /*
-   * Jump to the Sign-up screen.
-   *
-   * This function makes the app jump to the sign-up screen.
-   *
-   * @param none
-   * @return none
-   */
-  void signUp() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SignUpScreen()));
   }
 
   /*
