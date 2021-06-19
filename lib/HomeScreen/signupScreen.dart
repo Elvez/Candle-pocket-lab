@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:candle_pocketlab/HomeScreen/loginScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /*
  * Class name - SigninPage
@@ -15,9 +16,11 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   //Form key for email and password fields
-  static var _usernameController = new TextEditingController();
   static var _passwordController = new TextEditingController();
   static var _emailController = new TextEditingController();
+
+  //Firebase instance
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Background gradient
   final Decoration _decoration = new BoxDecoration(
@@ -37,22 +40,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       style: TextStyle(
           fontSize: 80.0, fontWeight: FontWeight.bold, fontFamily: 'Ropa Sans'),
     ),
-  );
-
-  //Username text field
-  final _usernameField = new TextFormField(
-    controller: _usernameController,
-    validator: (input) {
-      if (input.isEmpty) {
-        return "Enter name";
-      }
-
-      return null;
-    },
-    decoration: InputDecoration(
-        labelText: 'User name',
-        labelStyle: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black),
-        focusedBorder: OutlineInputBorder()),
   );
 
   //Username text field
@@ -108,8 +95,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      _usernameField,
-                      SizedBox(height: 10.0),
                       _emailField,
                       SizedBox(height: 10.0),
                       _passwordField,
@@ -158,6 +143,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   /*
+   * Show error by content
+   *
+   * This function shows the argument string as an error dialog.
+   *
+   * @param Error(String)
+   * @return none
+   */
+  void showError(String errormessage) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error',
+                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.red)),
+            content:
+                Text(errormessage, style: TextStyle(fontFamily: 'Ropa Sans')),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Future.delayed(Duration.zero, () {
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: Text('Ok'))
+            ],
+          );
+        });
+  }
+
+  /*
    * Go to login screen
    *
    * This function takes the app to the login screen.
@@ -168,5 +183,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void login() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => SigninPage()));
+  }
+
+  void register() async {
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        showError('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        showError('The account already exists for that email.');
+      }
+    } catch (e) {
+      showError(e.message);
+    }
   }
 }

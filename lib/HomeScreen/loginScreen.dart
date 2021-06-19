@@ -4,6 +4,7 @@ import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:candle_pocketlab/HomeScreen/signupScreen.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 /*
  * Class name - SigninPage
@@ -23,6 +24,11 @@ class _SigninPageState extends State<SigninPage> {
   //Firebase instance
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  //Loading screen state
+  bool _isSigningIn = false;
+
+  //Google instance
+  final googleSignIn = new GoogleSignIn();
   //Background gradient
   final Decoration _decoration = new BoxDecoration(
       gradient: LinearGradient(
@@ -76,6 +82,29 @@ class _SigninPageState extends State<SigninPage> {
     obscureText: true,
   );
 
+  //Or text
+  final _or = new Text(
+    "Or",
+    style: TextStyle(fontFamily: 'Ropa Sans', fontWeight: FontWeight.bold),
+  );
+
+  //Sign-in with google text
+  final _googleSignInText = new Text(
+    'Sign in with Google.',
+    style: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Ropa Sans',
+        fontSize: 20),
+  );
+
+  //Connecting progress indicator
+  final _working = new Center(
+    child: CircularProgressIndicator(
+      strokeWidth: 5,
+    ),
+  );
+
   /*
    * Initialize
    *
@@ -94,64 +123,99 @@ class _SigninPageState extends State<SigninPage> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            width: SizeConfig.screenWidth,
-            height: SizeConfig.screenHeight,
-            decoration: _decoration,
-            child: Column(crossAxisAlignment: _alignment, children: <Widget>[
-              Container(
-                child: Stack(
-                  children: <Widget>[_header],
+        body: _isSigningIn
+            ? _working
+            : SingleChildScrollView(
+                child: Container(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight,
+                  decoration: _decoration,
+                  child:
+                      Column(crossAxisAlignment: _alignment, children: <Widget>[
+                    Container(
+                      child: Stack(
+                        children: <Widget>[_header],
+                      ),
+                    ),
+                    Container(
+                        padding:
+                            EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                        child: Column(
+                          children: <Widget>[
+                            _emailField,
+                            SizedBox(height: 10.0),
+                            _passwordField,
+                            SizedBox(height: 80.0),
+
+                            //Sign-in button
+                            new Container(
+                                height: 50.0,
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  shadowColor: Colors.grey,
+                                  color: Colors.grey[100],
+                                  elevation: 7.0,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    onTap: login,
+                                    child: Center(
+                                      child: Text(
+                                        'Log-in',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Ropa Sans',
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+
+                            SizedBox(height: 15),
+                            _or,
+                            SizedBox(height: 15),
+
+                            //Sign-in with google button
+                            new Container(
+                                height: 40.0,
+                                width: 250,
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  shadowColor: Colors.grey,
+                                  color: Colors.grey[100],
+                                  elevation: 7.0,
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    onTap: signInWithGoogle,
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Image.asset('images/google.png'),
+                                          _googleSignInText,
+                                          SizedBox(width: 20)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )),
+
+                            SizedBox(height: 10),
+
+                            //Sign-up button
+                            new TextButton(
+                                onPressed: signUp,
+                                child: Text("Don't have an account? Sign-up.",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Ropa Sans',
+                                        fontSize: 15)))
+                          ],
+                        )),
+                  ]),
                 ),
               ),
-              Container(
-                  padding: EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      _emailField,
-                      SizedBox(height: 10.0),
-                      _passwordField,
-                      SizedBox(height: 50.0),
-
-                      //Sign-in button
-                      new Container(
-                          height: 50.0,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(20.0),
-                            shadowColor: Colors.grey,
-                            color: Colors.grey[100],
-                            elevation: 7.0,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(20.0),
-                              onTap: login,
-                              child: Center(
-                                child: Text(
-                                  'Sign-in',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Ropa Sans',
-                                      fontSize: 20),
-                                ),
-                              ),
-                            ),
-                          )),
-                      SizedBox(height: 10),
-
-                      //Sign-up button
-                      new TextButton(
-                          onPressed: signUp,
-                          child: Text("Don't have an account? Sign-up.",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Ropa Sans',
-                                  fontSize: 15)))
-                    ],
-                  )),
-            ]),
-          ),
-        ),
       ),
     );
   }
@@ -195,6 +259,42 @@ class _SigninPageState extends State<SigninPage> {
         showError(e.message);
         print(e);
       }
+    }
+  }
+
+  /*
+   * Sign in with google
+   *
+   * This function tries Sign the user in with a google account.
+   *
+   * @param none
+   * @return none
+   */
+  void signInWithGoogle() async {
+    setState(() {
+      _isSigningIn = true;
+    });
+    final user = await googleSignIn.signIn();
+
+    if (user == null) {
+      setState(() {
+        _isSigningIn = false;
+      });
+      showError("Cannot sign in with Google.");
+      return;
+    } else {
+      final googleAuth = await user.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+
+      setState(() {
+        _isSigningIn = false;
+      });
     }
   }
 
@@ -252,5 +352,11 @@ class _SigninPageState extends State<SigninPage> {
   Future<bool> _onWillPop() {
     SystemNavigator.pop();
     return Future.value(true);
+  }
+
+  set isSigningIn(bool isSigningIn) {
+    setState(() {
+      _isSigningIn = isSigningIn;
+    });
   }
 }
