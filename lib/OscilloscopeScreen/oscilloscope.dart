@@ -51,7 +51,10 @@ class OscilloscopeScreen extends StatefulWidget {
 
 class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   //Graph on/off state
-  bool playPauseState = false;
+  bool _graphState = false;
+
+  //Free device
+  bool turnOff = false;
 
   //Graph area margin
   final _graphMargin = new EdgeInsets.only(left: 7, top: 7, bottom: 7);
@@ -278,9 +281,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                       new InkWell(
                         onTap: () {
                           setState(() {
-                            playPauseState = !playPauseState;
+                            _graphState = !_graphState;
                           });
-                          setOscilloscope(playPauseState);
+                          setOscilloscope(_graphState);
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         splashColor: Colors.black.withAlpha(50),
@@ -293,7 +296,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                               //Set gradient according to graph state
                               gradient: LinearGradient(
-                                  colors: playPauseState
+                                  colors: _graphState
                                       ? [
                                           Color.fromARGB(150, 175, 46, 255),
                                           Color.fromARGB(255, 175, 46, 255)
@@ -304,7 +307,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                         ])),
                           child: new Center(
                             //Set icon according to graph state
-                            child: playPauseState
+                            child: _graphState
                                 ? new Icon(Icons.stop_rounded,
                                     color: Colors.white, size: 50)
                                 : new Icon(Icons.play_arrow_rounded,
@@ -349,9 +352,12 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
   /*
    * Back button interceptor
-   * TODO : Replacec interceptor with WillPopScope 
+   * TODO : Replace interceptor with WillPopScope 
    */
   bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    //Free device
+    setOscilloscope(turnOff);
+
     //If bug fix bool is true, then set orientation to portrait. If bugFix is true then the navigator is used from Osc screen.
     if (widget.bugFix) {
       //Set orientation
