@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 
+/*
+ * Class name - HomeScreenTile
+ * 
+ * Usage - This class is used for the 4 tiles (Oscilloscope, Multimeter, Wave generator, Power source)
+ * on the homescreen. 
+ */
 class HomeScreenTile extends StatelessWidget {
+  //Border radius
   final double borderRad = 10;
+
+  //Name of the tile
   final String tileName;
+
+  //Color
   final _tileColor;
+
+  //Image on the tile
   final _tileImage;
 
+  //Constructor
   HomeScreenTile(this.tileName, this._tileColor, this._tileImage);
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
+        //Gradient
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[800], width: 2),
             gradient: LinearGradient(colors: [

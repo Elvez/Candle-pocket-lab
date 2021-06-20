@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
 
+/*
+ * Class name - HeaderBar
+ * 
+ * Usage - It is just a simple colorful bar with title text. 
+ */
 class HeaderBar extends StatelessWidget {
+  //Title
   final String title;
+
+  //Colors in ARGB
   final int aL, rL, gL, bL, aR, rR, gR, bR;
+
+  //Constructor
   HeaderBar(this.title, this.aL, this.rL, this.gL, this.bL, this.aR, this.rR,
       this.gR, this.bR);
   @override
