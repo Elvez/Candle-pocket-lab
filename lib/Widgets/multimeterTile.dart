@@ -3,6 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'dart:convert';
 
 /*
  * Class name - MultimeterTile
@@ -101,7 +102,20 @@ class MultimeterTile extends StatefulWidget {
    * @return : none 
    */
   void setState(bool state) {
+    //Set state to default
     isTurnedOn = state;
+
+    if (isTurnedOn) {
+      //Send 'Multimeter state = on' command for current channel.
+      channelName == "Channel 1"
+          ? candle.sendMulCommand(1, "H")
+          : candle.sendMulCommand(2, "H");
+    } else {
+      //Send 'Multimeter state = off' command for current channel.
+      channelName == "Channel 1"
+          ? candle.sendMulCommand(1, "L")
+          : candle.sendMulCommand(2, "L");
+    }
   }
 }
 
@@ -121,7 +135,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
   //Value field decoration
   final _valueDecoration = new BoxDecoration(
       border: Border.all(width: 1, color: Color.fromARGB(255, 151, 151, 151)),
-      borderRadius: BorderRadius.all(Radius.circular(5)));
+      borderRadius: BorderRadius.all(Radius.circular(24)));
 
   //Channel name font
   final _channelNameStyle = new TextStyle(
@@ -130,8 +144,8 @@ class _MultimeterTileState extends State<MultimeterTile> {
       fontSize: 25);
 
   //Value area font
-  final _valueFont =
-      new TextStyle(color: Colors.black, fontFamily: 'Digital-7', fontSize: 50);
+  final _valueFont = new TextStyle(
+      color: Colors.grey[800], fontFamily: 'Digital-7', fontSize: 60);
 
   //Unit font
   final _unitFont = new TextStyle(
@@ -159,10 +173,24 @@ class _MultimeterTileState extends State<MultimeterTile> {
                     height: 30,
                     value: widget.isTurnedOn,
                     onToggle: (value) {
+                      //Set the switch state of tile
                       setState(() {
                         widget.isTurnedOn = value;
                       });
+
+                      //Set multimeter state on device.
                       setMultimeter(value);
+
+                      //Process state
+                      if (!widget.isTurnedOn) {
+                        //Dislplay zero on multimeter turned off.
+                        setState(() {
+                          widget.fieldValue = 0;
+                        });
+                      } else {
+                        //Receive values and update.
+                        loopValues();
+                      }
                     },
                   ),
                 ],
@@ -180,7 +208,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         child: Text(widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
                     Container(
-                      margin: EdgeInsets.only(left: 10, top: 12, right: 20),
+                      margin: EdgeInsets.only(left: 10, top: 12, right: 70),
                       child: Text(widget.unit, style: _unitFont),
                     )
                   ]))
@@ -196,11 +224,32 @@ class _MultimeterTileState extends State<MultimeterTile> {
    * @return : none 
    */
   Future<void> loopValues() async {
-    while (widget.isTurnedOn) {
-      setState(() {
-        //getVal and assign value.
+    //Packet receive buffer
+    String _packet = "";
+
+    //Parse value for voltmeter
+    double _value = 0;
+
+    try {
+      //Start listening
+      candle.connection.input.listen((event) {
+        //Decode bytes to string data
+        _packet = ascii.decode(event);
+
+        //Remove packet tail and parse to double
+        _packet = _packet.substring(0, _packet.length - 1);
+        _value = double.tryParse(_packet);
+
+        //Calculation MinVal = 0, MaxVal = 4096, Min result val = -20, Max result val = +20.
+        _value = (_value / 102.4) - 20.0;
+        setState(() {
+          //Display value.
+          widget.fieldValue = _value;
+          if (!widget.isTurnedOn) widget.fieldValue = 0;
+        });
       });
-      await Future.delayed(Duration(milliseconds: 17));
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -215,14 +264,18 @@ class _MultimeterTileState extends State<MultimeterTile> {
   void setMultimeter(bool state) {
     if (state) {
       if (widget.channelName == "Channel 1") {
+        //Send multimeter 'channel 1 = on'.
         candle.sendMulCommand(1, "H");
       } else if (widget.channelName == "Channel 2") {
+        //Send multimeter 'channel 2 = on'.
         candle.sendMulCommand(2, "H");
       }
     } else {
       if (widget.channelName == "Channel 1") {
+        //Send multimeter 'channel 1 = off'.
         candle.sendMulCommand(1, "L");
       } else if (widget.channelName == "Channel 2") {
+        //Send multimeter 'channel 2 = off'.
         candle.sendMulCommand(2, "L");
       }
     }

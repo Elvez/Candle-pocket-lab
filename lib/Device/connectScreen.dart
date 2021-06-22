@@ -30,7 +30,7 @@ class _StartScreenState extends State<StartScreen> {
 
   //Device image
   final Widget _deviceIcon = new Center(
-    child: Image.asset('images/deviceIcon.png'),
+    child: Container(child: Image.asset('images/deviceIcon.png')),
   );
 
   //Text "Connect device!"
@@ -52,7 +52,7 @@ class _StartScreenState extends State<StartScreen> {
               children: [
                 SizedBox(height: 80),
                 _deviceIcon,
-                SizedBox(height: 150),
+                SizedBox(height: 130),
                 Divider(),
                 Padding(
                   padding: const EdgeInsets.only(

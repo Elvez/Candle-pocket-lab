@@ -21,10 +21,14 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
   final int _marginColor = 13948116;
 
   //Channel 1 Tile
-  var _channelTile1 = MultimeterTile("Channel 1", "v");
+  var _channelTile1 = MultimeterTile("Channel 1", "V");
 
   //Channel 2 Tile
   var _channelTile2 = MultimeterTile("Channel 2", "mA");
+
+  //Back button icon
+  final _backButton =
+      new Icon(Icons.arrow_back_ios, color: Color.fromARGB(255, 52, 152, 199));
 
   //Appbar shadow
   final _shadow = new Container(
@@ -45,9 +49,9 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
 
               //Back button
               leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios,
-                    color: Color.fromARGB(255, 52, 152, 199)),
+                icon: _backButton,
                 onPressed: () {
+                  //Set both channels as 'off' on back press.
                   _channelTile1.setState(false);
                   _channelTile2.setState(false);
                   Navigator.pop(context);
@@ -69,14 +73,17 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
   }
 
   /*
-   * Set both the channels to state off on back press.
+   * Set both the channels to state off on navigator back press.
    * 
    * @params : none
    * @return : Bool 
    */
   Future<bool> _onWillPop() {
+    //Set both channels as 'off' on navigator back press.
     _channelTile2.setState(false);
     _channelTile1.setState(false);
     Navigator.of(context).pop(true);
+
+    return Future.value(true);
   }
 }
