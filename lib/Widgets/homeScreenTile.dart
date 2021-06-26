@@ -9,7 +9,7 @@ import 'package:candle_pocketlab/Settings/settings.dart';
  */
 class HomeScreenTile extends StatelessWidget {
   //Border radius
-  final double borderRad = 10;
+  final double borderRad = 20;
 
   //Name of the tile
   final String tileName;
@@ -29,13 +29,13 @@ class HomeScreenTile extends StatelessWidget {
     return Container(
         //Gradient
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[800], width: 2),
+            border: Border.all(color: Colors.white, width: 0),
             gradient: LinearGradient(colors: [
               Color.fromARGB(
-                  150, _tileColor.red, _tileColor.green, _tileColor.blue),
+                  100, _tileColor.red, _tileColor.green, _tileColor.blue),
               Color.fromARGB(
-                  255, _tileColor.red, _tileColor.green, _tileColor.blue)
-            ]),
+                  200, _tileColor.red, _tileColor.green, _tileColor.blue)
+            ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
             borderRadius: BorderRadius.all(Radius.circular(borderRad))),
         width: SizeConfig.blockSizeHorizontal * 94,
         height: SizeConfig.blockSizeVertical * 14,

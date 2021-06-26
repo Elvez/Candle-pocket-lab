@@ -27,28 +27,28 @@ class HomeScreen extends StatelessWidget {
   //Oscilloscope tile
   final _oscTile = new HomeScreenTile(
       "Oscilloscope",
-      TileColor(180, 200, 255),
+      TileColor(52, 152, 199),
       new Image.asset('images/osc.png',
           alignment: Alignment.bottomLeft, width: 100, height: 88));
 
   //Multimeter tile
   final _mulTile = new HomeScreenTile(
       "Multimeter",
-      TileColor(180, 210, 255),
+      TileColor(100, 150, 200),
       new Image.asset('images/multimeter.png',
           alignment: Alignment.bottomLeft, width: 90, height: 77));
 
   //Wave generator tile
   final _wgTile = new HomeScreenTile(
       "Wave generator",
-      TileColor(180, 220, 255),
+      TileColor(100, 150, 255),
       new Image.asset('images/waveIcon.png',
           alignment: Alignment.bottomLeft, width: 85, height: 82));
 
   //Power source tile
   final _psTile = new HomeScreenTile(
       "Power source",
-      TileColor(180, 230, 255),
+      TileColor(100, 100, 255),
       new Image.asset('images/powerSource.png',
           alignment: Alignment.bottomLeft, width: 62, height: 69));
 
@@ -98,7 +98,7 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: InkWell(
                           splashColor: Colors.black.withAlpha(50),
                           child: _oscTile,
@@ -118,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: InkWell(
                           splashColor: Colors.black.withAlpha(50),
                           child: _mulTile,
@@ -135,7 +135,7 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: InkWell(
                           splashColor: Colors.black.withAlpha(50),
                           child: _wgTile,
@@ -153,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 15),
                   child: Card(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: InkWell(
                           splashColor: Colors.black.withAlpha(50),
                           child: _psTile,

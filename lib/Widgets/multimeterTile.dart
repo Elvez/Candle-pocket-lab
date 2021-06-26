@@ -208,7 +208,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         child: Text(widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
                     Container(
-                      margin: EdgeInsets.only(left: 10, top: 12, right: 70),
+                      margin: EdgeInsets.only(left: 10, top: 12, right: 20),
                       child: Text(widget.unit, style: _unitFont),
                     )
                   ]))
