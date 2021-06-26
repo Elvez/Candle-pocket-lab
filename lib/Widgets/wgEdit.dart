@@ -20,10 +20,10 @@ class WaveGeneratorTile extends StatefulWidget {
   final int source;
 
   //Text editing controller for period field
-  final _periodController = new TextEditingController();
+  final _periodController = new TextEditingController(text: "200");
 
   //Text editing controller for amplitude field
-  final _amplitudeController = new TextEditingController();
+  final _amplitudeController = new TextEditingController(text: "3.30");
 
   //Wave type toggle
   List<bool> _waveTyoe = [true, false, false];
@@ -195,7 +195,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                     onToggle: (value) {
                       setState(() {
                         widget.isTurnedOn = value;
-                        validateInput();
+                        //validateInput();
                       });
 
                       //Send wave generator command
@@ -250,14 +250,29 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                   RegExp("[0-9.]")),
                               LengthLimitingTextInputFormatter(4)
                             ],
-                            textAlign: TextAlign.center,
+                            autovalidate: true,
+                            validator: (value) {
+                              if (value.isEmpty || value == null) {
+                                return "Enter period.";
+                              } else if (double.tryParse(value) > 3000) {
+                                return "Less than 3000ms.";
+                              } else if (double.tryParse(value) <= 0) {
+                                return "Cannot be 0.";
+                              }
+                            },
+                            textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget._periodController,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: "milli-seconds",
                                 contentPadding:
-                                    EdgeInsets.only(top: 2, right: 5)))))
+                                    EdgeInsets.only(top: 2, right: 5))))),
+                SizedBox(width: 5),
+                Text("ms",
+                    style: TextStyle(
+                        fontFamily: 'Ropa Sans',
+                        fontSize: 20,
+                        color: Colors.grey[700]))
               ])),
           new SizedBox(height: 8),
           new Container(
@@ -278,14 +293,29 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                   RegExp("[0-9.]")),
                               LengthLimitingTextInputFormatter(4)
                             ],
-                            textAlign: TextAlign.center,
+                            textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget._amplitudeController,
+                            autovalidate: true,
+                            validator: (value) {
+                              if (value.isEmpty || value == null) {
+                                return "Enter amplitude.";
+                              } else if (double.tryParse(value) > 3.3) {
+                                return "Less than 3.3V.";
+                              } else if (double.tryParse(value) <= 0) {
+                                return "Cannot be 0.";
+                              }
+                            },
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: "volts",
                                 contentPadding:
-                                    EdgeInsets.only(top: 2, right: 5)))))
+                                    EdgeInsets.only(top: 2, right: 5))))),
+                SizedBox(width: 5),
+                Text("V",
+                    style: TextStyle(
+                        fontFamily: 'Ropa Sans',
+                        fontSize: 20,
+                        color: Colors.grey[700]))
               ]))
         ]));
   }
@@ -312,6 +342,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    * Period input validator
    * 
    * Validates the period input.
+   * 
+   * STATUS - UNUSED
    * 
    * @params : none
    * @return : none 
