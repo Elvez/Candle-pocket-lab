@@ -134,7 +134,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
 
   //Value field decoration
   final _valueDecoration = new BoxDecoration(
-      border: Border.all(width: 1, color: Color.fromARGB(255, 151, 151, 151)),
+      border: Border.all(width: 3, color: Color.fromARGB(255, 151, 151, 151)),
       borderRadius: BorderRadius.all(Radius.circular(24)));
 
   //Channel name font
@@ -204,11 +204,11 @@ class _MultimeterTileState extends State<MultimeterTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(left: 50),
+                        margin: EdgeInsets.only(left: 40),
                         child: Text(widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
                     Container(
-                      margin: EdgeInsets.only(left: 10, top: 12, right: 20),
+                      margin: EdgeInsets.only(left: 10, top: 12, right: 30),
                       child: Text(widget.unit, style: _unitFont),
                     )
                   ]))

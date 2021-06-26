@@ -46,6 +46,8 @@ class OscilloscopeScreen extends StatefulWidget {
   double _period = 100;
   int _waveType = 1;
 
+  //Plot values
+
   _OscilloscopeScreenState createState() => _OscilloscopeScreenState();
 }
 
@@ -135,6 +137,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   final _backShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)));
 
+  //Plot data
+  var _graphData = new PlotData();
+
   Widget build(BuildContext context) {
     //Get screen sizes
     SizeConfig().init(context);
@@ -210,7 +215,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           },
                           child: new Container(
                               width: SizeConfig.blockSizeVertical * 18,
-                              height: SizeConfig.blockSizeHorizontal * 10.0,
+                              height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _chToolDecoration,
                               child: new Center(child: _chToolText))),
 
@@ -231,7 +236,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           },
                           child: new Container(
                               width: SizeConfig.blockSizeVertical * 18,
-                              height: SizeConfig.blockSizeHorizontal * 10.0,
+                              height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _xyToolDecoration,
                               child: new Center(child: _xyToolText))),
 
@@ -252,7 +257,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           },
                           child: new Container(
                               width: SizeConfig.blockSizeVertical * 18,
-                              height: SizeConfig.blockSizeHorizontal * 10.0,
+                              height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _opToolDecoration,
                               child: new Center(child: _opToolText))),
 
@@ -273,7 +278,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           },
                           child: new Container(
                               width: SizeConfig.blockSizeVertical * 18,
-                              height: SizeConfig.blockSizeHorizontal * 10.0,
+                              height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _wgToolDecoration,
                               child: new Center(child: _wgToolText))),
 
@@ -289,7 +294,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         splashColor: Colors.black.withAlpha(50),
                         child: new Container(
                           width: SizeConfig.blockSizeVertical * 18,
-                          height: SizeConfig.blockSizeHorizontal * 10.0,
+                          height: SizeConfig.blockSizeHorizontal * 8.0,
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
@@ -518,6 +523,16 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   *
 */
 class PlotData {
-  List<int> plotX = List<int>.filled(1000, 0);
-  List<double> plotY = List<double>.filled(1000, 0);
+  //X axis values.
+  List<double> plotX = List<double>.filled(100, 0);
+  List<double> plotY = List<double>.filled(100, 0);
+
+  void fillX(double _start, double _end) {
+    double _space = (_end - _start) / 100;
+    plotX[0] = _start;
+    for (int iter = 1; iter < (plotX.length - 1); iter++) {
+      plotX[iter] = plotX[iter - 1] + _space;
+    }
+    plotX[99] = _end;
+  }
 }

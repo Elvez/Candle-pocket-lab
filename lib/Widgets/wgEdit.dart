@@ -250,12 +250,12 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                   RegExp("[0-9.]")),
                               LengthLimitingTextInputFormatter(4)
                             ],
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
                             controller: widget._periodController,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: "ms",
+                                hintText: "milli-seconds",
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5)))))
               ])),
@@ -278,12 +278,12 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                   RegExp("[0-9.]")),
                               LengthLimitingTextInputFormatter(4)
                             ],
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.center,
                             keyboardType: TextInputType.number,
                             controller: widget._amplitudeController,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: "V",
+                                hintText: "volts",
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5)))))
               ]))

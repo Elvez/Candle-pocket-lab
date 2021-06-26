@@ -23,6 +23,9 @@ class Device {
   //Address of CandlePL bluetooth device
   String address;
 
+  //Is connected
+  bool isDeviceConnected = false;
+
   /*
    * Initialize device
    *
@@ -225,7 +228,7 @@ class Device {
     }
 
     //If the device is not already connected, try to connect.
-    if (!isConnected()) {
+    if (!isDeviceConnected) {
       try {
         await BluetoothConnection.toAddress(address)
             .timeout(Duration(seconds: 5), onTimeout: () {
@@ -236,6 +239,7 @@ class Device {
           if (result == null) {
             print("Connected!");
             result = Future.value(true);
+            isDeviceConnected = true;
           }
         }).catchError((error) {
           print("Error");
