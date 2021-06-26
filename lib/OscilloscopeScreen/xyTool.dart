@@ -356,7 +356,13 @@ class _XYDialogState extends State<XYDialog> {
                           ],
                           autovalidate: true,
                           validator: (value) {
-                            validateY(value);
+                            if (value == null || value.isEmpty) {
+                              widget.saveButton = false;
+                              return 'Error';
+                            } else {
+                              widget.saveButton = true;
+                              return null;
+                            }
                           },
                           controller: widget.rangeYController,
                           keyboardType: TextInputType.number,
@@ -542,24 +548,6 @@ class _XYDialogState extends State<XYDialog> {
       } else {
         widget.is2Color[index] = false;
       }
-    }
-  }
-
-  /*
-   * Text fiel Validator 
-   * 
-   * Validates the Y axis range
-   * 
-   * @params : index(int)
-   * @return : none
-   */
-  String validateY(value) {
-    if (value == null || value.isEmpty) {
-      widget.saveButton = false;
-      return 'Error';
-    } else {
-      widget.saveButton = true;
-      return null;
     }
   }
 }

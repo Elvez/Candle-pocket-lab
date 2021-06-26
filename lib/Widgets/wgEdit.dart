@@ -250,6 +250,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                   RegExp("[0-9.]")),
                               LengthLimitingTextInputFormatter(4)
                             ],
+
+                            //Input validation
                             autovalidate: true,
                             validator: (value) {
                               if (value.isEmpty || value == null) {
@@ -296,6 +298,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget._amplitudeController,
+
+                            //Input validation
                             autovalidate: true,
                             validator: (value) {
                               if (value.isEmpty || value == null) {
