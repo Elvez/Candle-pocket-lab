@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/services.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
@@ -8,6 +7,9 @@ import 'package:candle_pocketlab/OscilloscopeScreen/graphOpsTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/wavegenOSc.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'dart:math';
 
 class OscilloscopeScreen extends StatefulWidget {
   //Channel setup dialog instance
@@ -42,7 +44,7 @@ class OscilloscopeScreen extends StatefulWidget {
   bool _isDiff = false;
 
   //WGtool data
-  double _amplitude = 5.0;
+  double _amplitude = 3.3;
   double _period = 100;
   int _waveType = 1;
 
@@ -86,7 +88,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       gradient: LinearGradient(colors: [
         Color.fromARGB(150, 52, 152, 199),
         Color.fromARGB(255, 52, 152, 199)
-      ]));
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Channel tool text
   final _chToolText = new Text("Ch",
@@ -99,7 +101,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       gradient: LinearGradient(colors: [
         Color.fromARGB(110, 82, 152, 199),
         Color.fromARGB(255, 82, 152, 199)
-      ]));
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Graph tool text
   final _xyToolText = new Text("XY",
@@ -112,7 +114,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       gradient: LinearGradient(colors: [
         Color.fromARGB(130, 52, 192, 199),
         Color.fromARGB(255, 52, 192, 199)
-      ]));
+      ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Operations tool text
   final _opToolText = Text("Op",
@@ -122,7 +124,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   //Wave generator tool decoration
   final _wgToolDecoration = new BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(20)),
-      gradient: LinearGradient(colors: [Colors.red[200], Colors.red[400]]));
+      gradient: LinearGradient(
+          colors: [Colors.red[200], Colors.red[400]],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter));
 
   //Wave generator tool text
   final _wgToolText = new Text("W",
@@ -137,10 +142,15 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   final _backShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)));
 
-  //Plot data
-  var _graphData = new PlotData();
+  //Graph plot data
+  var _ch1Data = new GraphData();
+  var _ch2Data = new GraphData();
 
   Widget build(BuildContext context) {
+    //Set default range for both channels
+    _ch1Data.setRange(widget.xAxis.range);
+    _ch2Data.setRange(widget.xAxis.range);
+
     //Get screen sizes
     SizeConfig().init(context);
     return MaterialApp(
@@ -155,19 +165,28 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                 new Stack(
                   children: <Widget>[
                     new Container(
-                      margin: _graphMargin,
-                      width: SizeConfig.blockSizeHorizontal * 85,
-                      height: SizeConfig.blockSizeHorizontal * 100,
-                      decoration: _graphDecoration,
-                      child: new Center(
-                        child: Container(
-                          child: SfCartesianChart(
-                            primaryXAxis: NumericAxis(crossesAt: 0),
-                            primaryYAxis: NumericAxis(crossesAt: 0),
-                          ),
-                        ),
-                      ),
-                    ),
+                        margin: _graphMargin,
+                        width: SizeConfig.blockSizeHorizontal * 85,
+                        height: SizeConfig.blockSizeHorizontal * 100,
+                        decoration: _graphDecoration,
+                        child: new Center(
+                            child: Container(
+                                child: SfCartesianChart(
+                          borderColor: Colors.grey,
+                          primaryXAxis: NumericAxis(
+                              visibleMinimum: 0,
+                              visibleMaximum: widget.xAxis.range,
+                              interval: widget.xAxis.range / 10,
+                              placeLabelsNearAxisLine: false,
+                              crossesAt: 0,
+                              axisLine:
+                                  AxisLine(color: Colors.grey[600], width: 2)),
+                          primaryYAxis: NumericAxis(
+                              visibleMaximum: widget.yAxis.range,
+                              visibleMinimum: (0 - widget.yAxis.range),
+                              axisLine:
+                                  AxisLine(color: Colors.grey[600], width: 2)),
+                        )))),
 
                     //Back button
                     new Container(
@@ -309,7 +328,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                       : [
                                           Color.fromARGB(150, 0, 232, 62),
                                           Color.fromARGB(255, 0, 232, 62)
-                                        ])),
+                                        ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter)),
                           child: new Center(
                             //Set icon according to graph state
                             child: _graphState
@@ -425,6 +446,13 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       widget._amplitude = widget.waveGenerator.getAmp();
       widget._period = widget.waveGenerator.getPeriod();
       widget._waveType = widget.waveGenerator.getWaveType();
+
+      //Send wave generator command
+      candle.sendWGCommand(1, "H", widget._waveType, widget._period.toString(),
+          widget._amplitude.toString());
+
+      //Set wave state
+      widget.waveGenerator.isWaveOn = !widget.waveGenerator.isWaveOn;
     } else {
       //Dialog closed with cancel button
 
@@ -444,21 +472,25 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * @return none
    */
   void getGraphData() {
-    if (widget.graphSetup.isSaved()) {
-      //Dialog closed with save button
+    setState(() {
+      if (widget.graphSetup.isSaved()) {
+        //Dialog closed with save button
 
-      //Save data
-      widget.ch1 = widget.graphSetup.getChannelColor(1);
-      widget.ch2 = widget.graphSetup.getChannelColor(2);
-      widget.xAxis = widget.graphSetup.getXData();
-      widget.yAxis = widget.graphSetup.getYData();
-    } else {
-      //Dialog closed with cancel button
+        //Save data
+        widget.ch1 = widget.graphSetup.getChannelColor(1);
+        widget.ch2 = widget.graphSetup.getChannelColor(2);
+        widget.xAxis = widget.graphSetup.getXData();
+        widget.yAxis = widget.graphSetup.getYData();
+      } else {
+        //Dialog closed with cancel button
 
-      //Replace data with previous
-      widget.graphSetup.setColor(widget.ch1, widget.ch2);
-      widget.graphSetup.setData(widget.xAxis, widget.yAxis);
-    }
+        //Replace data with previous
+        widget.graphSetup.setColor(widget.ch1, widget.ch2);
+        widget.graphSetup.setData(widget.xAxis, widget.yAxis);
+      }
+      _ch1Data.setRange(widget.xAxis.range);
+      _ch2Data.setRange(widget.xAxis.range);
+    });
   }
 
   /*
@@ -516,23 +548,24 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   }
 }
 
-/*
-  * Class name - PlotData
-  *
-  * Usage - This class is a structure for the x and y plot of the graph.
-  *
-*/
-class PlotData {
-  //X axis values.
-  List<double> plotX = List<double>.filled(100, 0);
-  List<double> plotY = List<double>.filled(100, 0);
+class GraphData {
+  var xData = List<double>.filled(100, 0);
+  var yData = List<double>.filled(100, 0);
 
-  void fillX(double _start, double _end) {
-    double _space = (_end - _start) / 100;
-    plotX[0] = _start;
-    for (int iter = 1; iter < (plotX.length - 1); iter++) {
-      plotX[iter] = plotX[iter - 1] + _space;
+  /*
+   * Fill X axis values
+   * 
+   * Fills x axis values seperated by space, hundred values are filles irrespective of the range.
+   * 
+   * @params : Range(int)
+   * @return : none 
+   */
+  void setRange(double _range) {
+    xData[0] = 0;
+    double _space = _range / 100;
+
+    for (int iter = 1; iter < 100; iter++) {
+      xData[iter] = xData[iter - 1] + _space;
     }
-    plotX[99] = _end;
   }
 }

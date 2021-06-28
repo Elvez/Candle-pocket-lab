@@ -172,6 +172,10 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
   final _triangImage = new Padding(
       padding: const EdgeInsets.all(0),
       child: Image.asset('images/triang.png'));
+
+  //Is input data valid
+  bool _validPeriod = true;
+  bool _validAmp = true;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -184,54 +188,55 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
           new Container(
               margin: EdgeInsets.only(left: 15, right: 10, top: 15),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(widget.sourceName, style: _sourceFont),
-                  new FlutterSwitch(
-                    activeColor: Color.fromARGB(150, 52, 152, 199),
-                    width: 50,
-                    height: 30,
-                    value: widget.isTurnedOn,
-                    onToggle: (value) {
-                      setState(() {
-                        widget.isTurnedOn = value;
-                        //validateInput();
-                      });
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(widget.sourceName, style: _sourceFont),
+                    new FlutterSwitch(
+                        activeColor: Color.fromARGB(150, 52, 152, 199),
+                        width: 50,
+                        height: 30,
+                        value: widget.isTurnedOn,
+                        onToggle: (value) {
+                          setState(() {
+                            widget.isTurnedOn = value;
+                          });
 
-                      //Send wave generator command
-                      setWaveGenerator(widget.isTurnedOn);
-                    },
-                  ),
-                ],
-              )),
+                          //Send wave generator command
+                          if (_validPeriod && _validAmp) {
+                            setWaveGenerator(widget.isTurnedOn);
+                          } else {
+                            setState(() {
+                              widget.isTurnedOn = false;
+                            });
+                          }
+                        })
+                  ])),
           new Container(
               margin: EdgeInsets.only(left: 10, top: 10),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  _waveText,
-                  SizedBox(width: 70),
-                  Container(
-                    width: 200,
-                    height: 40,
-                    child: ToggleButtons(
-                        borderColor: Colors.grey,
-                        fillColor: Colors.white,
-                        borderWidth: 2,
-                        selectedBorderColor: Color.fromARGB(250, 52, 152, 199),
-                        borderRadius: BorderRadius.circular(4),
-                        children: [_sinImage, _sqImage, _triangImage],
-                        onPressed: (int newIndex) {
-                          setState(() {
-                            toggleWaveType(newIndex);
-                          });
-                        },
-                        isSelected: widget._waveTyoe),
-                  )
-                ],
-              )),
+              child: Row(children: [
+                SizedBox(
+                  width: 10,
+                ),
+                _waveText,
+                SizedBox(width: 70),
+                Container(
+                  width: 200,
+                  height: 40,
+                  child: ToggleButtons(
+                      borderColor: Colors.grey,
+                      fillColor: Colors.white,
+                      borderWidth: 2,
+                      selectedBorderColor: Color.fromARGB(250, 52, 152, 199),
+                      borderRadius: BorderRadius.circular(4),
+                      children: [_sinImage, _sqImage, _triangImage],
+                      onPressed: (int newIndex) {
+                        setState(() {
+                          toggleWaveType(newIndex);
+                        });
+                      },
+                      isSelected: widget._waveTyoe),
+                )
+              ])),
           new Container(
               margin: EdgeInsets.only(top: 15),
               child: Row(children: [
@@ -255,11 +260,17 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             autovalidate: true,
                             validator: (value) {
                               if (value.isEmpty || value == null) {
+                                _validPeriod = false;
                                 return "Enter period.";
                               } else if (double.tryParse(value) > 3000) {
+                                _validPeriod = false;
                                 return "Less than 3000ms.";
                               } else if (double.tryParse(value) <= 0) {
+                                _validPeriod = false;
                                 return "Cannot be 0.";
+                              } else {
+                                _validPeriod = true;
+                                return null;
                               }
                             },
                             textAlign: TextAlign.right,
@@ -303,11 +314,17 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             autovalidate: true,
                             validator: (value) {
                               if (value.isEmpty || value == null) {
+                                _validAmp = false;
                                 return "Enter amplitude.";
                               } else if (double.tryParse(value) > 3.3) {
+                                _validAmp = false;
                                 return "Less than 3.3V.";
                               } else if (double.tryParse(value) <= 0) {
+                                _validAmp = false;
                                 return "Cannot be 0.";
+                              } else {
+                                _validAmp = true;
+                                return null;
                               }
                             },
                             decoration: InputDecoration(

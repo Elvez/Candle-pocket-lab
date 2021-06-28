@@ -291,6 +291,14 @@ class _XYDialogState extends State<XYDialog> {
   final _ch1Text = new Text("Channel 1",
       style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 20));
 
+  //Channel colors
+  final List<Icon> _channelColors = [
+    new Icon(Icons.circle, color: Colors.black),
+    new Icon(Icons.circle, color: Colors.red),
+    new Icon(Icons.circle, color: Colors.blue),
+    new Icon(Icons.circle, color: Colors.green)
+  ];
+
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
@@ -313,6 +321,7 @@ class _XYDialogState extends State<XYDialog> {
                           ],
                           controller: widget.rangeXController,
                           keyboardType: TextInputType.number,
+                          textAlign: TextAlign.right,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.only(top: 2, left: 2),
@@ -365,6 +374,7 @@ class _XYDialogState extends State<XYDialog> {
                             }
                           },
                           controller: widget.rangeYController,
+                          textAlign: TextAlign.right,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -405,14 +415,9 @@ class _XYDialogState extends State<XYDialog> {
                       borderColor: Colors.grey[200],
                       fillColor: Colors.white,
                       borderWidth: 1.2,
-                      selectedBorderColor: Colors.black,
+                      selectedBorderColor: Colors.grey[600],
                       borderRadius: BorderRadius.circular(15),
-                      children: [
-                        new Icon(Icons.circle, color: Colors.yellow),
-                        new Icon(Icons.circle, color: Colors.red),
-                        new Icon(Icons.circle, color: Colors.blue),
-                        new Icon(Icons.circle, color: Colors.green)
-                      ],
+                      children: _channelColors,
                       onPressed: (int newIndex) {
                         setState(() {
                           toggle1Color(newIndex);
@@ -436,14 +441,9 @@ class _XYDialogState extends State<XYDialog> {
                       borderColor: Colors.grey[200],
                       fillColor: Colors.white,
                       borderWidth: 1.2,
-                      selectedBorderColor: Colors.black,
+                      selectedBorderColor: Colors.grey[600],
                       borderRadius: BorderRadius.circular(15),
-                      children: [
-                        new Icon(Icons.circle, color: Colors.yellow),
-                        new Icon(Icons.circle, color: Colors.red),
-                        new Icon(Icons.circle, color: Colors.blue),
-                        new Icon(Icons.circle, color: Colors.green)
-                      ],
+                      children: _channelColors,
                       onPressed: (int newIndex) {
                         setState(() {
                           toggle2Color(newIndex);

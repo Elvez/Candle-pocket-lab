@@ -17,10 +17,13 @@ class WGDialog extends StatefulWidget {
   final period = new TextEditingController(text: "100");
 
   //Amplitude text controller
-  final amplitude = new TextEditingController(text: "5.0");
+  final amplitude = new TextEditingController(text: "3.3");
 
   //Save state for the settings menu
   bool save = false;
+
+  //Wave generator state
+  bool isWaveOn = false;
 
   /*
    * Get save state
@@ -194,6 +197,19 @@ class _WGDialogState extends State<WGDialog> {
     hintText: "ms",
     contentPadding: EdgeInsets.only(top: 2, right: 5),
   );
+
+  //Unit ms
+  final _unitMs = new Text(" ms",
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
+
+  //Unit V
+  final _unitV = new Text("V",
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
+
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SingleChildScrollView(
@@ -206,8 +222,7 @@ class _WGDialogState extends State<WGDialog> {
           children: [
             _waveText,
             Container(
-              margin: EdgeInsets.only(left: 50),
-              width: 180,
+              width: 160,
               height: SizeConfig.blockSizeHorizontal * 3.5,
               child: ToggleButtons(
                 borderColor: Colors.grey,
@@ -232,7 +247,7 @@ class _WGDialogState extends State<WGDialog> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _periodText,
-                  SizedBox(width: 25),
+                  SizedBox(width: 42),
                   Container(
                       child: Container(
                           width: 132,
@@ -247,47 +262,74 @@ class _WGDialogState extends State<WGDialog> {
                               ],
                               autovalidate: true,
                               validator: (value) {
-                                validatePeriod(value);
+                                if (value == null) {
+                                  widget.enableSaveP = false;
+                                  return 'Invalid';
+                                } else if (value.isEmpty) {
+                                  widget.enableSaveP = false;
+                                  return 'Invalid';
+                                } else if (double.tryParse(value) <= 0 ||
+                                    double.tryParse(value) > 3000) {
+                                  widget.enableSaveP = false;
+                                  return 'Invalid';
+                                } else {
+                                  widget.enableSaveP = true;
+                                  return null;
+                                }
                               },
                               textAlign: TextAlign.right,
                               keyboardType: TextInputType.number,
                               controller: widget.period,
-                              decoration: _periodInpDecoration)))
+                              decoration: _periodInpDecoration))),
+                  _unitMs
                 ])),
         new SizedBox(height: 8),
         new Container(
             margin: EdgeInsets.only(top: 10),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _ampText,
-                SizedBox(width: 25),
-                Container(
-                  child: Container(
-                      width: 132,
-                      height: 31,
-                      decoration: _ampDecoration,
-                      margin: EdgeInsets.only(left: 10),
-                      child: TextFormField(
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
-                            LengthLimitingTextInputFormatter(4)
-                          ],
-                          autovalidate: true,
-                          validator: (value) {
-                            validateAmplitude(value);
-                          },
-                          textAlign: TextAlign.right,
-                          keyboardType: TextInputType.number,
-                          controller: widget.amplitude,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: "V",
-                              contentPadding:
-                                  EdgeInsets.only(top: 2, right: 5)))),
-                )
-              ],
-            )),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _ampText,
+                  SizedBox(width: 25),
+                  Container(
+                    child: Container(
+                        width: 132,
+                        height: 31,
+                        decoration: _ampDecoration,
+                        child: TextFormField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp("[0-9.]")),
+                              LengthLimitingTextInputFormatter(4)
+                            ],
+                            autovalidate: true,
+                            validator: (value) {
+                              if (value == null) {
+                                widget.enableSaveA = false;
+                                return 'Invalid';
+                              } else if (value.isEmpty) {
+                                widget.enableSaveA = false;
+                                return 'Invalid';
+                              } else if (double.tryParse(value) <= 0 ||
+                                  double.tryParse(value) > 3.3) {
+                                widget.enableSaveA = false;
+                                return 'Invalid';
+                              } else {
+                                widget.enableSaveA = true;
+                                return null;
+                              }
+                            },
+                            textAlign: TextAlign.right,
+                            keyboardType: TextInputType.number,
+                            controller: widget.amplitude,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: "V",
+                                contentPadding:
+                                    EdgeInsets.only(top: 2, right: 5)))),
+                  ),
+                  _unitV
+                ]))
       ])),
       actions: [
         TextButton(
@@ -304,7 +346,7 @@ class _WGDialogState extends State<WGDialog> {
               Navigator.pop(context);
             } else {}
           },
-          child: Text(widget.actionButton,
+          child: Text(widget.isWaveOn ? "Turn Off" : widget.actionButton,
               style: TextStyle(fontFamily: 'Ropa Sans')),
         ),
       ],
@@ -321,44 +363,6 @@ class _WGDialogState extends State<WGDialog> {
       } else {
         widget._waveType[index] = false;
       }
-    }
-  }
-
-  /*
-   * Validator for period input field 
-   */
-  String validatePeriod(value) {
-    if (value == null) {
-      widget.enableSaveP = false;
-      return 'Invalid';
-    } else if (value.isEmpty) {
-      widget.enableSaveP = false;
-      return 'Invalid';
-    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 3000) {
-      widget.enableSaveP = false;
-      return 'Invalid';
-    } else {
-      widget.enableSaveP = true;
-      return null;
-    }
-  }
-
-  /*
-   * Validator for period input field 
-   */
-  String validateAmplitude(value) {
-    if (value == null) {
-      widget.enableSaveA = false;
-      return 'Invalid';
-    } else if (value.isEmpty) {
-      widget.enableSaveA = false;
-      return 'Invalid';
-    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 5.0) {
-      widget.enableSaveA = false;
-      return 'Invalid';
-    } else {
-      widget.enableSaveA = true;
-      return null;
     }
   }
 }
