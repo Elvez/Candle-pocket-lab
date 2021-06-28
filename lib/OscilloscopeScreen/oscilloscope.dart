@@ -145,6 +145,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   //Graph plot data
   var _ch1Data = new GraphData();
   var _ch2Data = new GraphData();
+  String yTitle = "V";
+  String xTitle = "ms";
 
   Widget build(BuildContext context) {
     //Set default range for both channels
@@ -171,22 +173,26 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         decoration: _graphDecoration,
                         child: new Center(
                             child: Container(
+                                margin: EdgeInsets.only(right: 15),
                                 child: SfCartesianChart(
-                          borderColor: Colors.grey,
-                          primaryXAxis: NumericAxis(
-                              visibleMinimum: 0,
-                              visibleMaximum: widget.xAxis.range,
-                              interval: widget.xAxis.range / 10,
-                              placeLabelsNearAxisLine: false,
-                              crossesAt: 0,
-                              axisLine:
-                                  AxisLine(color: Colors.grey[600], width: 2)),
-                          primaryYAxis: NumericAxis(
-                              visibleMaximum: widget.yAxis.range,
-                              visibleMinimum: (0 - widget.yAxis.range),
-                              axisLine:
-                                  AxisLine(color: Colors.grey[600], width: 2)),
-                        )))),
+                                  borderColor: Colors.white,
+                                  primaryXAxis: NumericAxis(
+                                      labelFormat: '{value} $xTitle',
+                                      visibleMinimum: 0,
+                                      visibleMaximum: widget.xAxis.range,
+                                      interval: widget.xAxis.range / 10,
+                                      placeLabelsNearAxisLine: false,
+                                      crossesAt: 0,
+                                      axisLine: AxisLine(
+                                          color: Colors.grey[600], width: 2)),
+                                  primaryYAxis: NumericAxis(
+                                      interval: widget.yAxis.range / 5,
+                                      visibleMaximum: widget.yAxis.range,
+                                      visibleMinimum: (0 - widget.yAxis.range),
+                                      labelFormat: '{value} $yTitle',
+                                      axisLine: AxisLine(
+                                          color: Colors.grey[600], width: 2)),
+                                )))),
 
                     //Back button
                     new Container(
@@ -490,6 +496,27 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       }
       _ch1Data.setRange(widget.xAxis.range);
       _ch2Data.setRange(widget.xAxis.range);
+
+      switch (widget.xAxis.unit) {
+        case timeUnit.micro:
+          xTitle = "μs";
+          break;
+        case timeUnit.milli:
+          xTitle = "ms";
+          break;
+        case timeUnit.second:
+          xTitle = "s";
+          break;
+      }
+
+      switch (widget.yAxis.unit) {
+        case voltUnit.milli:
+          yTitle = "mV";
+          break;
+        case voltUnit.volt:
+          yTitle = "V";
+          break;
+      }
     });
   }
 
