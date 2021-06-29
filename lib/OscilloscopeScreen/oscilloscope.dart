@@ -8,7 +8,7 @@ import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/wavegenOSc.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:candle_pocketlab/Plot/plot.dart';
 import 'dart:math';
 
 class OscilloscopeScreen extends StatefulWidget {
@@ -34,7 +34,7 @@ class OscilloscopeScreen extends StatefulWidget {
   bool ch2Active = false;
 
   //xyTool data
-  color ch1 = color.yellow;
+  color ch1 = color.black;
   color ch2 = color.red;
   var xAxis = new XGraphData(100.0, timeUnit.milli);
   var yAxis = new YGraphData(5.0, voltUnit.volt);
@@ -143,8 +143,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       borderRadius: BorderRadius.all(Radius.circular(10)));
 
   //Graph plot data
-  var _ch1Data = new GraphData();
-  var _ch2Data = new GraphData();
+  var _ch1Data = new GraphData(100, Colors.black);
+  var _ch2Data = new GraphData(100, Colors.red);
   String yTitle = "V";
   String xTitle = "ms";
 
@@ -175,6 +175,26 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             child: Container(
                                 margin: EdgeInsets.only(right: 15),
                                 child: SfCartesianChart(
+                                  series: <ChartSeries>[
+                                    FastLineSeries<PlotValue, double>(
+                                        isVisible: widget.ch1Active,
+                                        animationDuration: 10,
+                                        dataSource: _ch1Data.plot,
+                                        color: _ch1Data.color,
+                                        xValueMapper: (PlotValue _plot, _) =>
+                                            _plot.xVal,
+                                        yValueMapper: (PlotValue _plot, _) =>
+                                            _plot.yVal),
+                                    FastLineSeries<PlotValue, double>(
+                                        isVisible: widget.ch2Active,
+                                        animationDuration: 10,
+                                        dataSource: _ch2Data.plot,
+                                        color: _ch2Data.color,
+                                        xValueMapper: (PlotValue _plot, _) =>
+                                            _plot.xVal,
+                                        yValueMapper: (PlotValue _plot, _) =>
+                                            _plot.yVal)
+                                  ],
                                   borderColor: Colors.white,
                                   primaryXAxis: NumericAxis(
                                       labelFormat: '{value} $xTitle',
@@ -309,10 +329,12 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                       //Graph start/stop button
                       new InkWell(
-                        onTap: () {
+                        onTap: () async {
                           setState(() {
                             _graphState = !_graphState;
                           });
+
+                          //Send oscilloscope command
                           setOscilloscope(_graphState);
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -420,11 +442,13 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
     if (widget.channelSetup.isSaved()) {
       //Dialog closed with save button
 
-      //Save data
-      widget._rangeCh1 = widget.channelSetup.getRange1();
-      widget.ch1Active = widget.channelSetup.getChannelState(1);
-      widget._rangeCh2 = widget.channelSetup.getRange2();
-      widget.ch2Active = widget.channelSetup.getChannelState(2);
+      setState(() {
+        //Save data
+        widget._rangeCh1 = widget.channelSetup.getRange1();
+        widget.ch1Active = widget.channelSetup.getChannelState(1);
+        widget._rangeCh2 = widget.channelSetup.getRange2();
+        widget.ch2Active = widget.channelSetup.getChannelState(2);
+      });
     } else {
       //Dialog closed with cancel button
 
@@ -487,35 +511,69 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         widget.ch2 = widget.graphSetup.getChannelColor(2);
         widget.xAxis = widget.graphSetup.getXData();
         widget.yAxis = widget.graphSetup.getYData();
+        _ch1Data.setRange(widget.xAxis.range);
+        _ch2Data.setRange(widget.xAxis.range);
+
+        //Update graph Xaxis unit
+        switch (widget.xAxis.unit) {
+          case timeUnit.micro:
+            xTitle = "μs";
+            break;
+          case timeUnit.milli:
+            xTitle = "ms";
+            break;
+          case timeUnit.second:
+            xTitle = "s";
+            break;
+        }
+
+        //Update graph Yaxis unit
+        switch (widget.yAxis.unit) {
+          case voltUnit.milli:
+            yTitle = "mV";
+            break;
+          case voltUnit.volt:
+            yTitle = "V";
+            break;
+        }
+
+        //Update channel 1 color
+        switch (widget.ch1) {
+          case color.black:
+            _ch1Data.setColor(Colors.black);
+            break;
+          case color.red:
+            _ch1Data.setColor(Colors.red);
+            break;
+          case color.blue:
+            _ch1Data.setColor(Colors.blue);
+            break;
+          case color.green:
+            _ch1Data.setColor(Colors.green);
+            break;
+        }
+
+        //Update channel 2 color
+        switch (widget.ch2) {
+          case color.black:
+            _ch2Data.setColor(Colors.black);
+            break;
+          case color.red:
+            _ch2Data.setColor(Colors.red);
+            break;
+          case color.blue:
+            _ch2Data.setColor(Colors.blue);
+            break;
+          case color.green:
+            _ch2Data.setColor(Colors.green);
+            break;
+        }
       } else {
         //Dialog closed with cancel button
 
         //Replace data with previous
         widget.graphSetup.setColor(widget.ch1, widget.ch2);
         widget.graphSetup.setData(widget.xAxis, widget.yAxis);
-      }
-      _ch1Data.setRange(widget.xAxis.range);
-      _ch2Data.setRange(widget.xAxis.range);
-
-      switch (widget.xAxis.unit) {
-        case timeUnit.micro:
-          xTitle = "μs";
-          break;
-        case timeUnit.milli:
-          xTitle = "ms";
-          break;
-        case timeUnit.second:
-          xTitle = "s";
-          break;
-      }
-
-      switch (widget.yAxis.unit) {
-        case voltUnit.milli:
-          yTitle = "mV";
-          break;
-        case voltUnit.volt:
-          yTitle = "V";
-          break;
       }
     });
   }
@@ -571,28 +629,6 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
           1, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
       candle.sendOSCCommmand(
           2, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
-    }
-  }
-}
-
-class GraphData {
-  var xData = List<double>.filled(100, 0);
-  var yData = List<double>.filled(100, 0);
-
-  /*
-   * Fill X axis values
-   * 
-   * Fills x axis values seperated by space, hundred values are filles irrespective of the range.
-   * 
-   * @params : Range(int)
-   * @return : none 
-   */
-  void setRange(double _range) {
-    xData[0] = 0;
-    double _space = _range / 100;
-
-    for (int iter = 1; iter < 100; iter++) {
-      xData[iter] = xData[iter - 1] + _space;
     }
   }
 }

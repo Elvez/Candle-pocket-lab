@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 enum timeUnit { micro, milli, second }
 enum voltUnit { milli, volt }
-enum color { yellow, red, blue, green }
+enum color { black, red, blue, green }
 
 class XYDialog extends StatefulWidget {
   //Text editing controller for X axis range
@@ -84,7 +84,7 @@ class XYDialog extends StatefulWidget {
    * @return : none 
    */
   void setColor(color channel1, color channel2) {
-    if (channel1 == color.yellow) {
+    if (channel1 == color.black) {
       is1Color[0] = true;
       is1Color[1] = false;
       is1Color[2] = false;
@@ -109,7 +109,7 @@ class XYDialog extends StatefulWidget {
       is1Color[3] = true;
     }
 
-    if (channel2 == color.yellow) {
+    if (channel2 == color.black) {
       is2Color[0] = true;
       is2Color[1] = false;
       is2Color[2] = false;
@@ -200,14 +200,14 @@ class XYDialog extends StatefulWidget {
    */
   color getChannelColor(int ch) {
     if (ch == 1) {
-      if (is1Color[0]) return color.yellow;
+      if (is1Color[0]) return color.black;
       if (is1Color[1]) return color.red;
       if (is1Color[2]) return color.blue;
       if (is1Color[3]) return color.green;
     }
 
     if (ch == 2) {
-      if (is2Color[0]) return color.yellow;
+      if (is2Color[0]) return color.black;
       if (is2Color[1]) return color.red;
       if (is2Color[2]) return color.blue;
       if (is2Color[3]) return color.green;
