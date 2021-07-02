@@ -47,7 +47,7 @@ class DeviceUSB {
    * @params : none
    * @return : none 
    */
-  void initialize() async {
+  Future<bool> initialize() async {
     //Port open result
     bool _openResult = false;
 
@@ -76,18 +76,18 @@ class DeviceUSB {
           //Some error opening the port
           print("Could not open port!");
           isConnected = false;
-          return;
+          return Future.value(false);
         }
       } else {
         //Devices list is empty.
         print("There are no devices to connect!");
         isConnected = false;
-        return;
+        return Future.value(false);
       }
     } else {
       //Device is already connected.
       print("Device already connected.");
-      return;
+      return true;
     }
   }
 

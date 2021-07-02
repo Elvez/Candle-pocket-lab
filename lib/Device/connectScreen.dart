@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/HomeScreen/homescreen.dart';
-import 'package:candle_pocketlab/Device/device.dart';
+import 'package:candle_pocketlab/Device/deviceUSB.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 //Global bluetooth device instance
-Device candle = Device();
+DeviceUSB candle = DeviceUSB();
 
 /* Class name - StartScreen
  * This class is the UI screen class for connect screen.
@@ -34,7 +36,7 @@ class _StartScreenState extends State<StartScreen> {
   );
 
   //Text "Connect device!"
-  final _connectText = new Text("Connect device!",
+  final _connectText = new AutoSizeText("Connect device!",
       style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 30));
 
   //Connect button icon
@@ -42,7 +44,7 @@ class _StartScreenState extends State<StartScreen> {
       color: Color.fromARGB(255, 52, 152, 199));
 
   Widget build(BuildContext context) {
-    candle.initDevice();
+    SizeConfig().init(context);
     return MaterialApp(
         home: Scaffold(
       backgroundColor: _bgColor,
@@ -50,9 +52,9 @@ class _StartScreenState extends State<StartScreen> {
           ? _working
           : Column(
               children: [
-                SizedBox(height: 80),
+                SizedBox(height: SizeConfig.blockSizeVertical * 10),
                 _deviceIcon,
-                SizedBox(height: 130),
+                SizedBox(height: SizeConfig.blockSizeVertical * 12),
                 Divider(),
                 Padding(
                   padding: const EdgeInsets.only(
@@ -64,29 +66,8 @@ class _StartScreenState extends State<StartScreen> {
                       IconButton(
                           icon: _connectIcon,
                           onPressed: () async {
-                            if (await candle.isBTon()) {
-                              setState(() {
-                                isConnecting = true;
-                              });
-                              bool result = await candle.tryConnect();
-                              setState(() {
-                                isConnecting = false;
-                              });
-                              if (result) {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreen()));
-                              } else {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => ErrorDialog());
-                              }
-                            } else {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => BluetoothError());
-                            }
+                            //TODO: Add USB connect API
+                            print(await candle.getDevices());
                           })
                     ],
                   ),
@@ -96,65 +77,34 @@ class _StartScreenState extends State<StartScreen> {
             ),
     ));
   }
-}
 
-/* Error dialog for if bluetooth is not turned on.
- * No methods
- */
-class BluetoothError extends StatelessWidget {
-  //Title Text
-  final _title = new Text("Error", style: TextStyle(fontFamily: 'Ropa Sans'));
-
-  //Body text
-  final _bodyText = new Text("Would you like to turn on bluetooth?",
-      style: TextStyle(fontFamily: 'Ropa Sans'));
-
-  //Ok button text
-  final _okButton = new Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans'));
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: _title,
-      content: _bodyText,
-      actions: [
-        TextButton(
-          child: _okButton,
-          onPressed: () {
-            candle.enableBluetooth();
-            Navigator.pop(context);
-          },
-        )
-      ],
-    );
-  }
-}
-
-/* Error dialog for if device cannot connect.
- * No methods
- */
-class ErrorDialog extends StatelessWidget {
-  //Title text
-  final _title = new Text("Error", style: TextStyle(fontFamily: 'Ropa Sans'));
-
-  //Body text
-  final _bodyText = new Text(
-      "Device cannot connect, try pairing with the device.",
-      style: TextStyle(fontFamily: 'Ropa Sans'));
-
-  //Ok button text
-  final _okButton = new Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans'));
-
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: _title,
-      content: _bodyText,
-      actions: [
-        TextButton(
-          child: _okButton,
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        )
-      ],
-    );
+  /*
+   * Show error by content
+   *
+   * This function shows the argument string as an error dialog.
+   *
+   * @param Error(String)
+   * @return none
+   */
+  void showError(String errormessage) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error',
+                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.red)),
+            content:
+                Text(errormessage, style: TextStyle(fontFamily: 'Ropa Sans')),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Future.delayed(Duration.zero, () {
+                      Navigator.pop(context);
+                    });
+                  },
+                  child: Text('Ok'))
+            ],
+          );
+        });
   }
 }

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 
 /*
  * Class name - MultimeterTile
@@ -158,19 +159,23 @@ class _MultimeterTileState extends State<MultimeterTile> {
         width: SizeConfig.blockSizeHorizontal * 92.2,
         height: SizeConfig.blockSizeVertical * 27.1,
         decoration: _decoration,
-        margin: EdgeInsets.only(top: 15),
+        margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.90),
         child: Column(children: [
           Container(
-              margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+              margin: EdgeInsets.only(
+                  left: SizeConfig.blockSizeVertical * 1.90,
+                  right: SizeConfig.blockSizeVertical * 1.20,
+                  top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(widget.channelName, style: _channelNameStyle),
+                  new AutoSizeText(widget.channelName,
+                      style: _channelNameStyle),
                   FlutterSwitch(
                     duration: Duration(milliseconds: 200),
                     activeColor: Color.fromARGB(255, 52, 152, 199),
-                    width: 50,
-                    height: 30,
+                    width: SizeConfig.blockSizeVertical * 6.32,
+                    height: SizeConfig.blockSizeVertical * 3.8,
                     value: widget.isTurnedOn,
                     onToggle: (value) {
                       //Set the switch state of tile
@@ -199,17 +204,21 @@ class _MultimeterTileState extends State<MultimeterTile> {
               decoration: _valueDecoration,
               width: SizeConfig.blockSizeHorizontal * 66.7,
               height: SizeConfig.blockSizeVertical * 12.2,
-              margin: EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 2.40),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(left: 40),
-                        child: Text(widget.valueM.format(widget.fieldValue),
+                        margin: EdgeInsets.only(left: 18),
+                        child: new AutoSizeText(
+                            widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
                     Container(
-                      margin: EdgeInsets.only(left: 10, top: 12, right: 30),
-                      child: Text(widget.unit, style: _unitFont),
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeVertical * 1.20,
+                          top: SizeConfig.blockSizeVertical * 1.50,
+                          right: SizeConfig.blockSizeVertical * 3.60),
+                      child: new AutoSizeText(widget.unit, style: _unitFont),
                     )
                   ]))
         ]));
@@ -230,27 +239,27 @@ class _MultimeterTileState extends State<MultimeterTile> {
     //Parse value for voltmeter
     double _value = 0;
 
-    try {
-      //Start listening
-      candle.connection.input.listen((event) {
-        //Decode bytes to string data
-        _packet = ascii.decode(event);
+    // try {
+    //   //Start listening
+    //   candle.connection.input.listen((event) {
+    //     //Decode bytes to string data
+    //     _packet = ascii.decode(event);
 
-        //Remove packet tail and parse to double
-        _packet = _packet.substring(0, _packet.length - 1);
-        _value = double.tryParse(_packet);
+    //     //Remove packet tail and parse to double
+    //     _packet = _packet.substring(0, _packet.length - 1);
+    //     _value = double.tryParse(_packet);
 
-        //Calculation MinVal = 0, MaxVal = 4096, Min result val = -20, Max result val = +20.
-        _value = (_value / 102.4) - 20.0;
-        setState(() {
-          //Display value.
-          widget.fieldValue = _value;
-          if (!widget.isTurnedOn) widget.fieldValue = 0;
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
+    //     //Calculation MinVal = 0, MaxVal = 4096, Min result val = -20, Max result val = +20.
+    //     _value = (_value / 102.4) - 20.0;
+    //     setState(() {
+    //       //Display value.
+    //       widget.fieldValue = _value;
+    //       if (!widget.isTurnedOn) widget.fieldValue = 0;
+    //     });
+    //   });
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   /*

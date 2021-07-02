@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:holding_gesture/holding_gesture.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 //Power source enumeration
 enum powerSource { source1, source2, source3, source4 }
@@ -156,7 +157,7 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
   //Field area decoration
   final _valueDecoration = new BoxDecoration(
       border: Border.all(color: Colors.grey, width: 1),
-      borderRadius: BorderRadius.all(Radius.circular(3)));
+      borderRadius: BorderRadius.all(Radius.circular(15)));
 
   //Value font
   final _valueFont = new TextStyle(
@@ -166,7 +167,7 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
   );
 
   //Unit 'v'
-  final _voltageUnit = new Text(
+  final _voltageUnit = new AutoSizeText(
     "v",
     style:
         TextStyle(color: Colors.black, fontFamily: 'Ropa Sans', fontSize: 35),
@@ -188,7 +189,10 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
         decoration: _decoration,
         child: new Column(children: [
           new Container(
-              margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+              margin: EdgeInsets.only(
+                  left: SizeConfig.blockSizeVertical * 1.90,
+                  right: SizeConfig.blockSizeVertical * 1.26,
+                  top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -209,7 +213,9 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
               )),
           new Container(
               child: new Container(
-                  margin: EdgeInsets.only(top: 20, left: 10),
+                  margin: EdgeInsets.only(
+                      top: SizeConfig.blockSizeVertical * 2.40,
+                      left: SizeConfig.blockSizeVertical * 1.20),
                   child: new Row(children: [
                     new Container(
                         width: SizeConfig.blockSizeHorizontal * 28,
@@ -218,7 +224,7 @@ class _PowerSourceTileState extends State<PowerSourceTile> {
                         child: new Container(
                             margin: EdgeInsets.only(left: 3),
                             child: new Row(children: [
-                              Text(
+                              AutoSizeText(
                                 widget._valueFormat.format(widget._value),
                                 style: _valueFont,
                                 textAlign: TextAlign.right,
@@ -372,14 +378,14 @@ class LowerSectionPS extends StatelessWidget {
             isNegativeRated
                 ? Container(
                     height: 24, width: 24, child: Image.asset('images/pm.png'))
-                : Text(
+                : AutoSizeText(
                     "0 - ",
                     style: TextStyle(
                         color: Color.fromARGB(179, 0, 0, 0),
                         fontFamily: 'Ropa Sans',
                         fontSize: 31),
                   ),
-            Text(
+            AutoSizeText(
               "$rating" + "v",
               style: TextStyle(
                   color: Color.fromARGB(179, 0, 0, 0),

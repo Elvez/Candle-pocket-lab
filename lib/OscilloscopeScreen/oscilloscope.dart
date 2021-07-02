@@ -10,6 +10,7 @@ import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:candle_pocketlab/Plot/plot.dart';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class OscilloscopeScreen extends StatefulWidget {
   //Channel setup dialog instance
@@ -77,7 +78,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   //Tool area border
   final _toolDecoration = new BoxDecoration(
       border: Border.all(color: Color.fromARGB(150, 30, 87, 125), width: 1.2),
-      borderRadius: BorderRadius.all(Radius.circular(10)));
+      borderRadius: BorderRadius.all(Radius.circular(15)));
 
   //Tools alignment
   final _toolAlignment = MainAxisAlignment.spaceEvenly;
@@ -91,7 +92,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Channel tool text
-  final _chToolText = new Text("Ch",
+  final _chToolText = new AutoSizeText("Ch",
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 50, color: Colors.white));
 
@@ -104,7 +105,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Graph tool text
-  final _xyToolText = new Text("XY",
+  final _xyToolText = new AutoSizeText("XY",
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 50, color: Colors.white));
 
@@ -117,7 +118,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter));
 
   //Operations tool text
-  final _opToolText = Text("Op",
+  final _opToolText = AutoSizeText("Op",
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 50, color: Colors.white));
 
@@ -130,7 +131,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
           end: Alignment.bottomCenter));
 
   //Wave generator tool text
-  final _wgToolText = new Text("W",
+  final _wgToolText = new AutoSizeText("W",
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 50, color: Colors.white));
 
@@ -169,11 +170,12 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     new Container(
                         margin: _graphMargin,
                         width: SizeConfig.blockSizeHorizontal * 85,
-                        height: SizeConfig.blockSizeHorizontal * 100,
+                        height: SizeConfig.blockSizeVertical * 100,
                         decoration: _graphDecoration,
                         child: new Center(
                             child: Container(
-                                margin: EdgeInsets.only(right: 15),
+                                margin: EdgeInsets.only(
+                                    right: SizeConfig.blockSizeVertical * 1.90),
                                 child: SfCartesianChart(
                                   series: <ChartSeries>[
                                     FastLineSeries<PlotValue, double>(
@@ -217,8 +219,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     //Back button
                     new Container(
                       margin: _backButtonMargin,
-                      width: 40,
-                      height: 40,
+                      width: SizeConfig.blockSizeVertical * 4.80,
+                      height: SizeConfig.blockSizeVertical * 4.80,
                       child: FloatingActionButton(
                         child: _backIcon,
                         backgroundColor: Colors.white,
@@ -237,8 +239,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                 //Tool box
                 new Container(
                   margin: _toolMargin,
-                  width: SizeConfig.blockSizeVertical * 20,
-                  height: SizeConfig.blockSizeHorizontal * 100,
+                  width: SizeConfig.blockSizeHorizontal * 10,
+                  height: SizeConfig.blockSizeVertical * 100,
                   decoration: _toolDecoration,
                   child: new Column(
                     mainAxisAlignment: _toolAlignment,
@@ -259,7 +261,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             });
                           },
                           child: new Container(
-                              width: SizeConfig.blockSizeVertical * 18,
+                              margin: EdgeInsets.only(right: 1, left: 1),
+                              width: SizeConfig.blockSizeVertical * 20,
                               height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _chToolDecoration,
                               child: new Center(child: _chToolText))),
@@ -280,7 +283,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             });
                           },
                           child: new Container(
-                              width: SizeConfig.blockSizeVertical * 18,
+                              margin: EdgeInsets.only(right: 1, left: 1),
+                              width: SizeConfig.blockSizeVertical * 20,
                               height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _xyToolDecoration,
                               child: new Center(child: _xyToolText))),
@@ -301,7 +305,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             });
                           },
                           child: new Container(
-                              width: SizeConfig.blockSizeVertical * 18,
+                              margin: EdgeInsets.only(right: 1, left: 1),
+                              width: SizeConfig.blockSizeVertical * 20,
                               height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _opToolDecoration,
                               child: new Center(child: _opToolText))),
@@ -322,7 +327,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             });
                           },
                           child: new Container(
-                              width: SizeConfig.blockSizeVertical * 18,
+                              margin: EdgeInsets.only(right: 1, left: 1),
+                              width: SizeConfig.blockSizeVertical * 20,
                               height: SizeConfig.blockSizeHorizontal * 8.0,
                               decoration: _wgToolDecoration,
                               child: new Center(child: _wgToolText))),
@@ -340,7 +346,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         splashColor: Colors.black.withAlpha(50),
                         child: new Container(
-                          width: SizeConfig.blockSizeVertical * 18,
+                          width: SizeConfig.blockSizeVertical * 20,
                           height: SizeConfig.blockSizeHorizontal * 8.0,
                           decoration: BoxDecoration(
                               borderRadius:

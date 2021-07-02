@@ -3,6 +3,7 @@ import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/services.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 /*
  * Class name - WaveGeneratorTile
@@ -138,21 +139,21 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       fontSize: 25);
 
   //Wave text
-  final _waveText = new Text("Wave:",
+  final _waveText = new AutoSizeText("Wave:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 25,
           color: Color.fromARGB(255, 74, 74, 74)));
 
   //Period text
-  final _periodText = new Text("Period:",
+  final _periodText = new AutoSizeText("Period:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 25,
           color: Color.fromARGB(255, 74, 74, 74)));
 
   //Amplitude text
-  final _amplitudeText = new Text("Amplitude:",
+  final _amplitudeText = new AutoSizeText("Amplitude:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 25,
@@ -181,20 +182,23 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
     SizeConfig().init(context);
     return new Container(
         width: SizeConfig.blockSizeHorizontal * 92.2,
-        height: SizeConfig.blockSizeVertical * 27.1,
+        height: SizeConfig.blockSizeVertical * 30,
         decoration: _decoration,
-        margin: EdgeInsets.only(top: 15),
+        margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.90),
         child: new Column(children: [
           new Container(
-              margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+              margin: EdgeInsets.only(
+                  left: SizeConfig.blockSizeVertical * 1.90,
+                  right: SizeConfig.blockSizeVertical * 1.20,
+                  top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(widget.sourceName, style: _sourceFont),
+                    new AutoSizeText(widget.sourceName, style: _sourceFont),
                     new FlutterSwitch(
                         activeColor: Color.fromARGB(150, 52, 152, 199),
-                        width: 50,
-                        height: 30,
+                        width: SizeConfig.blockSizeHorizontal * 12.75,
+                        height: SizeConfig.blockSizeVertical * 3.79,
                         value: widget.isTurnedOn,
                         onToggle: (value) {
                           setState(() {
@@ -218,10 +222,10 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                   width: 10,
                 ),
                 _waveText,
-                SizedBox(width: 70),
+                SizedBox(width: SizeConfig.blockSizeVertical * 8.85),
                 Container(
-                  width: 200,
-                  height: 40,
+                  width: SizeConfig.blockSizeVertical * 25.28,
+                  height: SizeConfig.blockSizeVertical * 5.05,
                   child: ToggleButtons(
                       borderColor: Colors.grey,
                       fillColor: Colors.white,
@@ -238,17 +242,18 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                 )
               ])),
           new Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(children: [
-                SizedBox(width: 20),
+                SizedBox(width: SizeConfig.blockSizeVertical * 2.40),
                 _periodText,
-                SizedBox(width: 25),
+                SizedBox(width: SizeConfig.blockSizeVertical * 3.16),
                 Container(
                     child: Container(
-                        width: 132,
-                        height: 31,
+                        width: SizeConfig.blockSizeVertical * 16.7,
+                        height: SizeConfig.blockSizeVertical * 3.92,
                         decoration: _fieldDecoration,
-                        margin: EdgeInsets.only(left: 47),
+                        margin: EdgeInsets.only(
+                            left: SizeConfig.blockSizeVertical * 5.94),
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -281,25 +286,26 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5))))),
                 SizedBox(width: 5),
-                Text("ms",
+                AutoSizeText("ms",
                     style: TextStyle(
                         fontFamily: 'Ropa Sans',
                         fontSize: 20,
                         color: Colors.grey[700]))
               ])),
-          new SizedBox(height: 8),
+          new SizedBox(height: SizeConfig.blockSizeVertical * 1.0),
           new Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.20),
               child: Row(children: [
-                SizedBox(width: 20),
+                SizedBox(width: SizeConfig.blockSizeVertical * 2.40),
                 _amplitudeText,
-                SizedBox(width: 25),
+                SizedBox(width: SizeConfig.blockSizeVertical * 2.60),
                 Container(
                     child: Container(
-                        width: 132,
-                        height: 31,
+                        width: SizeConfig.blockSizeVertical * 16.7,
+                        height: SizeConfig.blockSizeVertical * 3.92,
                         decoration: _fieldDecoration,
-                        margin: EdgeInsets.only(left: 10),
+                        margin: EdgeInsets.only(
+                            left: SizeConfig.blockSizeVertical * 1.90),
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -332,7 +338,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5))))),
                 SizedBox(width: 5),
-                Text("V",
+                AutoSizeText("V",
                     style: TextStyle(
                         fontFamily: 'Ropa Sans',
                         fontSize: 20,
@@ -378,13 +384,15 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text("Error", style: TextStyle(fontFamily: 'Ropa Sans')),
-                content: Text(error, style: TextStyle(fontFamily: 'Ropa Sans')),
+                title: AutoSizeText("Error",
+                    style: TextStyle(fontFamily: 'Ropa Sans')),
+                content: AutoSizeText(error,
+                    style: TextStyle(fontFamily: 'Ropa Sans')),
                 actions: [
                   TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child:
-                          Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans')))
+                      child: AutoSizeText("Ok",
+                          style: TextStyle(fontFamily: 'Ropa Sans')))
                 ],
               ));
       setState(() {
@@ -397,13 +405,15 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text("Error", style: TextStyle(fontFamily: 'Ropa Sans')),
-                content: Text(error, style: TextStyle(fontFamily: 'Ropa Sans')),
+                title: AutoSizeText("Error",
+                    style: TextStyle(fontFamily: 'Ropa Sans')),
+                content: AutoSizeText(error,
+                    style: TextStyle(fontFamily: 'Ropa Sans')),
                 actions: [
                   TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child:
-                          Text("Ok", style: TextStyle(fontFamily: 'Ropa Sans')))
+                      child: AutoSizeText("Ok",
+                          style: TextStyle(fontFamily: 'Ropa Sans')))
                 ],
               ));
       setState(() {
