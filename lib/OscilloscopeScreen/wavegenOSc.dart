@@ -222,7 +222,7 @@ class _WGDialogState extends State<WGDialog> {
           children: [
             _waveText,
             Container(
-              width: 160,
+              width: SizeConfig.blockSizeHorizontal * 20.22,
               height: SizeConfig.blockSizeHorizontal * 3.5,
               child: ToggleButtons(
                 borderColor: Colors.grey,
@@ -242,18 +242,19 @@ class _WGDialogState extends State<WGDialog> {
           ],
         ),
         new Container(
-            margin: EdgeInsets.only(top: 15),
+            margin: EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 1.90),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _periodText,
-                  SizedBox(width: 42),
+                  SizedBox(width: SizeConfig.blockSizeHorizontal * 5.31),
                   Container(
                       child: Container(
-                          width: 132,
-                          height: 31,
+                          width: SizeConfig.blockSizeHorizontal * 16.7,
+                          height: SizeConfig.blockSizeHorizontal * 3.92,
                           decoration: _periodDecoration,
-                          margin: EdgeInsets.only(left: 47),
+                          margin: EdgeInsets.only(
+                              left: SizeConfig.blockSizeHorizontal * 5.94),
                           child: TextFormField(
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
@@ -283,18 +284,18 @@ class _WGDialogState extends State<WGDialog> {
                               decoration: _periodInpDecoration))),
                   _unitMs
                 ])),
-        new SizedBox(height: 8),
+        new SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
         new Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 1.20),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _ampText,
-                  SizedBox(width: 25),
+                  SizedBox(width: SizeConfig.blockSizeHorizontal * 3.16),
                   Container(
                     child: Container(
-                        width: 132,
-                        height: 31,
+                        width: SizeConfig.blockSizeHorizontal * 16.7,
+                        height: SizeConfig.blockSizeHorizontal * 3.92,
                         decoration: _ampDecoration,
                         child: TextFormField(
                             inputFormatters: [

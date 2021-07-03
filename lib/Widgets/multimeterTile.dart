@@ -194,7 +194,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         });
                       } else {
                         //Receive values and update.
-                        loopValues();
+                        //loopValues();
                       }
                     },
                   ),

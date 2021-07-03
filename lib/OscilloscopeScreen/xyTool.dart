@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/services.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 enum timeUnit { micro, milli, second }
 enum voltUnit { milli, volt }
@@ -300,6 +301,7 @@ class _XYDialogState extends State<XYDialog> {
   ];
 
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return SingleChildScrollView(
       child: AlertDialog(
         title: _title,
@@ -313,7 +315,8 @@ class _XYDialogState extends State<XYDialog> {
                       width: SizeConfig.blockSizeVertical * 20,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
                       decoration: _xfieldDecoration,
-                      margin: EdgeInsets.only(left: 47),
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 5.94),
                       child: TextFormField(
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
@@ -327,9 +330,10 @@ class _XYDialogState extends State<XYDialog> {
                             contentPadding: EdgeInsets.only(top: 2, left: 2),
                           ))),
                   new Container(
-                      width: 150,
+                      width: SizeConfig.blockSizeHorizontal * 18.96,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
-                      margin: EdgeInsets.only(left: 30),
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 3.60),
                       child: ToggleButtons(
                         borderColor: Colors.grey[700],
                         fillColor: Colors.grey[350],
@@ -347,7 +351,7 @@ class _XYDialogState extends State<XYDialog> {
                       )),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: SizeConfig.blockSizeHorizontal * 1.51),
               new Row(
                 children: [
                   _rangeYText,
@@ -355,7 +359,8 @@ class _XYDialogState extends State<XYDialog> {
                       width: SizeConfig.blockSizeVertical * 20,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
                       decoration: _yfieldDecoration,
-                      margin: EdgeInsets.only(left: 48),
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 6.06),
                       child: TextFormField(
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
@@ -384,7 +389,8 @@ class _XYDialogState extends State<XYDialog> {
                   new Container(
                       width: 150,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
-                      margin: EdgeInsets.only(left: 30),
+                      margin: EdgeInsets.only(
+                          left: SizeConfig.blockSizeHorizontal * 3.60),
                       child: ToggleButtons(
                         borderColor: Colors.grey[700],
                         fillColor: Colors.grey[350],
@@ -403,14 +409,15 @@ class _XYDialogState extends State<XYDialog> {
                       )),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: SizeConfig.blockSizeHorizontal * 1.50),
               new Row(
                 children: [
                   _ch1Text,
                   new Container(
                     width: 200,
                     height: SizeConfig.blockSizeHorizontal * 3.5,
-                    margin: EdgeInsets.only(left: 34),
+                    margin: EdgeInsets.only(
+                        left: SizeConfig.blockSizeHorizontal * 4.29),
                     child: ToggleButtons(
                       borderColor: Colors.grey[200],
                       fillColor: Colors.white,
@@ -428,15 +435,16 @@ class _XYDialogState extends State<XYDialog> {
                   )
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: SizeConfig.blockSizeHorizontal * 1.50),
               new Row(
                 children: [
                   Text("Channel 2",
                       style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 20)),
                   new Container(
-                    width: 200,
+                    width: SizeConfig.blockSizeHorizontal * 25.28,
                     height: SizeConfig.blockSizeHorizontal * 3.5,
-                    margin: EdgeInsets.only(left: 32),
+                    margin: EdgeInsets.only(
+                        left: SizeConfig.blockSizeHorizontal * 4.04),
                     child: ToggleButtons(
                       borderColor: Colors.grey[200],
                       fillColor: Colors.white,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 /*
   * Class nane - ChannelDialog
@@ -221,6 +221,7 @@ class _ChannelDialogState extends State<ChannelDialog> {
   final _saveText = new Text('Save', style: TextStyle(fontFamily: 'Ropa Sans'));
 
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return AlertDialog(
         title: _title,
         content: new Container(
@@ -232,12 +233,12 @@ class _ChannelDialogState extends State<ChannelDialog> {
                   new Row(
                     children: [
                       _ch1Text,
-                      SizedBox(width: 190),
+                      SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
                       FlutterSwitch(
                         duration: Duration(milliseconds: 200),
                         activeColor: Color.fromARGB(255, 52, 152, 219),
-                        width: 43,
-                        height: 27,
+                        width: SizeConfig.blockSizeHorizontal * 5.43,
+                        height: SizeConfig.blockSizeHorizontal * 3.41,
                         value: widget.is1TurnedOn,
                         onToggle: (value) {
                           setState(() {
@@ -251,10 +252,10 @@ class _ChannelDialogState extends State<ChannelDialog> {
                   new Row(
                     children: [
                       _rangeText,
-                      SizedBox(width: 110),
+                      SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
                       Container(
-                        width: 150,
-                        height: 30,
+                        width: SizeConfig.blockSizeHorizontal * 18.96,
+                        height: SizeConfig.blockSizeHorizontal * 3.60,
                         child: ToggleButtons(
                           borderColor: Colors.grey[700],
                           fillColor: Colors.grey[350],
@@ -295,12 +296,12 @@ class _ChannelDialogState extends State<ChannelDialog> {
                   new Row(
                     children: [
                       _ch2Text,
-                      SizedBox(width: 190),
+                      SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
                       FlutterSwitch(
                         duration: Duration(milliseconds: 200),
                         activeColor: Color.fromARGB(255, 52, 152, 219),
-                        width: 43,
-                        height: 27,
+                        width: SizeConfig.blockSizeHorizontal * 5.43,
+                        height: SizeConfig.blockSizeHorizontal * 3.41,
                         value: widget.is2TurnedOn,
                         onToggle: (value) {
                           setState(() {
@@ -314,10 +315,10 @@ class _ChannelDialogState extends State<ChannelDialog> {
                   new Row(
                     children: [
                       _rangeText,
-                      SizedBox(width: 110),
+                      SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
                       Container(
-                        width: 150,
-                        height: 30,
+                        width: SizeConfig.blockSizeHorizontal * 18.96,
+                        height: SizeConfig.blockSizeHorizontal * 3.60,
                         child: ToggleButtons(
                           borderColor: Colors.grey[700],
                           fillColor: Colors.grey[350],

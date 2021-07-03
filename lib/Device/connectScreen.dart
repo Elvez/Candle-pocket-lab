@@ -70,7 +70,7 @@ class _StartScreenState extends State<StartScreen> {
                             String _result = await candle.tryConnect();
 
                             //Show connection result
-                            showError("Info", _result);
+                            showMessage("Info", _result);
 
                             //Device is connected
                             if (candle.isDeviceConnected()) {
@@ -97,7 +97,7 @@ class _StartScreenState extends State<StartScreen> {
    * @param Error(String)
    * @return none
    */
-  void showError(String errorTitle, String errormessage) {
+  void showMessage(String errorTitle, String errormessage) {
     showDialog(
         context: context,
         builder: (BuildContext context) {

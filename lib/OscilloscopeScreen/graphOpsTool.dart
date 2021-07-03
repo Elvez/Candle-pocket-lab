@@ -128,12 +128,12 @@ class _OpDialogState extends State<OpDialog> {
             new Row(
               children: [
                 _ftText,
-                SizedBox(width: 190),
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
                 FlutterSwitch(
                   duration: Duration(milliseconds: 200),
                   activeColor: Color.fromARGB(255, 52, 152, 219),
-                  width: 43,
-                  height: 27,
+                  width: SizeConfig.blockSizeHorizontal * 5.43,
+                  height: SizeConfig.blockSizeHorizontal * 3.413,
                   value: widget.isFT,
                   onToggle: (value) {
                     setState(() {
@@ -147,12 +147,12 @@ class _OpDialogState extends State<OpDialog> {
             new Row(
               children: [
                 _diffText,
-                SizedBox(width: 225),
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 28.44),
                 FlutterSwitch(
                   duration: Duration(milliseconds: 200),
                   activeColor: Color.fromARGB(255, 52, 152, 219),
-                  width: 43,
-                  height: 27,
+                  width: SizeConfig.blockSizeHorizontal * 5.43,
+                  height: SizeConfig.blockSizeHorizontal * 3.413,
                   value: widget.isDiff,
                   onToggle: (value) {
                     setState(() {
