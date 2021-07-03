@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
@@ -194,7 +196,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         });
                       } else {
                         //Receive values and update.
-                        //loopValues();
+                        loopValues();
                       }
                     },
                   ),
@@ -209,7 +211,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                        margin: EdgeInsets.only(left: 18),
+                        margin: EdgeInsets.only(left: 30),
                         child: new AutoSizeText(
                             widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
@@ -239,27 +241,22 @@ class _MultimeterTileState extends State<MultimeterTile> {
     //Parse value for voltmeter
     double _value = 0;
 
-    // try {
-    //   //Start listening
-    //   candle.connection.input.listen((event) {
-    //     //Decode bytes to string data
-    //     _packet = ascii.decode(event);
+    candle.port.inputStream.listen((Uint8List data) {
+      //Decode bytes to string
+      _packet = ascii.decode(data);
 
-    //     //Remove packet tail and parse to double
-    //     _packet = _packet.substring(0, _packet.length - 1);
-    //     _value = double.tryParse(_packet);
+      //Remove tail : Packet received = 1000!, After tail remove = 1000
+      _packet = _packet.substring(0, _packet.length - 1);
 
-    //     //Calculation MinVal = 0, MaxVal = 4096, Min result val = -20, Max result val = +20.
-    //     _value = (_value / 102.4) - 20.0;
-    //     setState(() {
-    //       //Display value.
-    //       widget.fieldValue = _value;
-    //       if (!widget.isTurnedOn) widget.fieldValue = 0;
-    //     });
-    //   });
-    // } catch (e) {
-    //   print(e);
-    // }
+      //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
+      _value = double.tryParse(_packet);
+      _value = (_value / 102.4) - 20.0;
+
+      //Loop values
+      setState(() {
+        widget.fieldValue = _value;
+      });
+    });
   }
 
   /*

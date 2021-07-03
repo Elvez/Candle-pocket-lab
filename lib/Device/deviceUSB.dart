@@ -10,7 +10,7 @@ import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
  */
 class DeviceUSB {
   //USB port, used for sending/receiving data.
-  UsbPort _port;
+  UsbPort port;
 
   //Connected Devices list
   List<UsbDevice> _devices = [];
@@ -59,17 +59,17 @@ class DeviceUSB {
 
       if (_devices.isNotEmpty) {
         //Create port from the first device in the list.
-        _port = await _devices[0].create();
+        port = await _devices[0].create();
 
         //Try to open port.
-        _openResult = await _port.open();
+        _openResult = await port.open();
         if (_openResult) {
           //Send "Data Terminal ready" and "Ready to Send" signals
-          await _port.setDTR(true);
-          await _port.setRTS(true);
+          await port.setDTR(true);
+          await port.setRTS(true);
 
           //Set port params, Baud = 115200, Databits = 8, Parity = 0, Stop-bits = 1
-          await _port.setPortParameters(115200, UsbPort.DATABITS_8,
+          await port.setPortParameters(115200, UsbPort.DATABITS_8,
               UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
 
           result = "Connected successfully!";
@@ -117,7 +117,7 @@ class DeviceUSB {
   void sendPacket(String _packet) async {
     if (isConnected) {
       //Write string to port.
-      await _port.write(Uint8List.fromList(_packet.codeUnits));
+      await port.write(Uint8List.fromList(_packet.codeUnits));
     } else {
       //Device not connected.
       print("Device not connected!");
