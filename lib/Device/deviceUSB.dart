@@ -1,4 +1,5 @@
 import 'dart:async' show Future;
+import 'dart:typed_data';
 import 'package:usb_serial/usb_serial.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 
@@ -47,9 +48,10 @@ class DeviceUSB {
    * @params : none
    * @return : none 
    */
-  Future<bool> initialize() async {
+  Future<String> tryConnect() async {
     //Port open result
     bool _openResult = false;
+    String result = "";
 
     if (!isConnected) {
       //Get list of devices
@@ -70,25 +72,38 @@ class DeviceUSB {
           await _port.setPortParameters(115200, UsbPort.DATABITS_8,
               UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
 
-          print("Port opened successfully!");
+          result = "Connected successfully!";
           isConnected = true;
+          return result;
         } else {
           //Some error opening the port
-          print("Could not open port!");
+          result = "Could not connect!";
           isConnected = false;
-          return Future.value(false);
+          return result;
         }
       } else {
         //Devices list is empty.
-        print("There are no devices to connect!");
+        result = "No connected device found!";
         isConnected = false;
-        return Future.value(false);
+        return result;
       }
     } else {
       //Device is already connected.
-      print("Device already connected.");
-      return true;
+      result = "Device already connected!";
+      return result;
     }
+  }
+
+  /*
+   * Is device connected
+   * 
+   * Returns device bool isConnected
+   * 
+   * @params : none
+   * @return : bool 
+   */
+  bool isDeviceConnected() {
+    return isConnected;
   }
 
   /*
@@ -102,7 +117,7 @@ class DeviceUSB {
   void sendPacket(String _packet) async {
     if (isConnected) {
       //Write string to port.
-      await _port.write(_packet.codeUnits);
+      await _port.write(Uint8List.fromList(_packet.codeUnits));
     } else {
       //Device not connected.
       print("Device not connected!");

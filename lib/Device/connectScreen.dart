@@ -66,8 +66,19 @@ class _StartScreenState extends State<StartScreen> {
                       IconButton(
                           icon: _connectIcon,
                           onPressed: () async {
-                            //TODO: Add USB connect API
-                            print(await candle.getDevices());
+                            //Try Connect USB
+                            String _result = await candle.tryConnect();
+
+                            //Show connection result
+                            showError("Info", _result);
+
+                            //Device is connected
+                            if (candle.isDeviceConnected()) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()));
+                            }
                           })
                     ],
                   ),
@@ -86,13 +97,13 @@ class _StartScreenState extends State<StartScreen> {
    * @param Error(String)
    * @return none
    */
-  void showError(String errormessage) {
+  void showError(String errorTitle, String errormessage) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error',
-                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.red)),
+            title: Text(errorTitle,
+                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black)),
             content:
                 Text(errormessage, style: TextStyle(fontFamily: 'Ropa Sans')),
             actions: <Widget>[

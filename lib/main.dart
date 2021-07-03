@@ -11,7 +11,7 @@ void main() {
       .then((_) async {
     await Firebase.initializeApp();
     runApp(MaterialApp(
-      home: HomeScreen(),
+      home: SigninPage(),
     ));
   });
 }

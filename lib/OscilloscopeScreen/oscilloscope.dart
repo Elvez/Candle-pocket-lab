@@ -219,8 +219,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     //Back button
                     new Container(
                       margin: _backButtonMargin,
-                      width: SizeConfig.blockSizeVertical * 4.80,
-                      height: SizeConfig.blockSizeVertical * 4.80,
+                      width: SizeConfig.blockSizeVertical * 8.0,
+                      height: SizeConfig.blockSizeVertical * 8.0,
                       child: FloatingActionButton(
                         child: _backIcon,
                         backgroundColor: Colors.white,
