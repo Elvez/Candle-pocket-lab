@@ -69,15 +69,15 @@ class _StartScreenState extends State<StartScreen> {
                             //Try Connect USB
                             String _result = await candle.tryConnect();
 
-                            //Show connection result
-                            showMessage("Info", _result);
-
                             //Device is connected
                             if (candle.isDeviceConnected()) {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => HomeScreen()));
+                            } else {
+                              //Show connection result
+                              showMessage("Info", _result);
                             }
                           })
                     ],
