@@ -257,7 +257,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp("[0-9.]")),
+                                  RegExp(r'^\d+\.?\d*')),
                               LengthLimitingTextInputFormatter(4)
                             ],
 
@@ -273,6 +273,9 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                               } else if (double.tryParse(value) <= 0) {
                                 _validPeriod = false;
                                 return "Cannot be 0.";
+                              } else if (value.endsWith('.')) {
+                                _validPeriod = false;
+                                return "Invalid";
                               } else {
                                 _validPeriod = true;
                                 return null;
@@ -309,7 +312,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp("[0-9.]")),
+                                  RegExp(r'^\d+\.?\d*')),
                               LengthLimitingTextInputFormatter(4)
                             ],
                             textAlign: TextAlign.right,
@@ -328,6 +331,9 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                               } else if (double.tryParse(value) <= 0) {
                                 _validAmp = false;
                                 return "Cannot be 0.";
+                              } else if (value.endsWith('.')) {
+                                _validAmp = false;
+                                return "Invalid";
                               } else {
                                 _validAmp = true;
                                 return null;

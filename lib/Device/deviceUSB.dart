@@ -128,6 +128,8 @@ class DeviceUSB {
    * Send Multimeter command
    *
    * This function sends the Multimeter command to the bluetooth device.
+   * Command packet - M(Source)(State)-----------------
+   * Example - M1H-----------------
    *
    * @param Source(int), State(String)
    * example : sendMulCommand(1, "H");
@@ -146,9 +148,11 @@ class DeviceUSB {
    * Send Wave generator command
    *
    * This function sends the wave generator command to the bluetooth device.
+   * Command packet - W(Source)(State)(WaveType)(Period)(Amplitude)
+   * Example - W1H120.03.30-------
    *
    * @param Source(int), State(String), Wave type(int), Period(String), Amplitude(String)
-   * example : sendWGCommand(1, "H", 1, "200.0", "3.30");
+   * example : sendWGCommand(1, "H", 1, "20.0", "3.30");
    * @return none
    */
   void sendWGCommand(
@@ -179,6 +183,7 @@ class DeviceUSB {
       }
 
       commandPacket += period;
+      commandPacket += 'A';
       commandPacket += amplitude;
       commandPacket = fillDummy(commandPacket);
 
@@ -191,6 +196,8 @@ class DeviceUSB {
    * Send Power source command
    *
    * This function sends the power source command to the bluetooth device.
+   * Command packet - P(Source)(State)(Value)-------------
+   * Example - P1H2.50-------------
    *
    * @param Source(int), State(String), Amplitude(String)
    * example : sendPSCommand(1, "H", "2.50");
@@ -220,6 +227,8 @@ class DeviceUSB {
    * Send Oscilloscope command
    *
    * This function sends the Oscilloscope command to the bluetooth device.
+   * Command packet - O(Source)(State)(Range)(Unit)------------
+   * Example - O1H30.01-------------
    *
    * @param Source(int), State(String), Range(String), Time unit(timeUnit)
    * example : sendOSCCommand(1, "H", "300.0", timeUnit.seconds);

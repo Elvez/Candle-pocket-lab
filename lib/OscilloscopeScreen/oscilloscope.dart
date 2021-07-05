@@ -227,6 +227,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         shape: _backShape,
                         elevation: 1,
                         onPressed: () {
+                          //Free device
+                          setOscilloscope(false);
+
                           SystemChrome.setPreferredOrientations(
                               [DeviceOrientation.portraitUp]);
                           Navigator.pop(context);
@@ -248,6 +251,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                       //Channel setup tool
                       new InkWell(
                           onTap: () {
+                            //Turn oscilloscope off
+                            setOscilloscope(false);
+
                             widget.bugFix = false;
                             showDialog<void>(
                                     barrierDismissible: false,
@@ -258,6 +264,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                               //Get channel settings.
                               getChData();
+
+                              //Turn Oscilloscope on
+                              setOscilloscope(true);
                             });
                           },
                           child: new Container(
@@ -270,6 +279,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                       //Graph setup tool
                       new InkWell(
                           onTap: () {
+                            //Turn oscilloscope off
+                            setOscilloscope(false);
+
                             widget.bugFix = false;
                             showDialog<void>(
                                     barrierDismissible: false,
@@ -280,6 +292,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                               //Get graph settings
                               getGraphData();
+
+                              //Turn Oscilloscope on
+                              setOscilloscope(true);
                             });
                           },
                           child: new Container(
@@ -292,6 +307,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                       //Operations tool
                       new InkWell(
                           onTap: () {
+                            //Turn oscilloscope off
+                            setOscilloscope(false);
+
                             widget.bugFix = false;
                             showDialog<void>(
                                 barrierDismissible: false,
@@ -302,6 +320,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                               //Get operation tool settings
                               getOPdata();
+
+                              //Turn Oscilloscope on
+                              setOscilloscope(true);
                             });
                           },
                           child: new Container(
@@ -314,6 +335,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                       //Wave generator tool
                       new InkWell(
                           onTap: () {
+                            //Turn oscilloscope off
+                            setOscilloscope(false);
                             widget.bugFix = false;
                             showDialog<void>(
                                     barrierDismissible: false,
@@ -324,6 +347,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                               //Get wave generator settings
                               getWaveData();
+
+                              //Turn Oscilloscope on
+                              setOscilloscope(true);
                             });
                           },
                           child: new Container(
