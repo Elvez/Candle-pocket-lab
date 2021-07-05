@@ -222,7 +222,7 @@ class _WGDialogState extends State<WGDialog> {
           children: [
             _waveText,
             Container(
-              width: SizeConfig.blockSizeHorizontal * 20.22,
+              width: SizeConfig.blockSizeHorizontal * 22.22,
               height: SizeConfig.blockSizeHorizontal * 3.5,
               child: ToggleButtons(
                 borderColor: Colors.grey,

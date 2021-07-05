@@ -331,7 +331,7 @@ class _XYDialogState extends State<XYDialog> {
                             contentPadding: EdgeInsets.only(top: 2, left: 2),
                           ))),
                   new Container(
-                      width: SizeConfig.blockSizeHorizontal * 18.96,
+                      width: SizeConfig.blockSizeHorizontal * 22.50,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
                       margin: EdgeInsets.only(
                           left: SizeConfig.blockSizeHorizontal * 3.60),
@@ -416,7 +416,7 @@ class _XYDialogState extends State<XYDialog> {
                 children: [
                   _ch1Text,
                   new Container(
-                    width: 200,
+                    width: SizeConfig.blockSizeHorizontal * 28.28,
                     height: SizeConfig.blockSizeHorizontal * 3.5,
                     margin: EdgeInsets.only(
                         left: SizeConfig.blockSizeHorizontal * 4.29),
@@ -443,7 +443,7 @@ class _XYDialogState extends State<XYDialog> {
                   Text("Channel 2",
                       style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 20)),
                   new Container(
-                    width: SizeConfig.blockSizeHorizontal * 25.28,
+                    width: SizeConfig.blockSizeHorizontal * 28.28,
                     height: SizeConfig.blockSizeHorizontal * 3.5,
                     margin: EdgeInsets.only(
                         left: SizeConfig.blockSizeHorizontal * 4.04),

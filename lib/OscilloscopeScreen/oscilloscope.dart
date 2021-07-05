@@ -266,7 +266,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               getChData();
 
                               //Turn Oscilloscope on
-                              setOscilloscope(true);
+                              setOscilloscope(_graphState);
                             });
                           },
                           child: new Container(
@@ -294,7 +294,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               getGraphData();
 
                               //Turn Oscilloscope on
-                              setOscilloscope(true);
+                              setOscilloscope(_graphState);
                             });
                           },
                           child: new Container(
@@ -322,7 +322,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               getOPdata();
 
                               //Turn Oscilloscope on
-                              setOscilloscope(true);
+                              setOscilloscope(_graphState);
                             });
                           },
                           child: new Container(
@@ -349,7 +349,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               getWaveData();
 
                               //Turn Oscilloscope on
-                              setOscilloscope(true);
+                              setOscilloscope(_graphState);
                             });
                           },
                           child: new Container(
@@ -509,12 +509,15 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       widget._period = widget.waveGenerator.getPeriod();
       widget._waveType = widget.waveGenerator.getWaveType();
 
-      //Send wave generator command
-      candle.sendWGCommand(1, "H", widget._waveType, widget._period.toString(),
-          widget._amplitude.toString());
-
       //Set wave state
       widget.waveGenerator.isWaveOn = !widget.waveGenerator.isWaveOn;
+
+      //Send wave generator command
+      widget.waveGenerator.isWaveOn
+          ? candle.sendWGCommand(1, "H", widget._waveType,
+              widget._period.toString(), widget._amplitude.toString())
+          : candle.sendWGCommand(1, "L", widget._waveType,
+              widget._period.toString(), widget._amplitude.toString());
     } else {
       //Dialog closed with cancel button
 

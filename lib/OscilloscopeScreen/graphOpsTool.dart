@@ -147,7 +147,7 @@ class _OpDialogState extends State<OpDialog> {
             new Row(
               children: [
                 _diffText,
-                SizedBox(width: SizeConfig.blockSizeHorizontal * 28.44),
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 29.20),
                 FlutterSwitch(
                   duration: Duration(milliseconds: 200),
                   activeColor: Color.fromARGB(255, 52, 152, 219),

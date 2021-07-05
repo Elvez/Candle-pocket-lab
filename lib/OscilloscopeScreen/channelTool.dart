@@ -254,7 +254,7 @@ class _ChannelDialogState extends State<ChannelDialog> {
                       _rangeText,
                       SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
                       Container(
-                        width: SizeConfig.blockSizeHorizontal * 18.96,
+                        width: SizeConfig.blockSizeHorizontal * 22.5,
                         height: SizeConfig.blockSizeHorizontal * 3.60,
                         child: ToggleButtons(
                           borderColor: Colors.grey[700],
@@ -317,7 +317,7 @@ class _ChannelDialogState extends State<ChannelDialog> {
                       _rangeText,
                       SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
                       Container(
-                        width: SizeConfig.blockSizeHorizontal * 18.96,
+                        width: SizeConfig.blockSizeHorizontal * 22.5,
                         height: SizeConfig.blockSizeHorizontal * 3.60,
                         child: ToggleButtons(
                           borderColor: Colors.grey[700],
