@@ -228,7 +228,7 @@ class DeviceUSB {
    *
    * This function sends the Oscilloscope command to the bluetooth device.
    * Command packet - O(Source)(State)(Range)(Unit)------------
-   * Example - O1H30.01-------------
+   * Example - O1H30.0U1------------
    *
    * @param Source(int), State(String), Range(String), Time unit(timeUnit)
    * example : sendOSCCommand(1, "H", "300.0", timeUnit.seconds);
@@ -247,7 +247,11 @@ class DeviceUSB {
       sendPacket(commandPacket);
       return;
     } else if (state == "H") {
+      //Range
       commandPacket += rangeX;
+
+      //Unit marker
+      commandPacket += 'U';
       switch (unit) {
         case timeUnit.micro:
           commandPacket += "1";

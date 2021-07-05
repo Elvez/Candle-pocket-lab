@@ -258,7 +258,7 @@ class _WGDialogState extends State<WGDialog> {
                           child: TextFormField(
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(
-                                    RegExp("[0-9.]")),
+                                    RegExp(r'^\d+\.?\d*')),
                                 LengthLimitingTextInputFormatter(4)
                               ],
                               autovalidate: true,
@@ -300,7 +300,7 @@ class _WGDialogState extends State<WGDialog> {
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
-                                  RegExp("[0-9.]")),
+                                  RegExp(r'^\d+\.?\d*')),
                               LengthLimitingTextInputFormatter(4)
                             ],
                             autovalidate: true,

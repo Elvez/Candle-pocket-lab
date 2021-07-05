@@ -319,7 +319,8 @@ class _XYDialogState extends State<XYDialog> {
                           left: SizeConfig.blockSizeHorizontal * 5.94),
                       child: TextFormField(
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d*')),
                             LengthLimitingTextInputFormatter(4)
                           ],
                           controller: widget.rangeXController,
@@ -363,7 +364,8 @@ class _XYDialogState extends State<XYDialog> {
                           left: SizeConfig.blockSizeHorizontal * 6.06),
                       child: TextFormField(
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d*')),
                             widget.isYSelected[0]
                                 ? LengthLimitingTextInputFormatter(4)
                                 : LengthLimitingTextInputFormatter(2)
