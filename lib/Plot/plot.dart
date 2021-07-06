@@ -18,7 +18,6 @@ class GraphData {
 
   //Constructor
   GraphData(this._range, this.color) {
-    setRange(_range);
     setColor(color);
   }
 
@@ -47,9 +46,47 @@ class GraphData {
   }
 
   /*
+   * Add value to the plot
+   * 
+   * Adds the value of type PlotValue to the plot list.
+   * 
+   * @params : XVal(double), YVal(double)
+   * @return : none 
+   */
+  void addValue(double x, double y) {
+    plot.add(PlotValue(x, y));
+  }
+
+  /*
+   * Removes value from the plot
+   * 
+   * Removes a value from the beginning of the plot.
+   * 
+   * @params : XVal(double), YVal(double)
+   * @return : none 
+   */
+  void popFirst() {
+    plot.removeAt(0);
+  }
+
+  /*
+   * Clears the plot
+   * 
+   * Removes all values from the plot.
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void clearPlot() {
+    plot.clear();
+  }
+
+  /*
    * Fill X axis values
    * 
    * Fills x axis values seperated by space, hundred values are filles irrespective of the range.
+   * 
+   * Status - UNUSED
    * 
    * @params : Range(int)
    * @return : none 
@@ -93,6 +130,25 @@ class GraphData {
       index = (plot.length - 1);
     }
     return plot[index];
+  }
+
+  /*
+   * Set value at index
+   * 
+   * Sets given value at the given index in plot
+   * 
+   * @params : Value(double), index(int)
+   * @return : none 
+   */
+  void setValue(double value, int index) {
+    //In case bad value is passed
+    if (index < 0) {
+      index = 0;
+    } else if (index >= plot.length) {
+      index = (plot.length - 1);
+    }
+
+    plot[index].yVal = value;
   }
 }
 

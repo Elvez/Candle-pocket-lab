@@ -148,12 +148,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   var _ch2Data = new GraphData(100, Colors.red);
   String yTitle = "V";
   String xTitle = "ms";
+  ChartSeriesController channel1Controller;
+  ChartSeriesController channel2Controller;
 
   Widget build(BuildContext context) {
-    //Set default range for both channels
-    _ch1Data.setRange(widget.xAxis.range);
-    _ch2Data.setRange(widget.xAxis.range);
-
     //Get screen sizes
     SizeConfig().init(context);
     return MaterialApp(
@@ -179,6 +177,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                 child: SfCartesianChart(
                                   series: <ChartSeries>[
                                     FastLineSeries<PlotValue, double>(
+                                        onRendererCreated:
+                                            (ChartSeriesController controller) {
+                                          channel1Controller = controller;
+                                        },
                                         isVisible: widget.ch1Active,
                                         animationDuration: 10,
                                         dataSource: _ch1Data.plot,
@@ -188,6 +190,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                         yValueMapper: (PlotValue _plot, _) =>
                                             _plot.yVal),
                                     FastLineSeries<PlotValue, double>(
+                                        onRendererCreated:
+                                            (ChartSeriesController controller) {
+                                          channel2Controller = controller;
+                                        },
                                         isVisible: widget.ch2Active,
                                         animationDuration: 10,
                                         dataSource: _ch2Data.plot,
@@ -206,14 +212,14 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                       placeLabelsNearAxisLine: false,
                                       crossesAt: 0,
                                       axisLine: AxisLine(
-                                          color: Colors.grey[600], width: 2)),
+                                          color: Colors.grey[400], width: 2)),
                                   primaryYAxis: NumericAxis(
                                       interval: widget.yAxis.range / 5,
                                       visibleMaximum: widget.yAxis.range,
                                       visibleMinimum: (0 - widget.yAxis.range),
                                       labelFormat: '{value} $yTitle',
                                       axisLine: AxisLine(
-                                          color: Colors.grey[600], width: 2)),
+                                          color: Colors.grey[400], width: 2)),
                                 )))),
 
                     //Back button
@@ -480,6 +486,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         widget.ch1Active = widget.channelSetup.getChannelState(1);
         widget._rangeCh2 = widget.channelSetup.getRange2();
         widget.ch2Active = widget.channelSetup.getChannelState(2);
+
+        if (!widget.ch1Active) _ch1Data.clearPlot();
+        if (!widget.ch2Active) _ch2Data.clearPlot();
       });
     } else {
       //Dialog closed with cancel button
