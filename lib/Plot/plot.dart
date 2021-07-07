@@ -116,9 +116,35 @@ class GraphData {
   }
 
   /*
+   * Returns plot's current length
+   * 
+   * @params : none
+   * @return : int
+   */
+  int plotLength() {
+    return plot.length;
+  }
+
+  /*
+   * Reset plot
+   * 
+   * Resets the plot
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void resetPlot() {
+    if (plot.isNotEmpty) {
+      for (int iter = 0; iter < plot.length; iter++) {
+        plot[iter] = PlotValue(0, 0);
+      }
+    }
+  }
+
+  /*
    * Returns values at given index.
    * 
-   * Returns x and y values at argument index. Index should be between (0-99)
+   * Returns x and y values at argument index. Index should be between (0-999)
    * 
    * @params : Index(int) 
    * @return : PlotValue

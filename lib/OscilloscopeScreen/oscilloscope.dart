@@ -372,8 +372,31 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             _graphState = !_graphState;
                           });
 
+                          //Reset the plot
+                          if (widget.ch1Active) {
+                            _ch1Data.resetPlot();
+                          }
+                          if (widget.ch2Active) {
+                            _ch2Data.resetPlot();
+                          }
+
                           //Send oscilloscope command
                           setOscilloscope(_graphState);
+
+                          if (_graphState) {
+                            //Start the loop
+                            if (widget.ch1Active) {
+                              //TODO: Start channel 1 loop
+                            }
+
+                            if (widget.ch2Active) {
+                              //TODO: Start channel 2 loop
+                            }
+                          } else {
+                            //Reset all plots
+                            _ch1Data.resetPlot();
+                            _ch2Data.resetPlot();
+                          }
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
                         splashColor: Colors.black.withAlpha(50),
@@ -487,8 +510,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         widget._rangeCh2 = widget.channelSetup.getRange2();
         widget.ch2Active = widget.channelSetup.getChannelState(2);
 
-        if (!widget.ch1Active) _ch1Data.clearPlot();
-        if (!widget.ch2Active) _ch2Data.clearPlot();
+        if (!widget.ch1Active) _ch1Data.resetPlot();
+        if (!widget.ch2Active) _ch2Data.resetPlot();
       });
     } else {
       //Dialog closed with cancel button
