@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/services.dart';
@@ -374,28 +377,31 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                           //Reset the plot
                           if (widget.ch1Active) {
-                            _ch1Data.resetPlot();
+                            _ch1Data.resetPlot(widget._rangeCh1);
+                            print(_ch1Data.plotLength());
                           }
                           if (widget.ch2Active) {
-                            _ch2Data.resetPlot();
+                            //_ch2Data.resetPlot();
                           }
 
                           //Send oscilloscope command
                           setOscilloscope(_graphState);
 
+                          print(_ch1Data.plotLength());
+
                           if (_graphState) {
                             //Start the loop
                             if (widget.ch1Active) {
-                              //TODO: Start channel 1 loop
+                              startChannel1();
                             }
 
                             if (widget.ch2Active) {
-                              //TODO: Start channel 2 loop
+                              startChannel2();
                             }
                           } else {
                             //Reset all plots
-                            _ch1Data.resetPlot();
-                            _ch2Data.resetPlot();
+                            //_ch1Data.resetPlot();
+                            //_ch2Data.resetPlot();
                           }
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -492,6 +498,66 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   }
 
   /*
+   * Channel 1 loop
+   * 
+   * Loops values in the Channel 1 plot
+   * 
+   * @params : none
+   * @return : none
+   */
+  void startChannel1() async {
+    //Packet receive buffer
+    String _packet = "";
+
+    //Parse value for plot
+    double _value = 0;
+
+    //Plot iterator
+    int iter = 0;
+
+    //Start channel
+    if (_graphState) {
+      candle.port.inputStream.listen((Uint8List data) {
+        //Decode bytes to string
+        _packet = ascii.decode(data);
+
+        print(_packet);
+
+        //Remove tail : Packet received = 1000!, After tail remove = 1000
+        _packet = _packet.substring(0, _packet.length - 1);
+
+        //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
+        _value = double.tryParse(_packet);
+        _value = (_value / 102.4) - 20.0;
+
+        //Update graph
+        setState(() {
+          _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
+        });
+        if (iter == 999)
+          iter = 0;
+        else
+          iter++;
+      });
+    } else {}
+  }
+
+  /*
+   * Channel 1 loop
+   * 
+   * Loops values in the Channel 1 plot
+   * 
+   * @params : none
+   * @return : none
+   */
+  void startChannel2() async {
+    //Start channel
+    if (_graphState) {
+      //TODO: start loop
+    } else {}
+  }
+
+  /*
    * Get channel settings
    *
    * This function saves channel settings data if the dialog was closed with the 'save' button.
@@ -510,8 +576,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         widget._rangeCh2 = widget.channelSetup.getRange2();
         widget.ch2Active = widget.channelSetup.getChannelState(2);
 
-        if (!widget.ch1Active) _ch1Data.resetPlot();
-        if (!widget.ch2Active) _ch2Data.resetPlot();
+        //if (!widget.ch1Active) _ch1Data.resetPlot();
+        //if (!widget.ch2Active) _ch2Data.resetPlot();
       });
     } else {
       //Dialog closed with cancel button

@@ -3,7 +3,7 @@ import 'package:candle_pocketlab/Widgets/header.dart';
 import 'package:candle_pocketlab/Widgets/homeScreenTile.dart';
 import 'package:candle_pocketlab/MultimeterScreen/multimeter.dart';
 import 'package:candle_pocketlab/OscilloscopeScreen/oscilloscope.dart';
-import 'package:candle_pocketlab/PowerSourceScreen/powerSource.dart';
+import 'package:candle_pocketlab/PWM & Output/pwmScreen.dart';
 import 'package:candle_pocketlab/WaveGeneratorScreen/waveGenerator.dart';
 import 'package:flutter/services.dart';
 
@@ -47,9 +47,9 @@ class HomeScreen extends StatelessWidget {
 
   //Power source tile
   final _psTile = new HomeScreenTile(
-      "Power source",
+      "PWM Output",
       TileColor(100, 100, 255),
-      new Image.asset('images/powerSource.png',
+      new Image.asset('images/ic.png',
           alignment: Alignment.bottomLeft, width: 62, height: 69));
 
   //Back button
@@ -159,10 +159,8 @@ class HomeScreen extends StatelessWidget {
                           child: _psTile,
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MyRoute(
-                                    builder: (context) => PowerSourceScreen()));
+                            Navigator.push(context,
+                                MyRoute(builder: (context) => PWMScreen()));
                           })))
             ]),
           ),

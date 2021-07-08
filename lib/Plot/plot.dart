@@ -133,10 +133,12 @@ class GraphData {
    * @params : none
    * @return : none 
    */
-  void resetPlot() {
+  void resetPlot(double range) {
+    double x = 0;
     if (plot.isNotEmpty) {
       for (int iter = 0; iter < plot.length; iter++) {
-        plot[iter] = PlotValue(0, 0);
+        plot[iter] = PlotValue(x, 0);
+        x += range / 1000;
       }
     }
   }

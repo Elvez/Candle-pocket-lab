@@ -47,6 +47,7 @@ dependencies:
   auto_size_text: ^2.1.0
 
 
+
   
 
 
@@ -99,6 +100,9 @@ flutter:
     - images/deviceIcon.png
     - images/google.png
     - images/facebook.png
+    - images/ic.png
+    - images/gpioIcon.png
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
