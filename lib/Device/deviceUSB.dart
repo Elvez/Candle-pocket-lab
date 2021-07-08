@@ -127,7 +127,7 @@ class DeviceUSB {
   /*
    * Send Multimeter command
    *
-   * This function sends the Multimeter command to the bluetooth device.
+   * This function sends the Multimeter command to the USB device.
    * Command packet - M(Source)(State)-----------------
    * Example - M1H-----------------
    *
@@ -147,7 +147,7 @@ class DeviceUSB {
   /*
    * Send Wave generator command
    *
-   * This function sends the wave generator command to the bluetooth device.
+   * This function sends the wave generator command to the USB device.
    * Command packet - W(Source)(State)(WaveType)(Period)(Amplitude)
    * Example - W1H120.03.30-------
    *
@@ -195,7 +195,7 @@ class DeviceUSB {
   /*
    * Send Power source command
    *
-   * This function sends the power source command to the bluetooth device.
+   * This function sends the power source command to the USB device.
    * Command packet - P(Source)(State)(Value)-------------
    * Example - P1H2.50-------------
    *
@@ -226,7 +226,7 @@ class DeviceUSB {
   /*
    * Send Oscilloscope command
    *
-   * This function sends the Oscilloscope command to the bluetooth device.
+   * This function sends the Oscilloscope command to the USB device.
    * Command packet - O(Source)(State)(Range)(Unit)------------
    * Example - O1H30.0U1------------
    *
@@ -271,6 +271,48 @@ class DeviceUSB {
       //Send Command
       sendPacket(commandPacket);
     }
+  }
+
+  /*
+   * Send PWM command
+   * 
+   * This function sends the PWM command to the USB device 
+   * Command Packet - G(Source)(State)(Duty Cycle)------
+   * Example - G2H50---------------
+   * 
+   * @params : Source(int), State(String), Duty cycle(String)
+   * @return : none
+   */
+  void sendPWMCommand(int source, String state, String dutyCycle) {
+    //Command packet
+    String commandPacket;
+
+    //Set header and source
+    commandPacket = 'G' + source.toString();
+    commandPacket += state;
+
+    if (state == 'H') {
+      //Set duty cycle
+      commandPacket += dutyCycle;
+    } else if (state == 'L') {
+      //Fill packet
+      commandPacket = fillDummy(commandPacket);
+
+      //Send command
+      sendPacket(commandPacket);
+
+      return;
+    } else {
+      print("Bad command");
+
+      return;
+    }
+
+    //Fill packet
+    commandPacket = fillDummy(commandPacket);
+
+    //Send packet
+    sendPacket(commandPacket);
   }
 
   /*

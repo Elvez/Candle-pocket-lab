@@ -1,6 +1,7 @@
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:candle_pocketlab/Device/connectScreen.dart';
 
 class PWMTile extends StatefulWidget {
   //Tile height
@@ -16,10 +17,7 @@ class PWMTile extends StatefulWidget {
   bool isTurnedOn = false;
 
   //PWM value
-  double _pwm = 0;
-
-  //Mode, false for pwm and true for switch
-  bool _mode = false;
+  int _pwm = 0;
 
   PWMTile(this._height, this._width, this.gpio);
   @override
@@ -27,145 +25,94 @@ class PWMTile extends StatefulWidget {
 }
 
 class _PWMTileState extends State<PWMTile> {
-  //Tile decoration and border
+  //Tile border
   final _decoration = new BoxDecoration(
-      borderRadius: BorderRadius.circular(15),
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [Colors.grey[100], Colors.grey[300]],
-      ));
+      border: Border.all(color: Colors.grey[850], width: 2),
+      borderRadius: BorderRadius.circular(10));
 
-  //GPIO icon
-  final _icon = new Icon(Icons.circle, color: Colors.grey[800], size: 10);
-
-  //Mode texts
-  final String pwmMode = "PWM";
-  final String switchMode = "Switch";
-
-  //Mode color
-  final _pwmColor = new Color.fromARGB(255, 229, 255, 217);
-  final _switchColor = Colors.grey[200];
-
-  //Font
-  final _modeFont = new TextStyle(
-      color: Colors.grey[850], fontFamily: 'Ropa Sans', fontSize: 22);
-
-  //PWM message
-  final String _pwmMessage = "Set duty cycle";
-  final String _switchMessage = "Set state";
-
+  //Title font
+  final _font = new TextStyle(
+      fontFamily: 'Ropa Sans', fontSize: 25, color: Colors.grey[700]);
   @override
   Widget build(BuildContext context) {
     return Container(
-        //Width
-        width: widget._width,
+      //Size
+      width: widget._width,
+      height: widget._height,
 
-        //Height
-        height: widget._height,
+      //Border
+      decoration: _decoration,
 
-        //Border and fill
-        decoration: _decoration,
+      //Body
+      child: new Column(
+        children: [
+          SizedBox(height: SizeConfig.blockSizeVertical * 1),
+          new Row(children: [
+            SizedBox(width: SizeConfig.blockSizeHorizontal * 3),
 
-        //Body
-        child: new Row(children: [
-          SizedBox(width: SizeConfig.blockSizeHorizontal * 5),
+            //Source name
+            new Text("Source " + widget.gpio.toString(), style: _font),
 
-          //GPIO name
-          new Text("G" + widget.gpio.toString(),
-              style: TextStyle(
-                  fontSize: 30,
-                  fontFamily: 'Ropa Sans',
-                  color: Colors.grey[850])),
+            SizedBox(width: SizeConfig.blockSizeHorizontal * 52),
 
-          SizedBox(width: SizeConfig.blockSizeHorizontal * 8),
-
-          //Three dots
-          _icon,
-          _icon,
-          _icon,
-
-          SizedBox(width: SizeConfig.blockSizeHorizontal * 10),
-
-          //Mode toggler
-          Container(
-              width: widget._width / 3.5,
-              height: widget._height / 2,
-              decoration: new BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      widget._mode ? _pwmColor : _switchColor
-                    ]),
-                border: Border.all(color: Colors.grey, width: 0),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: new TextButton(
-                  child: Text(widget._mode ? pwmMode : switchMode,
-                      style: _modeFont),
-                  onPressed: () {
-                    setState(() {
-                      widget._mode = !widget._mode;
-                    });
-                  })),
-
-          SizedBox(width: SizeConfig.blockSizeHorizontal * 10),
-
-          //Toggle on/off button
-          new FlutterSwitch(
-              activeColor: Color.fromARGB(180, 52, 152, 219),
+            //Toggle switch
+            FlutterSwitch(
+              activeColor: Color.fromARGB(150, 52, 152, 219),
               width: SizeConfig.blockSizeVertical * 5.43,
               height: SizeConfig.blockSizeVertical * 3.41,
               value: widget.isTurnedOn,
               onToggle: (value) {
-                if (value)
-                  getValue(widget._mode ? _pwmMessage : _switchMessage);
                 setState(() {
-                  widget.isTurnedOn = value;
+                  widget.isTurnedOn = !widget.isTurnedOn;
+
+                  //Send PWM command
+                  setPWM(value);
+
+                  if (!value) {
+                    setState(() {
+                      widget._pwm = 0;
+                    });
+                  }
                 });
-              })
-        ]));
+              },
+            )
+          ]),
+
+          //PWM duty cycle slider
+          new Slider(
+            value: widget._pwm.toDouble(),
+            activeColor: Color.fromARGB(255, 52, 152, 219),
+            inactiveColor: Colors.grey,
+            min: 0,
+            max: 100,
+            divisions: 100,
+            label: "Duty cycle ${widget._pwm}%",
+            onChanged: (value) {
+              setState(() {
+                widget._pwm = value.round();
+              });
+            },
+          )
+        ],
+      ),
+    );
   }
 
   /*
-   * Value dialog
+   * Send PWM command
    * 
-   * Shows a dialog and asks for a value
+   * Sends PWM command with source, state and duty cycle
    * 
-   * @params : Message (String)
+   * @params : State(bool)
    * @return : none 
    */
-  void getValue(String message) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            scrollable: true,
-            title: Text(message,
-                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.black)),
-            content: new Slider(
-                label: "${widget._pwm}",
-                min: 0,
-                max: 100,
-                value: widget._pwm,
-                onChanged: (value) {
-                  setState(() {
-                    widget._pwm = value;
-                  });
-                }),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Future.delayed(Duration.zero, () {
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Text('Ok'))
-            ],
-          );
-        });
+  void setPWM(bool state) {
+    if (state) {
+      //Send PWM on command
+      candle.sendPWMCommand(widget.gpio, 'H', widget._pwm.toString());
+    } else {
+      //Send PWM off command
+      candle.sendPWMCommand(widget.gpio, 'L', '0');
+    }
   }
 }

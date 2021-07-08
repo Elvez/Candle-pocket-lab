@@ -29,18 +29,18 @@ class PWMScreen extends StatelessWidget {
       new HeaderBar("PWM Output", 54, 219, 112, 52, 54, 255, 199, 0);
 
   //PWM tiles
-  var _tileG1 = PWMTile(SizeConfig.blockSizeVertical * 10,
+  var _tileG1 = PWMTile(SizeConfig.blockSizeVertical * 12,
       SizeConfig.blockSizeHorizontal * 90, 1);
-  var _tileG2 = PWMTile(SizeConfig.blockSizeVertical * 10,
+  var _tileG2 = PWMTile(SizeConfig.blockSizeVertical * 12,
       SizeConfig.blockSizeHorizontal * 90, 2);
-  var _tileG3 = PWMTile(SizeConfig.blockSizeVertical * 10,
+  var _tileG3 = PWMTile(SizeConfig.blockSizeVertical * 12,
       SizeConfig.blockSizeHorizontal * 90, 3);
-  var _tileG4 = PWMTile(SizeConfig.blockSizeVertical * 10,
+  var _tileG4 = PWMTile(SizeConfig.blockSizeVertical * 12,
       SizeConfig.blockSizeHorizontal * 90, 4);
-  var _tileG5 = PWMTile(SizeConfig.blockSizeVertical * 10,
+  var _tileG5 = PWMTile(SizeConfig.blockSizeVertical * 12,
       SizeConfig.blockSizeHorizontal * 90, 5);
-  var _tileG6 = PWMTile(SizeConfig.blockSizeVertical * 10,
-      SizeConfig.blockSizeHorizontal * 90, 6);
+
+  double test;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -76,16 +76,14 @@ class PWMScreen extends StatelessWidget {
                 _header,
                 SizedBox(height: SizeConfig.blockSizeVertical * 1.90),
                 _tileG1,
-                SizedBox(height: SizeConfig.blockSizeVertical * 1.20),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1.50),
                 _tileG2,
-                SizedBox(height: SizeConfig.blockSizeVertical * 1.20),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1.50),
                 _tileG3,
-                SizedBox(height: SizeConfig.blockSizeVertical * 1.20),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1.50),
                 _tileG4,
-                SizedBox(height: SizeConfig.blockSizeVertical * 1.20),
+                SizedBox(height: SizeConfig.blockSizeVertical * 1.50),
                 _tileG5,
-                SizedBox(height: SizeConfig.blockSizeVertical * 1.20),
-                _tileG6
               ],
             ),
           ),
