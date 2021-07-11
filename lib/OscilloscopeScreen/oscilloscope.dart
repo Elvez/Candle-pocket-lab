@@ -375,33 +375,19 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                             _graphState = !_graphState;
                           });
 
-                          //Reset the plot
-                          if (widget.ch1Active) {
-                            _ch1Data.resetPlot(widget._rangeCh1);
-                            print(_ch1Data.plotLength());
-                          }
-                          if (widget.ch2Active) {
-                            //_ch2Data.resetPlot();
-                          }
-
                           //Send oscilloscope command
-                          setOscilloscope(_graphState);
-
-                          print(_ch1Data.plotLength());
+                          // setOscilloscope(_graphState);
+                          candle.sendMulCommand(1, 'H');
 
                           if (_graphState) {
-                            //Start the loop
-                            if (widget.ch1Active) {
-                              startChannel1();
+                            for (int iter = 0; iter < 1000; iter++) {
+                              setState(() {
+                                _ch1Data.plot.add(PlotValue(0, 0));
+                              });
                             }
+                            print("Set plot to empty");
 
-                            if (widget.ch2Active) {
-                              startChannel2();
-                            }
-                          } else {
-                            //Reset all plots
-                            //_ch1Data.resetPlot();
-                            //_ch2Data.resetPlot();
+                            startChannel1();
                           }
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -524,20 +510,20 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         print(_packet);
 
         //Remove tail : Packet received = 1000!, After tail remove = 1000
-        _packet = _packet.substring(0, _packet.length - 1);
+        //_packet = _packet.substring(0, _packet.length - 1);
 
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
-        _value = double.tryParse(_packet);
-        _value = (_value / 102.4) - 20.0;
+        //_value = double.tryParse(_packet);
+        //_value = (_value / 102.4) - 20.0;
 
         //Update graph
-        setState(() {
-          _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
-        });
-        if (iter == 999)
-          iter = 0;
-        else
-          iter++;
+        //setState(() {
+        // _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
+        //});
+        //if (iter == 999)
+        //  iter = 0;
+        //else
+        // iter++;
       });
     } else {}
   }
