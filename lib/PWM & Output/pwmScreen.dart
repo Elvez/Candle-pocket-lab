@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Widgets/header.dart';
-import 'package:candle_pocketlab/Widgets/gpio.dart';
+import 'package:candle_pocketlab/Widgets/pwmTile.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 
 /*

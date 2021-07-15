@@ -178,6 +178,24 @@ class GraphData {
 
     plot[index].yVal = value;
   }
+
+  /*
+   * Reset plot
+   * 
+   * Resets the plot
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void reset() {
+    //Empty the plot
+    plot = [];
+
+    //Reset
+    for (int iter = 0; iter < 1000; iter++) {
+      plot.add(PlotValue(0, 0));
+    }
+  }
 }
 
 class PlotValue {

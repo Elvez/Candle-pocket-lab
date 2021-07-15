@@ -155,6 +155,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   ChartSeriesController channel2Controller;
 
   Widget build(BuildContext context) {
+    //Initialize plots
+    _ch1Data.reset();
+    _ch2Data.reset();
+
     //Get screen sizes
     SizeConfig().init(context);
     return MaterialApp(
@@ -376,15 +380,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           });
 
                           //Send oscilloscope command
-                          // setOscilloscope(_graphState);
-                          candle.sendMulCommand(1, 'H');
+                          setOscilloscope(_graphState);
 
                           if (_graphState) {
-                            for (int iter = 0; iter < 1000; iter++) {
-                              setState(() {
-                                _ch1Data.plot.add(PlotValue(0, 0));
-                              });
-                            }
+                            _ch1Data.reset();
                             print("Set plot to empty");
 
                             startChannel1();
