@@ -26,11 +26,7 @@ class _SigninPageState extends State<SigninPage> {
   final googleSignIn = new GoogleSignIn();
 
   //Background gradient
-  final Decoration _decoration = new BoxDecoration(
-      gradient: LinearGradient(
-          colors: [Colors.cyan[50], Colors.blue],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter));
+  final Decoration _decoration = new BoxDecoration(color: Colors.white);
 
   //Alignment
   final _alignment = CrossAxisAlignment.start;
@@ -41,7 +37,10 @@ class _SigninPageState extends State<SigninPage> {
     child: Text(
       'Just\nOne\nsmall\nstep!',
       style: TextStyle(
-          fontSize: 80.0, fontWeight: FontWeight.bold, fontFamily: 'Ropa Sans'),
+          color: Colors.grey[800],
+          fontSize: 80.0,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Ropa Sans'),
     ),
   );
 
@@ -92,16 +91,17 @@ class _SigninPageState extends State<SigninPage> {
                       ),
                     ),
                     Container(
-                        padding:
-                            EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+                        padding: EdgeInsets.only(
+                            top: SizeConfig.blockSizeVertical * 5,
+                            left: SizeConfig.blockSizeHorizontal * 10,
+                            right: SizeConfig.blockSizeHorizontal * 10),
                         child: Column(
                           children: <Widget>[
-                            SizedBox(height: 80.0),
-                            SizedBox(height: 15),
+                            SizedBox(height: SizeConfig.blockSizeVertical * 12),
 
                             //Sign-in with google button
                             new Container(
-                                height: 50.0,
+                                height: SizeConfig.blockSizeVertical * 6,
                                 child: Material(
                                   borderRadius: BorderRadius.circular(20.0),
                                   shadowColor: Colors.grey,
@@ -117,7 +117,10 @@ class _SigninPageState extends State<SigninPage> {
                                         children: [
                                           Image.asset('images/google.png'),
                                           _googleSignInText,
-                                          SizedBox(width: 20)
+                                          SizedBox(
+                                              width: SizeConfig
+                                                      .blockSizeHorizontal *
+                                                  5)
                                         ],
                                       ),
                                     ),
