@@ -146,19 +146,16 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   final _backShape = RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(10)));
 
+  //Custom Axis line
+  final _axisLine = new AxisLine(color: Colors.grey[400], width: 2);
+
   //Graph plot data
   var _ch1Data = new GraphData(100, Colors.black);
   var _ch2Data = new GraphData(100, Colors.red);
   String yTitle = "V";
   String xTitle = "ms";
-  ChartSeriesController channel1Controller;
-  ChartSeriesController channel2Controller;
 
   Widget build(BuildContext context) {
-    //Initialize plots
-    _ch1Data.reset();
-    _ch2Data.reset();
-
     //Get screen sizes
     SizeConfig().init(context);
     return MaterialApp(
@@ -182,13 +179,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                 margin: EdgeInsets.only(
                                     right: SizeConfig.blockSizeVertical * 1.90),
                                 child: SfCartesianChart(
+                                  borderColor: Colors.white,
                                   series: <ChartSeries>[
-                                    FastLineSeries<PlotValue, double>(
-                                        onRendererCreated:
-                                            (ChartSeriesController controller) {
-                                          channel1Controller = controller;
-                                        },
-                                        isVisible: widget.ch1Active,
+                                    //Channel 1 plot
+                                    LineSeries<PlotValue, double>(
                                         animationDuration: 10,
                                         dataSource: _ch1Data.plot,
                                         color: _ch1Data.color,
@@ -196,12 +190,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                             _plot.xVal,
                                         yValueMapper: (PlotValue _plot, _) =>
                                             _plot.yVal),
-                                    FastLineSeries<PlotValue, double>(
-                                        onRendererCreated:
-                                            (ChartSeriesController controller) {
-                                          channel2Controller = controller;
-                                        },
-                                        isVisible: widget.ch2Active,
+
+                                    //Channel 2 plot
+                                    LineSeries<PlotValue, double>(
                                         animationDuration: 10,
                                         dataSource: _ch2Data.plot,
                                         color: _ch2Data.color,
@@ -210,7 +201,8 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                         yValueMapper: (PlotValue _plot, _) =>
                                             _plot.yVal)
                                   ],
-                                  borderColor: Colors.white,
+
+                                  //X axis customization
                                   primaryXAxis: NumericAxis(
                                       labelFormat: '{value} $xTitle',
                                       visibleMinimum: 0,
@@ -218,15 +210,15 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                                       interval: widget.xAxis.range / 10,
                                       placeLabelsNearAxisLine: false,
                                       crossesAt: 0,
-                                      axisLine: AxisLine(
-                                          color: Colors.grey[400], width: 2)),
+                                      axisLine: _axisLine),
+
+                                  //Y axis customization
                                   primaryYAxis: NumericAxis(
                                       interval: widget.yAxis.range / 5,
                                       visibleMaximum: widget.yAxis.range,
                                       visibleMinimum: (0 - widget.yAxis.range),
                                       labelFormat: '{value} $yTitle',
-                                      axisLine: AxisLine(
-                                          color: Colors.grey[400], width: 2)),
+                                      axisLine: _axisLine),
                                 )))),
 
                     //Back button
@@ -377,15 +369,22 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         onTap: () async {
                           setState(() {
                             _graphState = !_graphState;
+                            _ch1Data.reset();
+
+                            for (int iter = 0; iter < 1000; iter++) {
+                              _graphState
+                                  ? _ch1Data.plot[iter] = PlotValue(
+                                      iter.toDouble() / 10,
+                                      sin(iter.toDouble() / 10))
+                                  : _ch1Data.plot[iter] = PlotValue(
+                                      iter.toDouble() / 10,
+                                      cos(iter.toDouble() / 10));
+                            }
                           });
 
                           //Send oscilloscope command
-                          setOscilloscope(_graphState);
-
-                          if (_graphState) {
-                            _ch1Data.reset();
-                            print("Set plot to empty");
-
+                          if (candle.isDeviceConnected()) {
+                            setOscilloscope(_graphState);
                             startChannel1();
                           }
                         },
@@ -506,23 +505,23 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         //Decode bytes to string
         _packet = ascii.decode(data);
 
-        print(_packet);
-
         //Remove tail : Packet received = 1000!, After tail remove = 1000
-        //_packet = _packet.substring(0, _packet.length - 1);
+        _packet = _packet.substring(0, _packet.length - 1);
 
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
-        //_value = double.tryParse(_packet);
-        //_value = (_value / 102.4) - 20.0;
+        _value = double.tryParse(_packet);
+        _value = (_value / 102.4) - 20.0;
 
-        //Update graph
-        //setState(() {
-        // _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
-        //});
-        //if (iter == 999)
-        //  iter = 0;
-        //else
-        // iter++;
+        print(_value);
+
+        // //Update graph
+        // setState(() {
+        //   _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
+        // });
+        // if (iter == 999)
+        //   iter = 0;
+        // else
+        //   iter++;
       });
     } else {}
   }
@@ -629,8 +628,6 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         widget.ch2 = widget.graphSetup.getChannelColor(2);
         widget.xAxis = widget.graphSetup.getXData();
         widget.yAxis = widget.graphSetup.getYData();
-        _ch1Data.setRange(widget.xAxis.range);
-        _ch2Data.setRange(widget.xAxis.range);
 
         //Update graph Xaxis unit
         switch (widget.xAxis.unit) {

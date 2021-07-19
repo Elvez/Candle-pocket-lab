@@ -82,30 +82,6 @@ class GraphData {
   }
 
   /*
-   * Fill X axis values
-   * 
-   * Fills x axis values seperated by space, hundred values are filles irrespective of the range.
-   * 
-   * Status - UNUSED
-   * 
-   * @params : Range(int)
-   * @return : none 
-   */
-  void setRange(double range) {
-    //Space between plot points
-    double _space = _range / 1000;
-
-    //Reset the graph
-    _range = range;
-    plot = [];
-
-    //Set rest of the values
-    for (int iter = 0; iter < 1000; iter++) {
-      plot.add(PlotValue(iter * _space, 0));
-    }
-  }
-
-  /*
    * Returns plot's current x-axis range 
    * 
    * @params : none
@@ -123,24 +99,6 @@ class GraphData {
    */
   int plotLength() {
     return plot.length;
-  }
-
-  /*
-   * Reset plot
-   * 
-   * Resets the plot
-   * 
-   * @params : none
-   * @return : none 
-   */
-  void resetPlot(double range) {
-    double x = 0;
-    if (plot.isNotEmpty) {
-      for (int iter = 0; iter < plot.length; iter++) {
-        plot[iter] = PlotValue(x, 0);
-        x += range / 1000;
-      }
-    }
   }
 
   /*

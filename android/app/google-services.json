@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "388438075310-ngmireia4rv4go21q68mrro5qi3hta6c.apps.googleusercontent.com",
+          "client_id": "388438075310-iunr5qj3tpu9m2s95eecoog119gr7rdg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.innovatecraft.candle_pocketlab",
-            "certificate_hash": "129b74b386473ee212b4659e6a01aca4f4bc9254"
+            "certificate_hash": "eb3373c31d6ac273263fcbe2eadd8af7a5f3da68"
           }
         },
         {
