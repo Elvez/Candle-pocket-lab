@@ -241,22 +241,24 @@ class _MultimeterTileState extends State<MultimeterTile> {
     //Parse value for voltmeter
     double _value = 0;
 
-    candle.port.inputStream.listen((Uint8List data) {
-      //Decode bytes to string
-      _packet = ascii.decode(data);
+    if (candle.isDeviceConnected()) {
+      candle.port.inputStream.listen((Uint8List data) {
+        //Decode bytes to string
+        _packet = ascii.decode(data);
 
-      //Remove tail : Packet received = 1000!, After tail remove = 1000
-      _packet = _packet.substring(0, _packet.length - 1);
+        //Remove tail : Packet received = 1000!, After tail remove = 1000
+        _packet = _packet.substring(0, _packet.length - 1);
 
-      //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
-      _value = double.tryParse(_packet);
-      _value = (_value / 102.4) - 20.0;
+        //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
+        _value = double.tryParse(_packet);
+        _value = (_value / 102.4) - 20.0;
 
-      //Loop values
-      setState(() {
-        widget.fieldValue = _value;
+        //Loop values
+        setState(() {
+          widget.fieldValue = _value;
+        });
       });
-    });
+    }
   }
 
   /*
@@ -268,7 +270,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
    * @return : none 
    */
   void setMultimeter(bool state) {
-    if (state) {
+    if (state && candle.isDeviceConnected()) {
       if (widget.channelName == "Channel 1") {
         //Send multimeter 'channel 1 = on'.
         candle.sendMulCommand(1, "H");

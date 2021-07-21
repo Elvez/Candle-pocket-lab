@@ -437,7 +437,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    * @return : none 
    */
   void setWaveGenerator(bool state) {
-    if (state) {
+    if (state && candle.isDeviceConnected()) {
       if (widget.source == 1) {
         candle.sendWGCommand(1, "H", widget.getWave(),
             widget._periodController.text, widget._amplitudeController.text);

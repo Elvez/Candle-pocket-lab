@@ -33,8 +33,9 @@ class XYDialog extends StatefulWidget {
   //Channel 2 color toggle
   List<bool> is2Color = [false, true, false, false];
 
-  //Save state for settings menu
-  bool saveButton = true;
+  //Save validator for settings menu
+  bool yRangeValid = true;
+  bool xRangeValid = true;
 
   /*
    * Set XY graph data
@@ -297,6 +298,8 @@ class _XYDialogState extends State<XYDialog> {
               new Row(
                 children: [
                   _rangeXText,
+
+                  //Range textbox
                   new Container(
                       width: SizeConfig.blockSizeVertical * 20,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
@@ -309,6 +312,8 @@ class _XYDialogState extends State<XYDialog> {
                                 RegExp(r'^\d+\.?\d*')),
                             LengthLimitingTextInputFormatter(4)
                           ],
+                          validator: _validator,
+                          autovalidate: true,
                           controller: widget.rangeXController,
                           keyboardType: TextInputType.number,
                           textAlign: TextAlign.right,
@@ -361,10 +366,10 @@ class _XYDialogState extends State<XYDialog> {
                           autovalidate: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              widget.saveButton = false;
+                              widget.yRangeValid = false;
                               return 'Error';
                             } else {
-                              widget.saveButton = true;
+                              widget.yRangeValid = true;
                               return null;
                             }
                           },
@@ -465,7 +470,7 @@ class _XYDialogState extends State<XYDialog> {
           ),
           TextButton(
             onPressed: () {
-              if (widget.saveButton) {
+              if (widget.xRangeValid && widget.yRangeValid) {
                 widget._save = true;
                 Navigator.pop(context);
               } else {}
@@ -475,6 +480,52 @@ class _XYDialogState extends State<XYDialog> {
         ],
       ),
     );
+  }
+
+  /*
+   * Validate x range
+   * 
+   * Validates x range in (100 - 10,000)ms and (1 - 10)s. Sets a boolean for range valiator so that save button 
+   * can be disabled if the range is not valid.
+   * 
+   * @params : none
+   * @return : error(String) 
+   */
+  String _validator(String input) {
+    if (input == null || input.isEmpty) {
+      //Input should not be empty
+      widget.xRangeValid = false;
+
+      return "Can't be empty!";
+    } else {
+      if (widget.isXSelected[0] == true) {
+        //For milli-seconds range
+        if (double.tryParse(input) < 100 || double.tryParse(input) > 10000) {
+          widget.xRangeValid = false;
+
+          return "Out of range!";
+        } else {
+          widget.xRangeValid = true;
+
+          return null;
+        }
+      } else if (widget.isXSelected[1] == true) {
+        //For seconds range
+        if (double.tryParse(input) < 0.1 || double.tryParse(input) > 10) {
+          widget.xRangeValid = false;
+
+          return "Out of range!";
+        } else {
+          widget.xRangeValid = true;
+
+          return null;
+        }
+      } else {
+        widget.xRangeValid = true;
+
+        return null;
+      }
+    }
   }
 
   /*
