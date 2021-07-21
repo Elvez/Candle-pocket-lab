@@ -227,50 +227,20 @@ class DeviceUSB {
    * Send Oscilloscope command
    *
    * This function sends the Oscilloscope command to the USB device.
-   * Command packet - O(Source)(State)(Range)(Unit)------------
-   * Example - O1H30.0U1------------
+   * Command packet - O(Source)(State)-----------------
+   * Example - O1H-------------------
    *
-   * @param Source(int), State(String), Range(String), Time unit(timeUnit)
-   * example : sendOSCCommand(1, "H", "300.0", timeUnit.seconds);
+   * @param : Source(int), State(String)
+   * example : sendOSCCommand(1, "H");
    * @return none
    */
-  void sendOSCCommmand(
-      int channel, String state, String rangeX, timeUnit unit) {
+  void sendOSCCommand(int source, String state) async {
     String commandPacket;
-    commandPacket = "O" + channel.toString();
-    commandPacket += state;
+    commandPacket = "O" + source.toString() + state;
+    commandPacket = fillDummy(commandPacket);
 
-    if (state == "L") {
-      commandPacket = fillDummy(commandPacket);
-
-      //Send Command
-      sendPacket(commandPacket);
-      return;
-    } else if (state == "H") {
-      //Range
-      commandPacket += rangeX;
-
-      //Unit marker
-      commandPacket += 'U';
-      switch (unit) {
-        case timeUnit.micro:
-          commandPacket += "1";
-          break;
-        case timeUnit.milli:
-          commandPacket += "2";
-          break;
-        case timeUnit.second:
-          commandPacket += "3";
-          break;
-        default:
-          return;
-          break;
-      }
-      commandPacket = fillDummy(commandPacket);
-
-      //Send Command
-      sendPacket(commandPacket);
-    }
+    //Send command
+    sendPacket(commandPacket);
   }
 
   /*

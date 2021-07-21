@@ -40,7 +40,7 @@ class OscilloscopeScreen extends StatefulWidget {
   //xyTool data
   color ch1 = color.black;
   color ch2 = color.red;
-  var xAxis = new XGraphData(100.0, timeUnit.milli);
+  var xAxis = new XGraphData(1000.0, timeUnit.milli);
   var yAxis = new YGraphData(5.0, voltUnit.volt);
 
   //OPtool data
@@ -298,6 +298,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               //Get graph settings
                               getGraphData();
 
+                              //Reset graph plot
+                              initGraph();
+
                               //Turn Oscilloscope on
                               setOscilloscope(_graphState);
                             });
@@ -369,23 +372,11 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         onTap: () async {
                           setState(() {
                             _graphState = !_graphState;
-                            _ch1Data.reset();
-
-                            for (int iter = 0; iter < 1000; iter++) {
-                              _graphState
-                                  ? _ch1Data.plot[iter] = PlotValue(
-                                      iter.toDouble() / 10,
-                                      sin(iter.toDouble() / 10))
-                                  : _ch1Data.plot[iter] = PlotValue(
-                                      iter.toDouble() / 10,
-                                      cos(iter.toDouble() / 10));
-                            }
                           });
 
                           //Send oscilloscope command
                           if (candle.isDeviceConnected()) {
                             setOscilloscope(_graphState);
-                            startChannel1();
                           }
                         },
                         borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -505,23 +496,24 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         //Decode bytes to string
         _packet = ascii.decode(data);
 
+        //print(_packet);
         //Remove tail : Packet received = 1000!, After tail remove = 1000
         _packet = _packet.substring(0, _packet.length - 1);
 
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
         _value = double.tryParse(_packet);
-        _value = (_value / 102.4) - 20.0;
+        if (_value != null) _value = (_value / 102.4) - 20.0;
 
-        print(_value);
+        // print(_value);
 
         // //Update graph
-        // setState(() {
-        //   _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
-        // });
-        // if (iter == 999)
-        //   iter = 0;
-        // else
-        //   iter++;
+        setState(() {
+          _ch1Data.plot[iter] = PlotValue((iter.toDouble() / 10), _value);
+        });
+        if (iter == 999)
+          iter = 0;
+        else
+          iter++;
       });
     } else {}
   }
@@ -726,24 +718,37 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * @return none
    */
   void setOscilloscope(bool state) {
-    if (state) {
-      //Send start command to device
-      if (widget.ch1Active) {
-        //Send channel-one state HIGH
-        candle.sendOSCCommmand(
-            1, "H", widget.xAxis.range.toString(), widget.xAxis.unit);
-      }
-      if (widget.ch2Active) {
-        //Send channel-two state HIGH
-        candle.sendOSCCommmand(
-            2, "H", widget.xAxis.range.toString(), widget.xAxis.unit);
-      }
+    //Send start command to device
+    if (widget.ch1Active) {
+      candle.sendOSCCommand(1, state ? "H" : "L");
     } else {
-      //Send both channels state LOW
-      candle.sendOSCCommmand(
-          1, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
-      candle.sendOSCCommmand(
-          2, "L", widget.xAxis.range.toString(), widget.xAxis.unit);
+      candle.sendOSCCommand(1, "L");
+    }
+
+    if (widget.ch2Active) {
+      candle.sendOSCCommand(2, state ? "H" : "L");
+    } else {
+      candle.sendOSCCommand(2, "L");
+    }
+  }
+
+  /*
+   * Initialise graph
+   * 
+   * Initializes graph with current x range, sets plot x values accordingly. 
+   * For example if current x range is 10s, plot length will be set to 10,000 values as 
+   * for every milli-second there is a sampled ADC value. 
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void initGraph() {
+    if (widget.xAxis.unit == timeUnit.milli) {
+      _ch1Data.setPlotLength(widget.xAxis.range.round());
+      _ch2Data.setPlotLength(widget.xAxis.range.round());
+    } else if (widget.xAxis.unit == timeUnit.second) {
+      _ch1Data.setPlotLength((widget.xAxis.range * 1000).toInt());
+      _ch2Data.setPlotLength((widget.xAxis.range * 1000).toInt());
     }
   }
 }

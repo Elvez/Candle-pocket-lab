@@ -22,7 +22,7 @@ class XYDialog extends StatefulWidget {
   bool _save = false;
 
   //X toggle time unit
-  List<bool> isXSelected = [false, true, false];
+  List<bool> isXSelected = [true, false];
 
   //Y toggle range unit
   List<bool> isYSelected = [false, true];
@@ -51,19 +51,15 @@ class XYDialog extends StatefulWidget {
     rangeYController.text = "$rangey";
 
     if (x.unit == timeUnit.micro) {
-      isXSelected[0] = true;
-      isXSelected[1] = false;
-      isXSelected[2] = false;
+      //No such unit
     }
     if (x.unit == timeUnit.milli) {
-      isXSelected[0] = false;
-      isXSelected[1] = true;
-      isXSelected[2] = false;
+      isXSelected[0] = true;
+      isXSelected[1] = false;
     }
     if (x.unit == timeUnit.second) {
       isXSelected[0] = false;
-      isXSelected[1] = false;
-      isXSelected[2] = true;
+      isXSelected[1] = true;
     }
 
     if (y.unit == voltUnit.milli) {
@@ -170,9 +166,8 @@ class XYDialog extends StatefulWidget {
    */
   XGraphData getXData() {
     xData.range = double.tryParse(rangeXController.text);
-    if (isXSelected[0]) xData.unit = timeUnit.micro;
-    if (isXSelected[1]) xData.unit = timeUnit.milli;
-    if (isXSelected[2]) xData.unit = timeUnit.second;
+    if (isXSelected[0]) xData.unit = timeUnit.milli;
+    if (isXSelected[1]) xData.unit = timeUnit.second;
     return xData;
   }
 
@@ -242,15 +237,6 @@ class _XYDialogState extends State<XYDialog> {
   final _yfieldDecoration = new BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       border: Border.all(color: Colors.grey, width: 1));
-
-  //Micro seconds text
-  final _usText = new Padding(
-    padding: const EdgeInsets.all(2.0),
-    child: Text(
-      'µs',
-      style: TextStyle(fontSize: 20, fontFamily: 'Ropa Sans'),
-    ),
-  );
 
   //Milli seconds text
   final _msText = new Padding(
@@ -330,6 +316,8 @@ class _XYDialogState extends State<XYDialog> {
                             border: OutlineInputBorder(),
                             contentPadding: EdgeInsets.only(top: 2, left: 2),
                           ))),
+
+                  //X-range toggle button
                   new Container(
                       width: SizeConfig.blockSizeHorizontal * 22.50,
                       height: SizeConfig.blockSizeHorizontal * 3.5,
@@ -342,7 +330,7 @@ class _XYDialogState extends State<XYDialog> {
                         selectedBorderColor: Colors.black,
                         selectedColor: Colors.black,
                         borderRadius: BorderRadius.circular(4),
-                        children: [_usText, _msText, _secText],
+                        children: [_msText, _secText],
                         onPressed: (int newIndex) {
                           setState(() {
                             toggleXRange(newIndex);

@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 import 'package:flutter/material.dart';
 
 /*
@@ -146,12 +147,28 @@ class GraphData {
    * @return : none 
    */
   void reset() {
-    //Empty the plot
+    //Reset
+    for (int iter = 0; iter < plot.length; iter++) {
+      plot.add(PlotValue(iter.toDouble(), null));
+    }
+  }
+
+  /*
+   * Set plot length
+   * 
+   * Sets plot length to given value and fills x values, y values are set to null
+   * 
+   * @params : Length(int)
+   * @return : none 
+   */
+  void setPlotLength(int length) {
+    //Make plot null
     plot = [];
 
-    //Reset
-    for (int iter = 0; iter < 1000; iter++) {
-      plot.add(PlotValue(0, 0));
+    //Set length
+    while (length > 0) {
+      plot.add(PlotValue(null, null));
+      length = length - 1;
     }
   }
 }
