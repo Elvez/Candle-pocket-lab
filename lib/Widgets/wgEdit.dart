@@ -195,6 +195,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     new AutoSizeText(widget.sourceName, style: _sourceFont),
+
+                    //On/Off switch
                     new FlutterSwitch(
                         activeColor: Color.fromARGB(150, 52, 152, 199),
                         width: SizeConfig.blockSizeHorizontal * 12.75,
@@ -215,6 +217,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                           }
                         })
                   ])),
+
+          //Select Wave-type Row
           new Container(
               margin: EdgeInsets.only(left: 10, top: 10),
               child: Row(children: [
@@ -241,6 +245,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                       isSelected: widget._waveTyoe),
                 )
               ])),
+
+          //Enter period row
           new Container(
               margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(children: [
@@ -263,24 +269,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
                             //Input validation
                             autovalidate: true,
-                            validator: (value) {
-                              if (value.isEmpty || value == null) {
-                                _validPeriod = false;
-                                return "Enter period.";
-                              } else if (double.tryParse(value) > 3000) {
-                                _validPeriod = false;
-                                return "Less than 3000ms.";
-                              } else if (double.tryParse(value) <= 0) {
-                                _validPeriod = false;
-                                return "Cannot be 0.";
-                              } else if (value.endsWith('.')) {
-                                _validPeriod = false;
-                                return "Invalid";
-                              } else {
-                                _validPeriod = true;
-                                return null;
-                              }
-                            },
+                            validator: validatePeriod,
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget._periodController,
@@ -295,7 +284,10 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         fontSize: 20,
                         color: Colors.grey[700]))
               ])),
+
           new SizedBox(height: SizeConfig.blockSizeVertical * 1.0),
+
+          //Enter amplitude row
           new Container(
               margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.20),
               child: Row(children: [
@@ -321,24 +313,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
                             //Input validation
                             autovalidate: true,
-                            validator: (value) {
-                              if (value.isEmpty || value == null) {
-                                _validAmp = false;
-                                return "Enter amplitude.";
-                              } else if (double.tryParse(value) > 3.3) {
-                                _validAmp = false;
-                                return "Less than 3.3V.";
-                              } else if (double.tryParse(value) <= 0) {
-                                _validAmp = false;
-                                return "Cannot be 0.";
-                              } else if (value.endsWith('.')) {
-                                _validAmp = false;
-                                return "Invalid";
-                              } else {
-                                _validAmp = true;
-                                return null;
-                              }
-                            },
+                            validator: validateAmp,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 contentPadding:
@@ -376,55 +351,74 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    * 
    * Validates the period input.
    * 
-   * STATUS - UNUSED
    * 
-   * @params : none
-   * @return : none 
+   * @params : Input(String)
+   * @return : String(Error) 
    */
-  void validateInput() {
-    String error =
-        "Invalid data, period must be in (0-3000)ms and amplitude less than 3.3V";
+  String validatePeriod(String value) {
+    if (value.isEmpty || value == null) {
+      //Value should not be empty
+      _validPeriod = false;
 
-    if (widget._amplitudeController.text.isEmpty ||
-        widget._periodController.text.isEmpty) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: AutoSizeText("Error",
-                    style: TextStyle(fontFamily: 'Ropa Sans')),
-                content: AutoSizeText(error,
-                    style: TextStyle(fontFamily: 'Ropa Sans')),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: AutoSizeText("Ok",
-                          style: TextStyle(fontFamily: 'Ropa Sans')))
-                ],
-              ));
-      setState(() {
-        widget.isTurnedOn = false;
-      });
-    } else if (double.tryParse(widget._periodController.text) <= 0 ||
-        double.tryParse(widget._periodController.text) >= 3000.0 ||
-        double.tryParse(widget._amplitudeController.text) <= 0 ||
-        double.tryParse(widget._amplitudeController.text) >= 3.30) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-                title: AutoSizeText("Error",
-                    style: TextStyle(fontFamily: 'Ropa Sans')),
-                content: AutoSizeText(error,
-                    style: TextStyle(fontFamily: 'Ropa Sans')),
-                actions: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: AutoSizeText("Ok",
-                          style: TextStyle(fontFamily: 'Ropa Sans')))
-                ],
-              ));
-      setState(() {
-        widget.isTurnedOn = false;
-      });
+      return "Enter period.";
+    } else if (double.tryParse(value) > 3000) {
+      //Out of range
+      _validPeriod = false;
+
+      return "Out of range!";
+    } else if (double.tryParse(value) <= 0) {
+      //Cannot be negative
+      _validPeriod = false;
+
+      return "Out of range!";
+    } else if (value.endsWith('.')) {
+      //Invalid number
+      _validPeriod = false;
+
+      return "Invalid";
+    } else {
+      //Valid input
+      _validPeriod = true;
+
+      return null;
+    }
+  }
+
+  /*
+   * Amplitude input validator
+   * 
+   * Validates the amplitude input.
+   * 
+   * 
+   * @params : Input(String)
+   * @return : String(Error) 
+   */
+  String validateAmp(String value) {
+    if (value.isEmpty || value == null) {
+      //Cannot be empty
+      _validAmp = false;
+
+      return "Enter amplitude.";
+    } else if (double.tryParse(value) > 3.3) {
+      //Out of range
+      _validAmp = false;
+
+      return "Out of range!";
+    } else if (double.tryParse(value) <= 0) {
+      //Out of range
+      _validAmp = false;
+
+      return "Out of range!";
+    } else if (value.endsWith('.')) {
+      //Invalid input
+      _validAmp = false;
+
+      return "Invalid";
+    } else {
+      //Valid input
+      _validAmp = true;
+
+      return null;
     }
   }
 
@@ -437,19 +431,24 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    * @return : none 
    */
   void setWaveGenerator(bool state) {
+    //Proceed if device is connected
     if (state && candle.isDeviceConnected()) {
       if (widget.source == 1) {
+        //Send command with source 1 and state High
         candle.sendWGCommand(1, "H", widget.getWave(),
             widget._periodController.text, widget._amplitudeController.text);
       } else if (widget.source == 2) {
+        //Send command with source 2 and state High
         candle.sendWGCommand(2, "H", widget.getWave(),
             widget._periodController.text, widget._amplitudeController.text);
       }
     } else {
       if (widget.source == 1) {
+        //Send command with source 1 and state Low
         candle.sendWGCommand(1, "L", widget.getWave(),
             widget._periodController.text, widget._amplitudeController.text);
       } else if (widget.source == 2) {
+        //Send command with source 2 and state Low
         candle.sendWGCommand(2, "L", widget.getWave(),
             widget._periodController.text, widget._amplitudeController.text);
       }
