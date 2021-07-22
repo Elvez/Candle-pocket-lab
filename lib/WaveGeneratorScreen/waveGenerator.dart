@@ -85,6 +85,12 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
    * @return : Bool 
    */
   Future<bool> _onWillPop() {
+    //Stop any running wave-generators
+    _sourceTile1.stopWG();
+    _sourceTile2.stopWG();
+
     Navigator.of(context).pop(true);
+
+    return Future.value(true);
   }
 }
