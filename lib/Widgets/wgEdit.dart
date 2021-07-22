@@ -27,7 +27,7 @@ class WaveGeneratorTile extends StatefulWidget {
   final _amplitudeController = new TextEditingController(text: "3.30");
 
   //Wave type toggle
-  List<bool> _waveTyoe = [true, false, false];
+  List<bool> _waveType = [true, false, false];
 
   //Constructor
   WaveGeneratorTile(this.sourceName, this.source);
@@ -107,17 +107,29 @@ class WaveGeneratorTile extends StatefulWidget {
    * @return : int 
    */
   int getWave() {
-    if (_waveTyoe[0]) {
+    if (_waveType[0]) {
       return 1;
     }
-    if (_waveTyoe[1]) {
+    if (_waveType[1]) {
       return 2;
     }
-    if (_waveTyoe[2]) {
+    if (_waveType[2]) {
       return 3;
     }
 
     return null;
+  }
+
+  /*
+   * Remotely send command to turn off wave-generator
+   * 
+   * Sends Turn-off wave-generator command to device
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void stopWG() {
+    candle.sendWGCommand(source, 'L', 1, "0", "0");
   }
 }
 
@@ -241,8 +253,12 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         setState(() {
                           toggleWaveType(newIndex);
                         });
+
+                        //Send wave-generator command
+                        if (_validAmp && _validPeriod)
+                          setWaveGenerator(widget.isTurnedOn);
                       },
-                      isSelected: widget._waveTyoe),
+                      isSelected: widget._waveType),
                 )
               ])),
 
@@ -270,6 +286,11 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             //Input validation
                             autovalidate: true,
                             validator: validatePeriod,
+                            onEditingComplete: () {
+                              //Send wave-generator command
+                              if (_validAmp && _validPeriod)
+                                setWaveGenerator(widget.isTurnedOn);
+                            },
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget._periodController,
@@ -313,6 +334,11 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
                             //Input validation
                             autovalidate: true,
+                            onEditingComplete: () {
+                              //Send wave-generator command
+                              if (_validAmp && _validPeriod)
+                                setWaveGenerator(widget.isTurnedOn);
+                            },
                             validator: validateAmp,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -337,11 +363,11 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    * @return : none 
    */
   void toggleWaveType(int newIndex) {
-    for (int index = 0; index < widget._waveTyoe.length; index++) {
+    for (int index = 0; index < widget._waveType.length; index++) {
       if (index == newIndex) {
-        widget._waveTyoe[index] = true;
+        widget._waveType[index] = true;
       } else {
-        widget._waveTyoe[index] = false;
+        widget._waveType[index] = false;
       }
     }
   }
