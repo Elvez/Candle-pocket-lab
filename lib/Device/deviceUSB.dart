@@ -1,7 +1,6 @@
 import 'dart:async' show Future;
 import 'dart:typed_data';
 import 'package:usb_serial/usb_serial.dart';
-import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
 
 /*
  * This class of device is similar to device class, it uses USB for communication.
