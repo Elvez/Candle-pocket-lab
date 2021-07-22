@@ -52,6 +52,11 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
                 icon: Icon(Icons.arrow_back_ios,
                     color: Color.fromARGB(255, 52, 152, 199)),
                 onPressed: () {
+                  //Stop any running wave-generators
+                  _sourceTile1.stopWG();
+                  _sourceTile2.stopWG();
+
+                  //Go back to homescreen
                   Navigator.pop(context);
                 },
               ),
