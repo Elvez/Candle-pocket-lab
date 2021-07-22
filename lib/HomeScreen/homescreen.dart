@@ -109,6 +109,8 @@ class HomeScreen extends StatelessWidget {
                                 MyRoute(
                                     builder: (context) =>
                                         OscilloscopeScreen()));
+
+                            //Change to landscape orientation
                             SystemChrome.setPreferredOrientations(
                                 [DeviceOrientation.landscapeLeft]);
                           }))),
