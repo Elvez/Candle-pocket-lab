@@ -149,9 +149,7 @@ class _SigninPageState extends State<SigninPage> {
   void checkAuthentification() async {
     _auth.authStateChanges().listen((user) {
       if (user != null) {
-        print(user);
-        print(" is Authenticated");
-
+        //Goto connect screen
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => StartScreen()));
       }
