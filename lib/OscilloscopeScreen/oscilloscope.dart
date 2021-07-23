@@ -48,7 +48,7 @@ class OscilloscopeScreen extends StatefulWidget {
   bool _isDiff = false;
 
   //WGtool data
-  double _amplitude = 3.3;
+  double _phase = 3.3;
   double _period = 100;
   int _waveType = 1;
 
@@ -579,7 +579,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       //Dialog closed with save button
 
       //Save data
-      widget._amplitude = widget.waveGenerator.getAmp();
+      widget._phase = widget.waveGenerator.getPhase();
       widget._period = widget.waveGenerator.getPeriod();
       widget._waveType = widget.waveGenerator.getWaveType();
 
@@ -589,14 +589,14 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
       //Send wave generator command
       widget.waveGenerator.isWaveOn
           ? candle.sendWGCommand(1, "H", widget._waveType,
-              widget._period.toString(), widget._amplitude.toString())
+              widget._period.toString(), widget._phase.toString())
           : candle.sendWGCommand(1, "L", widget._waveType,
-              widget._period.toString(), widget._amplitude.toString());
+              widget._period.toString(), widget._phase.toString());
     } else {
       //Dialog closed with cancel button
 
       //Replace data with previous
-      widget.waveGenerator.setAmp(widget._amplitude);
+      widget.waveGenerator.setPhase(widget._phase);
       widget.waveGenerator.setPeriod(widget._period);
       widget.waveGenerator.setWave(widget._waveType);
     }

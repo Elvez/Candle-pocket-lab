@@ -155,7 +155,7 @@ class DeviceUSB {
    * @return none
    */
   void sendWGCommand(
-      int source, String state, int waveType, String period, String amplitude) {
+      int source, String state, int waveType, String period, String phase) {
     String commandPacket;
     commandPacket = "W" + source.toString();
     commandPacket += state;
@@ -183,7 +183,7 @@ class DeviceUSB {
 
       commandPacket += period;
       commandPacket += 'A';
-      commandPacket += amplitude;
+      commandPacket += phase;
       commandPacket = fillDummy(commandPacket);
 
       //Send Command

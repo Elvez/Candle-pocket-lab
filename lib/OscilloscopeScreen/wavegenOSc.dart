@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 
 class WGDialog extends StatefulWidget {
   //Save states
-  bool enableSaveP = true;
-  bool enableSaveA = true;
+  bool _validPeriod = true;
+  bool _validPhase = true;
 
   //Generate text
   String actionButton = "Generate";
@@ -16,8 +16,8 @@ class WGDialog extends StatefulWidget {
   //Period text controller
   final period = new TextEditingController(text: "100");
 
-  //Amplitude text controller
-  final amplitude = new TextEditingController(text: "3.3");
+  //Phase text controller
+  final phase = new TextEditingController(text: "3.3");
 
   //Save state for the settings menu
   bool save = false;
@@ -52,16 +52,16 @@ class WGDialog extends StatefulWidget {
   }
 
   /*
-   * Get Amplitude value
+   * Get phase value
    * 
-   * Returns the value of amplitude of the wave.
+   * Returns the value of phase of the wave.
    * 
    * @params : none
    * @return : double 
    */
-  double getAmp() {
+  double getPhase() {
     double amp = 0.0;
-    amp = double.tryParse(amplitude.text);
+    amp = double.tryParse(phase.text);
     return amp;
   }
 
@@ -103,15 +103,15 @@ class WGDialog extends StatefulWidget {
   }
 
   /*
-   * Set amplitude value
+   * Set phase value
    * 
-   * Sets the amplitude value to the passed argument
+   * Sets the phase value to the passed argument
    * 
-   * @params : Amplitude(double)
+   * @params : phase(double)
    * @return : none 
    */
-  void setAmp(double amp) {
-    amplitude.text = "$amp";
+  void setPhase(double phs) {
+    phase.text = "$phs";
   }
 
   /*
@@ -148,8 +148,8 @@ class _WGDialogState extends State<WGDialog> {
   final _wgText = new Text("Wave generator",
       style: TextStyle(fontFamily: 'Ropa Sans', fontSize: 25));
 
-  //Amplitude text
-  final _ampText = new Text("Amplitude:",
+  //phase text
+  final _phasetext = new Text("Phase:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 20,
@@ -186,8 +186,8 @@ class _WGDialogState extends State<WGDialog> {
       borderRadius: BorderRadius.all(Radius.circular(4)),
       border: Border.all(color: Colors.grey, width: 1));
 
-  //Amplitude field decoration
-  final _ampDecoration = new BoxDecoration(
+  //phase field decoration
+  final _phaseDecoration = new BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       border: Border.all(color: Colors.grey, width: 1));
 
@@ -200,12 +200,6 @@ class _WGDialogState extends State<WGDialog> {
 
   //Unit ms
   final _unitMs = new Text(" ms",
-      textAlign: TextAlign.left,
-      style: TextStyle(
-          fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
-
-  //Unit V
-  final _unitV = new Text("V",
       textAlign: TextAlign.left,
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
@@ -263,18 +257,16 @@ class _WGDialogState extends State<WGDialog> {
                               ],
                               autovalidate: true,
                               validator: (value) {
-                                if (value == null) {
-                                  widget.enableSaveP = false;
-                                  return 'Invalid';
-                                } else if (value.isEmpty) {
-                                  widget.enableSaveP = false;
-                                  return 'Invalid';
+                                if (value == null || value.isEmpty) {
+                                  widget._validPeriod = false;
+                                  return 'Enter period';
                                 } else if (double.tryParse(value) <= 0 ||
                                     double.tryParse(value) > 3000) {
-                                  widget.enableSaveP = false;
+                                  widget._validPeriod = false;
                                   return 'Invalid';
                                 } else {
-                                  widget.enableSaveP = true;
+                                  widget._validPeriod = true;
+
                                   return null;
                                 }
                               },
@@ -290,13 +282,13 @@ class _WGDialogState extends State<WGDialog> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _ampText,
-                  SizedBox(width: SizeConfig.blockSizeHorizontal * 3.16),
+                  _phasetext,
+                  SizedBox(width: SizeConfig.blockSizeHorizontal * 11.5),
                   Container(
                     child: Container(
                         width: SizeConfig.blockSizeHorizontal * 16.7,
                         height: SizeConfig.blockSizeHorizontal * 3.92,
-                        decoration: _ampDecoration,
+                        decoration: _phaseDecoration,
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -305,31 +297,31 @@ class _WGDialogState extends State<WGDialog> {
                             ],
                             autovalidate: true,
                             validator: (value) {
-                              if (value == null) {
-                                widget.enableSaveA = false;
-                                return 'Invalid';
-                              } else if (value.isEmpty) {
-                                widget.enableSaveA = false;
-                                return 'Invalid';
+                              if (value == null || value.isEmpty) {
+                                widget._validPhase = false;
+
+                                return 'Enter phase.';
                               } else if (double.tryParse(value) <= 0 ||
-                                  double.tryParse(value) > 3.3) {
-                                widget.enableSaveA = false;
+                                  double.tryParse(value) > 1000) {
+                                widget._validPhase = false;
+
                                 return 'Invalid';
                               } else {
-                                widget.enableSaveA = true;
+                                widget._validPhase = true;
+
                                 return null;
                               }
                             },
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
-                            controller: widget.amplitude,
+                            controller: widget.phase,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: "V",
+                                hintText: "ms",
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5)))),
                   ),
-                  _unitV
+                  _unitMs
                 ]))
       ])),
       actions: [
@@ -342,7 +334,7 @@ class _WGDialogState extends State<WGDialog> {
         ),
         TextButton(
           onPressed: () {
-            if (widget.enableSaveP && widget.enableSaveA) {
+            if (widget._validPeriod && widget._validPhase) {
               widget.save = true;
               Navigator.pop(context);
             } else {}

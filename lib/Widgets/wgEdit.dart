@@ -23,8 +23,8 @@ class WaveGeneratorTile extends StatefulWidget {
   //Text editing controller for period field
   final _periodController = new TextEditingController(text: "200");
 
-  //Text editing controller for amplitude field
-  final _amplitudeController = new TextEditingController(text: "3.30");
+  //Text editing controller for phase field
+  final _phaseController = new TextEditingController(text: "3.30");
 
   //Wave type toggle
   List<bool> _waveType = [true, false, false];
@@ -84,15 +84,15 @@ class WaveGeneratorTile extends StatefulWidget {
   }
 
   /*
-   * Get amplitude value
+   * Get Phase value
    * 
-   * Returns the amplitude value.
+   * Returns the phase value.
    * 
    * @params : none
    * @return : double 
    */
-  double getAmplitude() {
-    return double.tryParse(_amplitudeController.text);
+  double getPhase() {
+    return double.tryParse(_phaseController.text);
   }
 
   /*
@@ -164,8 +164,8 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
           fontSize: 25,
           color: Color.fromARGB(255, 74, 74, 74)));
 
-  //Amplitude text
-  final _amplitudeText = new AutoSizeText("Amplitude:",
+  //Phase text
+  final _phaseText = new AutoSizeText("Phase:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 25,
@@ -188,7 +188,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
   //Is input data valid
   bool _validPeriod = true;
-  bool _validAmp = true;
+  bool _validPhase = true;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -220,7 +220,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                           });
 
                           //Send wave generator command
-                          if (_validPeriod && _validAmp) {
+                          if (_validPeriod && _validPhase) {
                             setWaveGenerator(widget.isTurnedOn);
                           } else {
                             setState(() {
@@ -255,7 +255,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         });
 
                         //Send wave-generator command
-                        if (_validAmp && _validPeriod)
+                        if (_validPhase && _validPeriod)
                           setWaveGenerator(widget.isTurnedOn);
                       },
                       isSelected: widget._waveType),
@@ -288,7 +288,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             validator: validatePeriod,
                             onEditingComplete: () {
                               //Send wave-generator command
-                              if (_validAmp && _validPeriod)
+                              if (_validPhase && _validPeriod)
                                 setWaveGenerator(widget.isTurnedOn);
                             },
                             textAlign: TextAlign.right,
@@ -308,13 +308,13 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
           new SizedBox(height: SizeConfig.blockSizeVertical * 1.0),
 
-          //Enter amplitude row
+          //Enter phase row
           new Container(
               margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.20),
               child: Row(children: [
                 SizedBox(width: SizeConfig.blockSizeVertical * 2.40),
-                _amplitudeText,
-                SizedBox(width: SizeConfig.blockSizeVertical * 2.60),
+                _phaseText,
+                SizedBox(width: SizeConfig.blockSizeVertical * 7.7),
                 Container(
                     child: Container(
                         width: SizeConfig.blockSizeVertical * 16.7,
@@ -330,22 +330,22 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             ],
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
-                            controller: widget._amplitudeController,
+                            controller: widget._phaseController,
 
                             //Input validation
                             autovalidate: true,
                             onEditingComplete: () {
                               //Send wave-generator command
-                              if (_validAmp && _validPeriod)
+                              if (_validPhase && _validPeriod)
                                 setWaveGenerator(widget.isTurnedOn);
                             },
-                            validator: validateAmp,
+                            validator: validatePhase,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5))))),
                 SizedBox(width: 5),
-                AutoSizeText("V",
+                AutoSizeText("ms",
                     style: TextStyle(
                         fontFamily: 'Ropa Sans',
                         fontSize: 20,
@@ -411,38 +411,38 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
   }
 
   /*
-   * Amplitude input validator
+   * Phase input validator
    * 
-   * Validates the amplitude input.
+   * Validates the phase input.
    * 
    * 
    * @params : Input(String)
    * @return : String(Error) 
    */
-  String validateAmp(String value) {
+  String validatePhase(String value) {
     if (value.isEmpty || value == null) {
       //Cannot be empty
-      _validAmp = false;
+      _validPhase = false;
 
-      return "Enter amplitude.";
-    } else if (double.tryParse(value) > 3.3) {
+      return "Enter phase.";
+    } else if (double.tryParse(value) > 1000) {
       //Out of range
-      _validAmp = false;
+      _validPhase = false;
 
       return "Out of range!";
     } else if (double.tryParse(value) <= 0) {
       //Out of range
-      _validAmp = false;
+      _validPhase = false;
 
       return "Out of range!";
     } else if (value.endsWith('.')) {
       //Invalid input
-      _validAmp = false;
+      _validPhase = false;
 
       return "Invalid";
     } else {
       //Valid input
-      _validAmp = true;
+      _validPhase = true;
 
       return null;
     }
@@ -462,21 +462,21 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       if (widget.source == 1) {
         //Send command with source 1 and state High
         candle.sendWGCommand(1, "H", widget.getWave(),
-            widget._periodController.text, widget._amplitudeController.text);
+            widget._periodController.text, widget._phaseController.text);
       } else if (widget.source == 2) {
         //Send command with source 2 and state High
         candle.sendWGCommand(2, "H", widget.getWave(),
-            widget._periodController.text, widget._amplitudeController.text);
+            widget._periodController.text, widget._phaseController.text);
       }
     } else {
       if (widget.source == 1) {
         //Send command with source 1 and state Low
         candle.sendWGCommand(1, "L", widget.getWave(),
-            widget._periodController.text, widget._amplitudeController.text);
+            widget._periodController.text, widget._phaseController.text);
       } else if (widget.source == 2) {
         //Send command with source 2 and state Low
         candle.sendWGCommand(2, "L", widget.getWave(),
-            widget._periodController.text, widget._amplitudeController.text);
+            widget._periodController.text, widget._phaseController.text);
       }
     }
   }
