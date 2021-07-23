@@ -256,20 +256,7 @@ class _WGDialogState extends State<WGDialog> {
                                 LengthLimitingTextInputFormatter(4)
                               ],
                               autovalidate: true,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  widget._validPeriod = false;
-                                  return 'Enter period';
-                                } else if (double.tryParse(value) <= 0 ||
-                                    double.tryParse(value) > 3000) {
-                                  widget._validPeriod = false;
-                                  return 'Invalid';
-                                } else {
-                                  widget._validPeriod = true;
-
-                                  return null;
-                                }
-                              },
+                              validator: validatePeriod,
                               textAlign: TextAlign.right,
                               keyboardType: TextInputType.number,
                               controller: widget.period,
@@ -296,22 +283,7 @@ class _WGDialogState extends State<WGDialog> {
                               LengthLimitingTextInputFormatter(4)
                             ],
                             autovalidate: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                widget._validPhase = false;
-
-                                return 'Enter phase.';
-                              } else if (double.tryParse(value) <= 0 ||
-                                  double.tryParse(value) > 1000) {
-                                widget._validPhase = false;
-
-                                return 'Invalid';
-                              } else {
-                                widget._validPhase = true;
-
-                                return null;
-                              }
-                            },
+                            validator: validatePhase,
                             textAlign: TextAlign.right,
                             keyboardType: TextInputType.number,
                             controller: widget.phase,
@@ -356,6 +328,60 @@ class _WGDialogState extends State<WGDialog> {
       } else {
         widget._waveType[index] = false;
       }
+    }
+  }
+
+  /*
+   * Validate phase
+   * 
+   * Validates phase in range of (0 - 1000)ms
+   * 
+   * @params : Input(String)
+   * @return : Error(String) 
+   */
+  String validatePhase(String value) {
+    if (value == null || value.isEmpty) {
+      //Input cannot be empty
+      widget._validPhase = false;
+
+      return 'Enter phase.';
+    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 1000) {
+      //Must be inside range
+      widget._validPhase = false;
+
+      return 'Invalid';
+    } else {
+      //Valid value
+      widget._validPhase = true;
+
+      return null;
+    }
+  }
+
+  /*
+   * Validate period
+   * 
+   * Validates period input in range of (1 - 3000)ms 
+   * 
+   * @params : Input(String)
+   * @return : Error(String)
+   */
+  String validatePeriod(String value) {
+    if (value == null || value.isEmpty) {
+      //Input cannot be empty
+      widget._validPeriod = false;
+
+      return 'Enter period';
+    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 3000) {
+      //Must be inside range
+      widget._validPeriod = false;
+
+      return 'Invalid';
+    } else {
+      //Valid value
+      widget._validPeriod = true;
+
+      return null;
     }
   }
 }
