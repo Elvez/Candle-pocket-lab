@@ -204,118 +204,134 @@ class _WGDialogState extends State<WGDialog> {
       style: TextStyle(
           fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
 
+  //Unit degree
+  final _unitDeg = new Text(" °",
+      textAlign: TextAlign.left,
+      style: TextStyle(
+          fontFamily: 'Ropa Sans', fontSize: 30, color: Colors.grey[600]));
+
+  //Input decoration
+  final _inputDecoration = new InputDecoration(
+      border: OutlineInputBorder(),
+      hintText: "ms",
+      contentPadding: EdgeInsets.only(top: 2, right: 5));
+
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return SingleChildScrollView(
         child: AlertDialog(
-      title: _wgText,
-      content: new Container(
-          child: Column(children: [
-        new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _waveText,
-            Container(
-              width: SizeConfig.blockSizeHorizontal * 22.22,
-              height: SizeConfig.blockSizeHorizontal * 3.5,
-              child: ToggleButtons(
-                borderColor: Colors.grey,
-                fillColor: Colors.white,
-                borderWidth: 2,
-                selectedBorderColor: Color.fromARGB(255, 52, 152, 199),
-                borderRadius: BorderRadius.circular(4),
-                children: [_sinImg, _sqImg, _triangImg],
-                onPressed: (int newIndex) {
-                  setState(() {
-                    toggleWave(newIndex);
-                  });
-                },
-                isSelected: widget._waveType,
-              ),
-            ),
-          ],
-        ),
-        new Container(
-            margin: EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 1.90),
-            child: Row(
+            title: _wgText,
+            content: new Container(
+                child: Column(children: [
+              //Toggle wave-type row
+              new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _periodText,
-                  SizedBox(width: SizeConfig.blockSizeHorizontal * 5.31),
+                  _waveText,
                   Container(
-                      child: Container(
-                          width: SizeConfig.blockSizeHorizontal * 16.7,
-                          height: SizeConfig.blockSizeHorizontal * 3.92,
-                          decoration: _periodDecoration,
-                          margin: EdgeInsets.only(
-                              left: SizeConfig.blockSizeHorizontal * 5.94),
-                          child: TextFormField(
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+\.?\d*')),
-                                LengthLimitingTextInputFormatter(4)
-                              ],
-                              autovalidate: true,
-                              validator: validatePeriod,
-                              textAlign: TextAlign.right,
-                              keyboardType: TextInputType.number,
-                              controller: widget.period,
-                              decoration: _periodInpDecoration))),
-                  _unitMs
-                ])),
-        new SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
-        new Container(
-            margin: EdgeInsets.only(top: SizeConfig.blockSizeHorizontal * 1.20),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _phasetext,
-                  SizedBox(width: SizeConfig.blockSizeHorizontal * 11.5),
-                  Container(
-                    child: Container(
-                        width: SizeConfig.blockSizeHorizontal * 16.7,
-                        height: SizeConfig.blockSizeHorizontal * 3.92,
-                        decoration: _phaseDecoration,
-                        child: TextFormField(
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'^\d+\.?\d*')),
-                              LengthLimitingTextInputFormatter(4)
-                            ],
-                            autovalidate: true,
-                            validator: validatePhase,
-                            textAlign: TextAlign.right,
-                            keyboardType: TextInputType.number,
-                            controller: widget.phase,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: "ms",
-                                contentPadding:
-                                    EdgeInsets.only(top: 2, right: 5)))),
+                    width: SizeConfig.blockSizeHorizontal * 22.22,
+                    height: SizeConfig.blockSizeHorizontal * 3.5,
+                    child: ToggleButtons(
+                      borderColor: Colors.grey,
+                      fillColor: Colors.white,
+                      borderWidth: 2,
+                      selectedBorderColor: Color.fromARGB(255, 52, 152, 199),
+                      borderRadius: BorderRadius.circular(4),
+                      children: [_sinImg, _sqImg, _triangImg],
+                      onPressed: (int newIndex) {
+                        setState(() {
+                          toggleWave(newIndex);
+                        });
+                      },
+                      isSelected: widget._waveType,
+                    ),
                   ),
-                  _unitMs
-                ]))
-      ])),
-      actions: [
-        TextButton(
-          onPressed: () {
-            widget.save = false;
-            Navigator.pop(context);
-          },
-          child: Text('Cancel', style: TextStyle(fontFamily: 'Ropa Sans')),
-        ),
-        TextButton(
-          onPressed: () {
-            if (widget._validPeriod && widget._validPhase) {
-              widget.save = true;
+                ],
+              ),
+
+              //Set wave period row
+              new Container(
+                  margin: EdgeInsets.only(
+                      top: SizeConfig.blockSizeHorizontal * 1.90),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _periodText,
+                        SizedBox(width: SizeConfig.blockSizeHorizontal * 5.31),
+                        Container(
+                            child: Container(
+                                width: SizeConfig.blockSizeHorizontal * 16.7,
+                                height: SizeConfig.blockSizeHorizontal * 3.92,
+                                decoration: _periodDecoration,
+                                margin: EdgeInsets.only(
+                                    left:
+                                        SizeConfig.blockSizeHorizontal * 5.94),
+                                child: TextFormField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'^\d+\.?\d*')),
+                                      LengthLimitingTextInputFormatter(4)
+                                    ],
+                                    autovalidate: true,
+                                    validator: validatePeriod,
+                                    textAlign: TextAlign.right,
+                                    keyboardType: TextInputType.number,
+                                    controller: widget.period,
+                                    decoration: _periodInpDecoration))),
+                        _unitMs
+                      ])),
+
+              new SizedBox(height: SizeConfig.blockSizeHorizontal * 1),
+
+              //Set phase row
+              new Container(
+                  margin: EdgeInsets.only(
+                      top: SizeConfig.blockSizeHorizontal * 1.20),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _phasetext,
+                        SizedBox(width: SizeConfig.blockSizeHorizontal * 11.5),
+                        Container(
+                          child: Container(
+                              width: SizeConfig.blockSizeHorizontal * 16.7,
+                              height: SizeConfig.blockSizeHorizontal * 3.92,
+                              decoration: _phaseDecoration,
+                              child: TextFormField(
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp(r'^\d+\.?\d*')),
+                                    LengthLimitingTextInputFormatter(4)
+                                  ],
+                                  autovalidate: true,
+                                  validator: validatePhase,
+                                  textAlign: TextAlign.right,
+                                  keyboardType: TextInputType.number,
+                                  controller: widget.phase,
+                                  decoration: _inputDecoration)),
+                        ),
+                        _unitDeg
+                      ]))
+            ])),
+            actions: [
+          TextButton(
+            onPressed: () {
+              widget.save = false;
               Navigator.pop(context);
-            } else {}
-          },
-          child: Text(widget.isWaveOn ? "Turn Off" : widget.actionButton,
-              style: TextStyle(fontFamily: 'Ropa Sans')),
-        ),
-      ],
-    ));
+            },
+            child: Text('Cancel', style: TextStyle(fontFamily: 'Ropa Sans')),
+          ),
+          TextButton(
+            onPressed: () {
+              if (widget._validPeriod && widget._validPhase) {
+                widget.save = true;
+                Navigator.pop(context);
+              } else {}
+            },
+            child: Text(widget.isWaveOn ? "Turn Off" : widget.actionButton,
+                style: TextStyle(fontFamily: 'Ropa Sans')),
+          )
+        ]));
   }
 
   /*
@@ -323,18 +339,16 @@ class _WGDialogState extends State<WGDialog> {
    */
   void toggleWave(int newIndex) {
     for (int index = 0; index < widget._waveType.length; index++) {
-      if (index == newIndex) {
-        widget._waveType[index] = true;
-      } else {
-        widget._waveType[index] = false;
-      }
+      (index == newIndex)
+          ? widget._waveType[index] = true
+          : widget._waveType[index] = false;
     }
   }
 
   /*
    * Validate phase
    * 
-   * Validates phase in range of (0 - 1000)ms
+   * Validates phase in range of (0 - 1000)degrees
    * 
    * @params : Input(String)
    * @return : Error(String) 
@@ -345,7 +359,7 @@ class _WGDialogState extends State<WGDialog> {
       widget._validPhase = false;
 
       return 'Enter phase.';
-    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 1000) {
+    } else if (double.tryParse(value) <= 0 || double.tryParse(value) > 360) {
       //Must be inside range
       widget._validPhase = false;
 

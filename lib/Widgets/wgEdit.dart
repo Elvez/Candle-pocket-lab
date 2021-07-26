@@ -24,7 +24,7 @@ class WaveGeneratorTile extends StatefulWidget {
   final _periodController = new TextEditingController(text: "200");
 
   //Text editing controller for phase field
-  final _phaseController = new TextEditingController(text: "3.30");
+  final _phaseController = new TextEditingController(text: "0");
 
   //Wave type toggle
   List<bool> _waveType = [true, false, false];
@@ -158,7 +158,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
           color: Color.fromARGB(255, 74, 74, 74)));
 
   //Period text
-  final _periodText = new AutoSizeText("Period:",
+  final _frequencyText = new AutoSizeText("Frequency:",
       style: TextStyle(
           fontFamily: 'Ropa Sans',
           fontSize: 25,
@@ -187,7 +187,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       child: Image.asset('images/triang.png'));
 
   //Is input data valid
-  bool _validPeriod = true;
+  bool _validFrequency = true;
   bool _validPhase = true;
   @override
   Widget build(BuildContext context) {
@@ -220,7 +220,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                           });
 
                           //Send wave generator command
-                          if (_validPeriod && _validPhase) {
+                          if (_validFrequency && _validPhase) {
                             setWaveGenerator(widget.isTurnedOn);
                           } else {
                             setState(() {
@@ -255,7 +255,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                         });
 
                         //Send wave-generator command
-                        if (_validPhase && _validPeriod)
+                        if (_validPhase && _validFrequency)
                           setWaveGenerator(widget.isTurnedOn);
                       },
                       isSelected: widget._waveType),
@@ -267,15 +267,14 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
               margin: EdgeInsets.only(top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(children: [
                 SizedBox(width: SizeConfig.blockSizeVertical * 2.40),
-                _periodText,
-                SizedBox(width: SizeConfig.blockSizeVertical * 3.16),
-                Container(
+                _frequencyText,
+                new Container(
                     child: Container(
                         width: SizeConfig.blockSizeVertical * 16.7,
                         height: SizeConfig.blockSizeVertical * 3.92,
                         decoration: _fieldDecoration,
                         margin: EdgeInsets.only(
-                            left: SizeConfig.blockSizeVertical * 5.94),
+                            left: SizeConfig.blockSizeVertical * 4.5),
                         child: TextFormField(
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -285,10 +284,10 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
 
                             //Input validation
                             autovalidate: true,
-                            validator: validatePeriod,
+                            validator: validateFrequency,
                             onEditingComplete: () {
                               //Send wave-generator command
-                              if (_validPhase && _validPeriod)
+                              if (_validPhase && _validFrequency)
                                 setWaveGenerator(widget.isTurnedOn);
                             },
                             textAlign: TextAlign.right,
@@ -299,7 +298,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5))))),
                 SizedBox(width: 5),
-                AutoSizeText("ms",
+                AutoSizeText("hz",
                     style: TextStyle(
                         fontFamily: 'Ropa Sans',
                         fontSize: 20,
@@ -336,7 +335,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                             autovalidate: true,
                             onEditingComplete: () {
                               //Send wave-generator command
-                              if (_validPhase && _validPeriod)
+                              if (_validPhase && _validFrequency)
                                 setWaveGenerator(widget.isTurnedOn);
                             },
                             validator: validatePhase,
@@ -345,7 +344,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
                                 contentPadding:
                                     EdgeInsets.only(top: 2, right: 5))))),
                 SizedBox(width: 5),
-                AutoSizeText("ms",
+                AutoSizeText("°",
                     style: TextStyle(
                         fontFamily: 'Ropa Sans',
                         fontSize: 20,
@@ -373,38 +372,38 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
   }
 
   /*
-   * Period input validator
+   * Frequency input validator
    * 
-   * Validates the period input.
+   * Validates the frequency input.
    * 
    * 
    * @params : Input(String)
    * @return : String(Error) 
    */
-  String validatePeriod(String value) {
+  String validateFrequency(String value) {
     if (value.isEmpty || value == null) {
       //Value should not be empty
-      _validPeriod = false;
+      _validFrequency = false;
 
-      return "Enter period.";
+      return "Enter Frequency.";
     } else if (double.tryParse(value) > 3000) {
       //Out of range
-      _validPeriod = false;
+      _validFrequency = false;
 
       return "Out of range!";
     } else if (double.tryParse(value) <= 0) {
       //Cannot be negative
-      _validPeriod = false;
+      _validFrequency = false;
 
       return "Out of range!";
     } else if (value.endsWith('.')) {
       //Invalid number
-      _validPeriod = false;
+      _validFrequency = false;
 
       return "Invalid";
     } else {
       //Valid input
-      _validPeriod = true;
+      _validFrequency = true;
 
       return null;
     }
@@ -425,12 +424,12 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
       _validPhase = false;
 
       return "Enter phase.";
-    } else if (double.tryParse(value) > 1000) {
+    } else if (double.tryParse(value) > 360) {
       //Out of range
       _validPhase = false;
 
       return "Out of range!";
-    } else if (double.tryParse(value) <= 0) {
+    } else if (double.tryParse(value) < 0) {
       //Out of range
       _validPhase = false;
 
@@ -458,7 +457,7 @@ class _WaveGeneratorTileState extends State<WaveGeneratorTile> {
    */
   void setWaveGenerator(bool state) {
     //Proceed if device is connected
-    if (state && candle.isDeviceConnected()) {
+    if (state) {
       if (widget.source == 1) {
         //Send command with source 1 and state High
         candle.sendWGCommand(1, "H", widget.getWave(),
