@@ -25,17 +25,16 @@ class DeviceUSB {
    * @params : none
    * @return : String 
    */
-  Future<String> getDevices() async {
+  Future<bool> getDevices() async {
     //Get list of connected devices
     _devices = await UsbSerial.listDevices();
 
     if (_devices.isEmpty) {
       //No device connected.
-      return "No device connected!";
+      return Future.value(false);
     } else {
-      print(_devices);
       //Some devices are connected
-      return "Devices found!";
+      return Future.value(true);
     }
   }
 
@@ -45,24 +44,19 @@ class DeviceUSB {
    * Tries to initialize the device, connect it and open the available port.
    * 
    * @params : none
-   * @return : none 
+   * @return : Error(String) 
    */
   Future<String> tryConnect() async {
-    //Port open result
-    bool _openResult = false;
     String result = "";
 
     if (!isConnected) {
-      //Get list of devices
-      await getDevices();
-
-      if (_devices.isNotEmpty) {
+      //Get list of available devices
+      if (await getDevices()) {
         //Create port from the first device in the list.
         port = await _devices[0].create();
 
         //Try to open port.
-        _openResult = await port.open();
-        if (_openResult) {
+        if (await port.open()) {
           //Send "Data Terminal ready" and "Ready to Send" signals
           await port.setDTR(true);
           await port.setRTS(true);
@@ -71,24 +65,29 @@ class DeviceUSB {
           await port.setPortParameters(115200, UsbPort.DATABITS_8,
               UsbPort.STOPBITS_1, UsbPort.PARITY_NONE);
 
+          //Set result string and return
           result = "Connected successfully!";
           isConnected = true;
+
           return result;
         } else {
           //Some error opening the port
           result = "Could not connect!";
           isConnected = false;
+
           return result;
         }
       } else {
         //Devices list is empty.
         result = "No connected device found!";
         isConnected = false;
+
         return result;
       }
     } else {
       //Device is already connected.
       result = "Device already connected!";
+
       return result;
     }
   }
@@ -117,9 +116,6 @@ class DeviceUSB {
     if (isConnected) {
       //Write string to port.
       await port.write(Uint8List.fromList(_packet.codeUnits));
-    } else {
-      //Device not connected.
-      print("Device not connected!");
     }
   }
 
@@ -148,14 +144,14 @@ class DeviceUSB {
    *
    * This function sends the wave generator command to the USB device.
    * Command packet - W(Source)(State)(WaveType)(Period)(Amplitude)
-   * Example - W1H120.03.30-------
+   * Example - W1H120.0!3.30-------
    *
-   * @param Source(int), State(String), Wave type(int), Period(String), Amplitude(String)
+   * @param Source(int), State(String), Wave type(int), Period(String), Phase(String)
    * example : sendWGCommand(1, "H", 1, "20.0", "3.30");
    * @return none
    */
   void sendWGCommand(
-      int source, String state, int waveType, String period, String phase) {
+      int source, String state, int waveType, String frequency, String phase) {
     String commandPacket;
     commandPacket = "W" + source.toString();
     commandPacket += state;
@@ -166,55 +162,11 @@ class DeviceUSB {
       sendPacket(commandPacket);
       return;
     } else if (state == "H") {
-      switch (waveType) {
-        case 1:
-          commandPacket += "1";
-          break;
-        case 2:
-          commandPacket += "2";
-          break;
-        case 3:
-          commandPacket += "3";
-          break;
-        default:
-          return;
-          break;
-      }
-
-      commandPacket += period;
-      commandPacket += 'A';
+      //Set parameters in command packet
+      commandPacket += waveType.toString();
+      commandPacket += frequency;
+      commandPacket += '!';
       commandPacket += phase;
-      commandPacket = fillDummy(commandPacket);
-
-      //Send Command
-      sendPacket(commandPacket);
-    }
-  }
-
-  /*
-   * Send Power source command
-   *
-   * This function sends the power source command to the USB device.
-   * Command packet - P(Source)(State)(Value)-------------
-   * Example - P1H2.50-------------
-   *
-   * @param Source(int), State(String), Amplitude(String)
-   * example : sendPSCommand(1, "H", "2.50");
-   * @return none
-   */
-  void sendPSCommand(int source, String state, String amplitude) {
-    String commandPacket;
-    commandPacket = "P" + source.toString();
-    commandPacket += state;
-
-    if (state == "L") {
-      commandPacket = fillDummy(commandPacket);
-
-      //Send Command
-      sendPacket(commandPacket);
-      return;
-    } else if (state == "H") {
-      commandPacket += amplitude;
       commandPacket = fillDummy(commandPacket);
 
       //Send Command
@@ -269,10 +221,6 @@ class DeviceUSB {
 
       //Send command
       sendPacket(commandPacket);
-
-      return;
-    } else {
-      print("Bad command");
 
       return;
     }
