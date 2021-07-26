@@ -104,21 +104,11 @@ class MultimeterTile extends StatefulWidget {
    * @params : State(bool)
    * @return : none 
    */
-  void setState(bool state) {
-    //Set state to default
-    isTurnedOn = state;
-
-    if (isTurnedOn) {
-      //Send 'Multimeter state = on' command for current channel.
-      channelName == "Channel 1"
-          ? candle.sendMulCommand(1, "H")
-          : candle.sendMulCommand(2, "H");
-    } else {
-      //Send 'Multimeter state = off' command for current channel.
-      channelName == "Channel 1"
-          ? candle.sendMulCommand(1, "L")
-          : candle.sendMulCommand(2, "L");
-    }
+  void kill() {
+    //Send 'Multimeter state = off' command for current channel.
+    channelName == "Channel 1"
+        ? candle.sendMulCommand(1, "L")
+        : candle.sendMulCommand(2, "L");
   }
 }
 
@@ -169,39 +159,41 @@ class _MultimeterTileState extends State<MultimeterTile> {
                   right: SizeConfig.blockSizeVertical * 1.20,
                   top: SizeConfig.blockSizeVertical * 1.90),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  new AutoSizeText(widget.channelName,
-                      style: _channelNameStyle),
-                  FlutterSwitch(
-                    duration: Duration(milliseconds: 200),
-                    activeColor: Color.fromARGB(255, 52, 152, 199),
-                    width: SizeConfig.blockSizeVertical * 6.32,
-                    height: SizeConfig.blockSizeVertical * 3.8,
-                    value: widget.isTurnedOn,
-                    onToggle: (value) {
-                      //Set the switch state of tile
-                      setState(() {
-                        widget.isTurnedOn = value;
-                      });
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    new AutoSizeText(widget.channelName,
+                        style: _channelNameStyle),
 
-                      //Set multimeter state on device.
-                      setMultimeter(value);
+                    //On-off switch
+                    FlutterSwitch(
+                        duration: Duration(milliseconds: 200),
+                        activeColor: Color.fromARGB(255, 52, 152, 199),
+                        width: SizeConfig.blockSizeVertical * 6.32,
+                        height: SizeConfig.blockSizeVertical * 3.8,
+                        value: widget.isTurnedOn,
+                        onToggle: (value) {
+                          //Set the switch state of tile
+                          setState(() {
+                            widget.isTurnedOn = value;
+                          });
 
-                      //Process state
-                      if (!widget.isTurnedOn) {
-                        //Dislplay zero on multimeter turned off.
-                        setState(() {
-                          widget.fieldValue = 0;
-                        });
-                      } else {
-                        //Receive values and update.
-                        loopValues();
-                      }
-                    },
-                  ),
-                ],
-              )),
+                          //Set multimeter state on device.
+                          setMultimeter(value);
+
+                          //Process state
+                          if (!widget.isTurnedOn) {
+                            //Dislplay zero on multimeter turned off.
+                            setState(() {
+                              widget.fieldValue = 0;
+                            });
+                          } else {
+                            //Receive values and update.
+                            loopValues();
+                          }
+                        })
+                  ])),
+
+          //Multimeter value area
           Container(
               decoration: _valueDecoration,
               width: SizeConfig.blockSizeHorizontal * 66.7,
@@ -210,12 +202,15 @@ class _MultimeterTileState extends State<MultimeterTile> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
+                    //Value
+                    new Container(
                         margin: EdgeInsets.only(left: 30),
                         child: new AutoSizeText(
                             widget.valueM.format(widget.fieldValue),
                             style: _valueFont)),
-                    Container(
+
+                    //Unit
+                    new Container(
                       margin: EdgeInsets.only(
                           left: SizeConfig.blockSizeVertical * 1.20,
                           top: SizeConfig.blockSizeVertical * 1.50,
@@ -270,7 +265,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
    * @return : none 
    */
   void setMultimeter(bool state) {
-    if (state && candle.isDeviceConnected()) {
+    if (state) {
       if (widget.channelName == "Channel 1") {
         //Send multimeter 'channel 1 = on'.
         candle.sendMulCommand(1, "H");

@@ -52,8 +52,8 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
                 icon: _backButton,
                 onPressed: () {
                   //Set both channels as 'off' on back press.
-                  _channelTile1.setState(false);
-                  _channelTile2.setState(false);
+                  _channelTile1.kill();
+                  _channelTile2.kill();
                   Navigator.pop(context);
                 },
               ),
@@ -80,8 +80,8 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
    */
   Future<bool> _onWillPop() {
     //Set both channels as 'off' on navigator back press.
-    _channelTile2.setState(false);
-    _channelTile1.setState(false);
+    _channelTile2.kill();
+    _channelTile1.kill();
     Navigator.of(context).pop(true);
 
     return Future.value(true);
