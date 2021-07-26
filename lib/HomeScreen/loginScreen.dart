@@ -165,27 +165,35 @@ class _SigninPageState extends State<SigninPage> {
    * @return none
    */
   void signInWithGoogle() async {
+    //This bool changes the screen to a progress indicator
     setState(() {
       _isSigningIn = true;
     });
+
+    //Try sign-in
     final user = await googleSignIn.signIn();
 
     if (user == null) {
+      //No user
       setState(() {
         _isSigningIn = false;
       });
+
       showError("Cannot sign in with Google.");
+
       return;
     } else {
+      //Authenticate user
       final googleAuth = await user.authentication;
 
+      //Sign in
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
       await _auth.signInWithCredential(credential);
 
+      //Terminate the progress indicator
       setState(() {
         _isSigningIn = false;
       });
@@ -205,20 +213,19 @@ class _SigninPageState extends State<SigninPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Error',
-                style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.red)),
-            content:
-                Text(errormessage, style: TextStyle(fontFamily: 'Ropa Sans')),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Future.delayed(Duration.zero, () {
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
+              title: Text('Error',
+                  style: TextStyle(fontFamily: 'Ropa Sans', color: Colors.red)),
+              content:
+                  Text(errormessage, style: TextStyle(fontFamily: 'Ropa Sans')),
+              actions: <Widget>[
+                TextButton(
+                    onPressed: () {
                       Navigator.pop(context);
-                    });
-                  },
-                  child: Text('Ok'))
-            ],
-          );
+                    },
+                    child: Text('Ok'))
+              ]);
         });
   }
 
