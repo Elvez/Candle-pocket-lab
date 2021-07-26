@@ -74,67 +74,59 @@ class _SigninPageState extends State<SigninPage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        body: _isSigningIn
-            ? _working
-            : SingleChildScrollView(
-                child: Container(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight,
-                  decoration: _decoration,
-                  child:
-                      Column(crossAxisAlignment: _alignment, children: <Widget>[
-                    Container(
-                      child: Stack(
-                        children: <Widget>[_header],
-                      ),
-                    ),
-                    Container(
-                        padding: EdgeInsets.only(
-                            top: SizeConfig.blockSizeVertical * 5,
-                            left: SizeConfig.blockSizeHorizontal * 10,
-                            right: SizeConfig.blockSizeHorizontal * 10),
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(height: SizeConfig.blockSizeVertical * 12),
+        onWillPop: _onWillPop,
+        child: Scaffold(
+            body: _isSigningIn
+                ? _working
+                : SingleChildScrollView(
+                    child: Container(
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.screenHeight,
+                        decoration: _decoration,
+                        child:
+                            Column(crossAxisAlignment: _alignment, children: <
+                                Widget>[
+                          Container(child: Stack(children: <Widget>[_header])),
+                          Container(
+                              padding: EdgeInsets.only(
+                                  top: SizeConfig.blockSizeVertical * 5,
+                                  left: SizeConfig.blockSizeHorizontal * 10,
+                                  right: SizeConfig.blockSizeHorizontal * 10),
+                              child: Column(children: <Widget>[
+                                SizedBox(
+                                    height: SizeConfig.blockSizeVertical * 12),
 
-                            //Sign-in with google button
-                            new Container(
-                                height: SizeConfig.blockSizeVertical * 6,
-                                child: Material(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  shadowColor: Colors.grey,
-                                  color: Colors.grey[100],
-                                  elevation: 7.0,
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    onTap: signInWithGoogle,
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Image.asset('images/google.png'),
-                                          _googleSignInText,
-                                          SizedBox(
-                                              width: SizeConfig
-                                                      .blockSizeHorizontal *
-                                                  5)
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )),
+                                //Sign-in with google button
+                                new Container(
+                                    height: SizeConfig.blockSizeVertical * 6,
+                                    child: Material(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        shadowColor: Colors.grey,
+                                        color: Colors.grey[100],
+                                        elevation: 7.0,
+                                        child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            onTap: signInWithGoogle,
+                                            child: Center(
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                  Image.asset(
+                                                      'images/google.png'),
+                                                  _googleSignInText,
+                                                  SizedBox(
+                                                      width: SizeConfig
+                                                              .blockSizeHorizontal *
+                                                          5)
+                                                ]))))),
 
-                            SizedBox(height: 10),
-                          ],
-                        )),
-                  ]),
-                ),
-              ),
-      ),
-    );
+                                SizedBox(height: 10),
+                              ]))
+                        ])))));
   }
 
   /*
