@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+//Plot maximum length
+const int MAX_PLOT_LENGTH = 1000;
+
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;

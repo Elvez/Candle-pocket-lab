@@ -40,7 +40,7 @@ class OscilloscopeScreen extends StatefulWidget {
   //xyTool data
   color ch1 = color.black;
   color ch2 = color.red;
-  var xAxis = new XGraphData(1000.0, timeUnit.milli);
+  var xAxis = new XGraphData(100.0, timeUnit.milli);
   var yAxis = new YGraphData(5.0, voltUnit.volt);
 
   //OPtool data
@@ -150,12 +150,13 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   final _axisLine = new AxisLine(color: Colors.grey[400], width: 2);
 
   //Graph plot data
-  var _ch1Data = new GraphData(100, Colors.black);
-  var _ch2Data = new GraphData(100, Colors.red);
+  var _ch1Data = new GraphData(Colors.black);
+  var _ch2Data = new GraphData(Colors.red);
   String yTitle = "V";
   String xTitle = "ms";
 
   Widget build(BuildContext context) {
+    initGraph();
     //Get screen sizes
     SizeConfig().init(context);
     return MaterialApp(
@@ -736,7 +737,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * Initialise graph
    * 
    * Initializes graph with current x range, sets plot x values accordingly. 
-   * For example if current x range is 10s, plot length will be set to 10,000 values as 
+   * For example if current x range is 10s, plot length will be set to 10,000 values, so it is set to Max as 
    * for every milli-second there is a sampled ADC value. 
    * 
    * @params : none
@@ -744,11 +745,19 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    */
   void initGraph() {
     if (widget.xAxis.unit == timeUnit.milli) {
+      //For 1ms there is one plot value
       _ch1Data.setPlotLength(widget.xAxis.range.round());
       _ch2Data.setPlotLength(widget.xAxis.range.round());
     } else if (widget.xAxis.unit == timeUnit.second) {
-      _ch1Data.setPlotLength((widget.xAxis.range * 1000).toInt());
-      _ch2Data.setPlotLength((widget.xAxis.range * 1000).toInt());
+      if (widget.xAxis.range >= 1) {
+        //Set plot length to max if range exceedes
+        _ch1Data.setPlotLength(MAX_PLOT_LENGTH);
+        _ch2Data.setPlotLength(MAX_PLOT_LENGTH);
+      } else {
+        //For 1s = 1000ms
+        _ch1Data.setPlotLength((widget.xAxis.range * 1000).toInt());
+        _ch2Data.setPlotLength((widget.xAxis.range * 1000).toInt());
+      }
     }
   }
 }

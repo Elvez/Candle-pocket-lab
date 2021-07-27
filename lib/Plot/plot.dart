@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:candle_pocketlab/OscilloscopeScreen/xyTool.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/material.dart';
 
 /*
@@ -8,9 +8,6 @@ import 'package:flutter/material.dart';
  * Usage - Graph plotting. 
  */
 class GraphData {
-  //Graph range
-  double _range;
-
   //Color
   Color color;
 
@@ -18,7 +15,7 @@ class GraphData {
   List<PlotValue> plot = [];
 
   //Constructor
-  GraphData(this._range, this.color) {
+  GraphData(this.color) {
     setColor(color);
   }
 
@@ -83,16 +80,6 @@ class GraphData {
   }
 
   /*
-   * Returns plot's current x-axis range 
-   * 
-   * @params : none
-   * @return double
-   */
-  double getRange() {
-    return _range;
-  }
-
-  /*
    * Returns plot's current length
    * 
    * @params : none
@@ -111,31 +98,11 @@ class GraphData {
    * @return : PlotValue
    */
   PlotValue getValuesAt(int index) {
-    if (index < 0) {
-      index = 0;
-    } else if (index >= plot.length) {
-      index = (plot.length - 1);
-    }
+    //Plot in range
+    if (index < 0) index = 0;
+    if (index >= plot.length) index = (plot.length - 1);
+
     return plot[index];
-  }
-
-  /*
-   * Set value at index
-   * 
-   * Sets given value at the given index in plot
-   * 
-   * @params : Value(double), index(int)
-   * @return : none 
-   */
-  void setValue(double value, int index) {
-    //In case bad value is passed
-    if (index < 0) {
-      index = 0;
-    } else if (index >= plot.length) {
-      index = (plot.length - 1);
-    }
-
-    plot[index].yVal = value;
   }
 
   /*
@@ -162,6 +129,10 @@ class GraphData {
    * @return : none 
    */
   void setPlotLength(int length) {
+    //Length in range of MAX plot length
+    if (length < 0) length = 0;
+    if (length > MAX_PLOT_LENGTH) length = MAX_PLOT_LENGTH;
+
     //Make plot null
     plot = [];
 
