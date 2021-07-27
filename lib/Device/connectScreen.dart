@@ -44,6 +44,10 @@ class _StartScreenState extends State<StartScreen> {
       color: Color.fromARGB(255, 52, 152, 199));
 
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered Connect devicec screen!");
+
+    //Init screen size
     SizeConfig().init(context);
     return MaterialApp(
         home: Scaffold(
@@ -76,6 +80,9 @@ class _StartScreenState extends State<StartScreen> {
                               new IconButton(
                                   icon: _connectIcon,
                                   onPressed: () async {
+                                    //Debug
+                                    debug("Trying connection...");
+
                                     //Try Connect USB
                                     String _result = await candle.tryConnect();
 
@@ -87,6 +94,9 @@ class _StartScreenState extends State<StartScreen> {
                                               builder: (context) =>
                                                   HomeScreen()));
                                     } else {
+                                      //Debug
+                                      debug(_result);
+
                                       //Show connection result
                                       showMessage("Info", _result);
                                     }
