@@ -133,6 +133,9 @@ class GraphData {
     if (length < 0) length = 0;
     if (length > MAX_PLOT_LENGTH) length = MAX_PLOT_LENGTH;
 
+    //Debug
+    debug("Setting plot length to $length");
+
     //Make plot null
     plot = [];
 

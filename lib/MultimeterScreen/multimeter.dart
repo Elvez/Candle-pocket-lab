@@ -1,3 +1,4 @@
+import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Widgets/header.dart';
 import 'package:candle_pocketlab/Widgets/multimeterTile.dart';
@@ -41,6 +42,9 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered Multimeter screen!");
+
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(

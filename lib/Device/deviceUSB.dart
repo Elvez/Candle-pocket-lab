@@ -1,6 +1,7 @@
 import 'dart:async' show Future;
 import 'dart:typed_data';
 import 'package:usb_serial/usb_serial.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 /*
  * This class of device is similar to device class, it uses USB for communication.
@@ -26,6 +27,9 @@ class DeviceUSB {
    * @return : String 
    */
   Future<bool> getDevices() async {
+    //Debug
+    debug("Fetching list of connections.");
+
     //Get list of connected devices
     _devices = await UsbSerial.listDevices();
 
@@ -113,6 +117,9 @@ class DeviceUSB {
    * @return : none 
    */
   void sendPacket(String _packet) async {
+    //Debug
+    debug("Sending : $_packet");
+
     if (isConnected) {
       //Write string to port.
       await port.write(Uint8List.fromList(_packet.codeUnits));

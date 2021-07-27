@@ -43,6 +43,9 @@ class PWMScreen extends StatelessWidget {
   double test;
   @override
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered PWM Output screen!");
+
     return WillPopScope(
         //Back button interception
         onWillPop: _onWillPop,

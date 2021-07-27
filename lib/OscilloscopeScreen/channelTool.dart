@@ -225,136 +225,123 @@ class _ChannelDialogState extends State<ChannelDialog> {
     return AlertDialog(
         title: _title,
         content: new Container(
-          child: Column(
-            children: [
-              new Container(
-                  child: Column(
-                children: [
-                  new Row(
+            child: Column(children: [
+          new Container(
+              child: Column(children: [
+            new Row(
+              children: [
+                _ch1Text,
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
+                FlutterSwitch(
+                  duration: Duration(milliseconds: 200),
+                  activeColor: Color.fromARGB(255, 52, 152, 219),
+                  width: SizeConfig.blockSizeHorizontal * 5.43,
+                  height: SizeConfig.blockSizeHorizontal * 3.41,
+                  value: widget.is1TurnedOn,
+                  onToggle: (value) {
+                    setState(() {
+                      widget.is1TurnedOn = value;
+                    });
+                  },
+                )
+              ],
+            ),
+            SizedBox(height: 7),
+            new Row(children: [
+              _rangeText,
+              SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
+              Container(
+                  width: SizeConfig.blockSizeHorizontal * 22.5,
+                  height: SizeConfig.blockSizeHorizontal * 3.60,
+                  child: ToggleButtons(
+                    borderColor: Colors.grey[700],
+                    fillColor: Colors.grey[350],
+                    borderWidth: 1.2,
+                    selectedBorderColor: Colors.black,
+                    selectedColor: Colors.black,
+                    borderRadius: BorderRadius.circular(4),
                     children: [
-                      _ch1Text,
-                      SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
-                      FlutterSwitch(
-                        duration: Duration(milliseconds: 200),
-                        activeColor: Color.fromARGB(255, 52, 152, 219),
-                        width: SizeConfig.blockSizeHorizontal * 5.43,
-                        height: SizeConfig.blockSizeHorizontal * 3.41,
-                        value: widget.is1TurnedOn,
-                        onToggle: (value) {
-                          setState(() {
-                            widget.is1TurnedOn = value;
-                          });
-                        },
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage20,
                       )
                     ],
-                  ),
-                  SizedBox(height: 7),
-                  new Row(
+                    onPressed: (int newIndex) {
+                      setState(() {
+                        toggleRangeCh1(newIndex);
+                      });
+                    },
+                    isSelected: widget._ch1Range,
+                  ))
+            ])
+          ])),
+          Divider(),
+          new Container(
+              child: Column(children: [
+            new Row(
+              children: [
+                _ch2Text,
+                SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
+                FlutterSwitch(
+                  duration: Duration(milliseconds: 200),
+                  activeColor: Color.fromARGB(255, 52, 152, 219),
+                  width: SizeConfig.blockSizeHorizontal * 5.43,
+                  height: SizeConfig.blockSizeHorizontal * 3.41,
+                  value: widget.is2TurnedOn,
+                  onToggle: (value) {
+                    setState(() {
+                      widget.is2TurnedOn = value;
+                    });
+                  },
+                )
+              ],
+            ),
+            SizedBox(height: 7),
+            new Row(children: [
+              _rangeText,
+              SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
+              Container(
+                  width: SizeConfig.blockSizeHorizontal * 22.5,
+                  height: SizeConfig.blockSizeHorizontal * 3.60,
+                  child: ToggleButtons(
+                    borderColor: Colors.grey[700],
+                    fillColor: Colors.grey[350],
+                    borderWidth: 1.2,
+                    selectedBorderColor: Colors.black,
+                    selectedColor: Colors.black,
+                    borderRadius: BorderRadius.circular(4),
                     children: [
-                      _rangeText,
-                      SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal * 22.5,
-                        height: SizeConfig.blockSizeHorizontal * 3.60,
-                        child: ToggleButtons(
-                          borderColor: Colors.grey[700],
-                          fillColor: Colors.grey[350],
-                          borderWidth: 1.2,
-                          selectedBorderColor: Colors.black,
-                          selectedColor: Colors.black,
-                          borderRadius: BorderRadius.circular(4),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage3,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage20,
-                            )
-                          ],
-                          onPressed: (int newIndex) {
-                            setState(() {
-                              toggleRangeCh1(newIndex);
-                            });
-                          },
-                          isSelected: widget._ch1Range,
-                        ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage3,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: _textVoltage20,
                       )
                     ],
-                  )
-                ],
-              )),
-              Divider(),
-              new Container(
-                  child: Column(
-                children: [
-                  new Row(
-                    children: [
-                      _ch2Text,
-                      SizedBox(width: SizeConfig.blockSizeHorizontal * 24.02),
-                      FlutterSwitch(
-                        duration: Duration(milliseconds: 200),
-                        activeColor: Color.fromARGB(255, 52, 152, 219),
-                        width: SizeConfig.blockSizeHorizontal * 5.43,
-                        height: SizeConfig.blockSizeHorizontal * 3.41,
-                        value: widget.is2TurnedOn,
-                        onToggle: (value) {
-                          setState(() {
-                            widget.is2TurnedOn = value;
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 7),
-                  new Row(
-                    children: [
-                      _rangeText,
-                      SizedBox(width: SizeConfig.blockSizeHorizontal * 13.90),
-                      Container(
-                        width: SizeConfig.blockSizeHorizontal * 22.5,
-                        height: SizeConfig.blockSizeHorizontal * 3.60,
-                        child: ToggleButtons(
-                          borderColor: Colors.grey[700],
-                          fillColor: Colors.grey[350],
-                          borderWidth: 1.2,
-                          selectedBorderColor: Colors.black,
-                          selectedColor: Colors.black,
-                          borderRadius: BorderRadius.circular(4),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage3,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: _textVoltage20,
-                            )
-                          ],
-                          onPressed: (int newIndex) {
-                            setState(() {
-                              toggleRangeCh2(newIndex);
-                            });
-                          },
-                          isSelected: widget._ch2Range,
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              )),
-            ],
-          ),
-        ),
+                    onPressed: (int newIndex) {
+                      setState(() {
+                        toggleRangeCh2(newIndex);
+                      });
+                    },
+                    isSelected: widget._ch2Range,
+                  ))
+            ])
+          ]))
+        ])),
         actions: [
           TextButton(
               onPressed: () {

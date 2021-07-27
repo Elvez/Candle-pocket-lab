@@ -6,6 +6,7 @@ import 'package:candle_pocketlab/OscilloscopeScreen/oscilloscope.dart';
 import 'package:candle_pocketlab/PWM & Output/pwmScreen.dart';
 import 'package:candle_pocketlab/WaveGeneratorScreen/waveGenerator.dart';
 import 'package:flutter/services.dart';
+import 'package:candle_pocketlab/Settings/settings.dart';
 
 /*
  * Class name - HomeScreen
@@ -72,6 +73,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered Connect Home screen!");
+
     return WillPopScope(
         //Back button interception
         onWillPop: _onWillPop,

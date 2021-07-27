@@ -1,3 +1,4 @@
+import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:candle_pocketlab/Widgets/header.dart';
 import 'package:candle_pocketlab/Widgets/wgEdit.dart';
@@ -38,6 +39,9 @@ class _WaveGeneratorScreenState extends State<WaveGeneratorScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered Wave-Generator screen!");
+
     return WillPopScope(
         //Back button interception
         onWillPop: _onWillPop,

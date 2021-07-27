@@ -45,7 +45,7 @@ class _StartScreenState extends State<StartScreen> {
 
   Widget build(BuildContext context) {
     //Debug
-    debug("Entered Connect devicec screen!");
+    debug("Entered Connect device screen!");
 
     //Init screen size
     SizeConfig().init(context);

@@ -156,6 +156,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   String xTitle = "ms";
 
   Widget build(BuildContext context) {
+    //Debug
+    debug("Entered Oscilloscope screen!");
+
     initGraph();
     //Get screen sizes
     SizeConfig().init(context);

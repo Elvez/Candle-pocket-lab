@@ -73,6 +73,10 @@ class _SigninPageState extends State<SigninPage> {
 
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
+    //Debug
+    debug("Entered Login screen!");
+
     return WillPopScope(
         onWillPop: _onWillPop,
         child: Scaffold(
@@ -157,6 +161,9 @@ class _SigninPageState extends State<SigninPage> {
    * @return none
    */
   void signInWithGoogle() async {
+    //Debug
+    debug("Attempting to authenticate user...");
+
     //This bool changes the screen to a progress indicator
     setState(() {
       _isSigningIn = true;
@@ -172,6 +179,9 @@ class _SigninPageState extends State<SigninPage> {
       });
 
       showError("Cannot sign in with Google.");
+
+      //Debug
+      debug("Cannot sign in with Google.");
 
       return;
     } else {
@@ -189,6 +199,9 @@ class _SigninPageState extends State<SigninPage> {
       setState(() {
         _isSigningIn = false;
       });
+
+      //Debug
+      debug("Sign-in successful!");
     }
   }
 
