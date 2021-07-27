@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 //Plot maximum length
 const int MAX_PLOT_LENGTH = 1000;
 
-//Debug mode
+//Debug mode, turn this off for release
 const bool debugEnabled = true;
 
 void debug(String message) {

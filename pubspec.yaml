@@ -85,20 +85,13 @@ flutter:
     - images/triang.png
     - images/sineWave.png
     - images/sqWave.png
-    - images/uparrow.png
-    - images/downarrow.png
     - images/pm.png
-    - images/sideMenu.png
     - images/logo.png
     - images/connection.png
-    - images/aboutUs.png
     - images/experiments.png
-    - images/logo.gif
     - images/deviceIcon.png
     - images/google.png
-    - images/facebook.png
     - images/ic.png
-    - images/gpioIcon.png
     
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
