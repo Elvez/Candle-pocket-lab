@@ -14,7 +14,7 @@ void main() {
     //Initialize Firebase Auth
     await Firebase.initializeApp();
     runApp(MaterialApp(
-      home: HomeScreen(),
+      home: SigninPage(),
     ));
   });
 }

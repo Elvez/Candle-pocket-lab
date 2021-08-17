@@ -74,7 +74,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Debug
-    debug("Entered Connect Home screen!");
+    debug("Entered Home screen!");
 
     return WillPopScope(
         //Back button interception

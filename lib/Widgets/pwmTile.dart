@@ -111,7 +111,7 @@ class _PWMTileState extends State<PWMTile> {
    * @return : none 
    */
   void setPWM(bool state) {
-    if (state && candle.isDeviceConnected()) {
+    if (state) {
       //Send PWM on command
       candle.sendPWMCommand(widget.gpio, 'H', widget._pwm.toString());
     } else {

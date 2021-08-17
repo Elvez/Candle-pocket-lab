@@ -12,7 +12,6 @@ import 'package:candle_pocketlab/OscilloscopeScreen/wavegenOSc.dart';
 import 'package:candle_pocketlab/Device/connectScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:candle_pocketlab/Plot/plot.dart';
-import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class OscilloscopeScreen extends StatefulWidget {
@@ -51,8 +50,6 @@ class OscilloscopeScreen extends StatefulWidget {
   double _phase = 3.3;
   double _period = 100;
   int _waveType = 1;
-
-  //Plot values
 
   _OscilloscopeScreenState createState() => _OscilloscopeScreenState();
 }
@@ -484,7 +481,7 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * @params : none
    * @return : none
    */
-  void startChannel1() async {
+  void startChannels() async {
     //Packet receive buffer
     String _packet = "";
 
@@ -519,21 +516,6 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         else
           iter++;
       });
-    } else {}
-  }
-
-  /*
-   * Channel 1 loop
-   * 
-   * Loops values in the Channel 1 plot
-   * 
-   * @params : none
-   * @return : none
-   */
-  void startChannel2() async {
-    //Start channel
-    if (_graphState) {
-      //TODO: start loop
     } else {}
   }
 

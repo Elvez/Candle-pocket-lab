@@ -208,7 +208,7 @@ class _WGDialogState extends State<WGDialog> {
   final _unitDeg = new Text(" °",
       textAlign: TextAlign.left,
       style: TextStyle(
-          fontFamily: 'Ropa Sans', fontSize: 30, color: Colors.grey[600]));
+          fontFamily: 'Ropa Sans', fontSize: 20, color: Colors.grey[600]));
 
   //Input decoration
   final _inputDecoration = new InputDecoration(

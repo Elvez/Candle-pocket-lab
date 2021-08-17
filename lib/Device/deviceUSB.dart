@@ -123,7 +123,11 @@ class DeviceUSB {
     if (isConnected) {
       //Write string to port.
       await port.write(Uint8List.fromList(_packet.codeUnits));
+
+      return;
     }
+
+    debug("Not connected!");
   }
 
   /*
