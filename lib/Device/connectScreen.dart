@@ -4,9 +4,6 @@ import 'package:candle_pocketlab/Device/deviceUSB.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
-//Global bluetooth device instance
-DeviceUSB candle = DeviceUSB();
-
 /* Class name - StartScreen
  * This class is the UI screen class for connect screen.
  *
