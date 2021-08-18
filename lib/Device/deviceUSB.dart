@@ -262,3 +262,6 @@ class DeviceUSB {
     return command;
   }
 }
+
+//Global bluetooth device instance
+DeviceUSB candle = DeviceUSB();
