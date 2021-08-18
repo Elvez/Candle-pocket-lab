@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'package:candle_pocketlab/Device/deviceUSB.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/services.dart';

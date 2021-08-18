@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:candle_pocketlab/Settings/settings.dart';
-import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'package:candle_pocketlab/Device/deviceUSB.dart';
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -165,7 +165,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         style: _channelNameStyle),
 
                     //On-off switch
-                    FlutterSwitch(
+                    new FlutterSwitch(
                         duration: Duration(milliseconds: 200),
                         activeColor: Color.fromARGB(255, 52, 152, 199),
                         width: SizeConfig.blockSizeVertical * 6.32,
@@ -194,7 +194,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
                   ])),
 
           //Multimeter value area
-          Container(
+          new Container(
               decoration: _valueDecoration,
               width: SizeConfig.blockSizeHorizontal * 66.7,
               height: SizeConfig.blockSizeVertical * 12.2,

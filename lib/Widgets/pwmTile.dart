@@ -1,7 +1,7 @@
 import 'package:candle_pocketlab/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:candle_pocketlab/Device/connectScreen.dart';
+import 'package:candle_pocketlab/Device/deviceUSB.dart';
 
 class PWMTile extends StatefulWidget {
   //Tile height
