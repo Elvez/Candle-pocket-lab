@@ -12,7 +12,7 @@ class GraphData {
   Color color;
 
   //Plot vector
-  List<PlotValue> plot = [];
+  List<PlotValue> plot = List.filled(100, PlotValue(null, null));
 
   //Constructor
   GraphData(this.color) {
@@ -119,32 +119,6 @@ class GraphData {
       plot.add(PlotValue(iter.toDouble(), null));
     }
   }
-
-  /*
-   * Set plot length
-   * 
-   * Sets plot length to given value and fills x values, y values are set to null
-   * 
-   * @params : Length(int)
-   * @return : none 
-   */
-  void setPlotLength(int length) {
-    //Length in range of MAX plot length
-    if (length < 0) length = 0;
-    if (length > MAX_PLOT_LENGTH) length = MAX_PLOT_LENGTH;
-
-    //Debug
-    debug("Setting plot length to $length");
-
-    //Make plot null
-    plot = [];
-
-    //Set length
-    while (length > 0) {
-      plot.add(PlotValue(null, null));
-      length = length - 1;
-    }
-  }
 }
 
 class PlotValue {
@@ -154,4 +128,14 @@ class PlotValue {
 
   //Constructor
   PlotValue(this.xVal, this.yVal);
+}
+
+class XGraphData {
+  double range;
+  XGraphData(this.range);
+}
+
+class YGraphData {
+  double range;
+  YGraphData(this.range);
 }
