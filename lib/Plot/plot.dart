@@ -12,7 +12,7 @@ class GraphData {
   Color color;
 
   //Plot vector
-  List<PlotValue> plot = List.filled(100, PlotValue(null, null));
+  List<PlotValue> plot = List.filled(201, PlotValue(null, null));
 
   //Constructor
   GraphData(this.color) {
@@ -116,7 +116,7 @@ class GraphData {
   void reset() {
     //Reset
     for (int iter = 0; iter < plot.length; iter++) {
-      plot.add(PlotValue(iter.toDouble(), null));
+      plot[iter] = PlotValue(0, 0);
     }
   }
 }
