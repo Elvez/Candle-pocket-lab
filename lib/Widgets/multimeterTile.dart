@@ -236,7 +236,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
     //Parse value for voltmeter
     double _value = 0;
 
-    if (candle.isDeviceConnected()) {
+    if (candle.isDeviceConnected() && widget.isTurnedOn) {
       candle.port.inputStream.listen((Uint8List data) {
         //Decode bytes to string
         _packet = ascii.decode(data);
