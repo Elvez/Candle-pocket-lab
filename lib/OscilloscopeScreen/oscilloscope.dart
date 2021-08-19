@@ -26,6 +26,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   //Graph on/off state
   bool _graphState = false;
 
+  //Iterator
+  int plotPointer = 0;
+
   //Free device
   bool turnOff = false;
 
@@ -56,9 +59,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   final _axisLine = new AxisLine(color: Colors.grey[400], width: 2);
 
   //Graph plot data
-  var _channelData = new GraphData(Colors.black);
+  var _channelData = new GraphData(Colors.green);
   String yTitle = "V";
   String xTitle = "ms";
+  ChartSeriesController _chartSeriesController;
 
   Widget build(BuildContext context) {
     //Debug
@@ -89,12 +93,19 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               series: <ChartSeries>[
                                 //Channel 1 plot
                                 LineSeries<PlotValue, double>(
+                                    width: 3.5,
                                     dataSource: _channelData.plot,
                                     color: _channelData.color,
                                     xValueMapper: (PlotValue _plot, _) =>
                                         _plot.xVal,
                                     yValueMapper: (PlotValue _plot, _) =>
-                                        _plot.yVal),
+                                        _plot.yVal,
+
+                                    //Control chart plot
+                                    onRendererCreated:
+                                        (ChartSeriesController controller) {
+                                      _chartSeriesController = controller;
+                                    })
                               ],
 
                               //X axis customization
@@ -165,7 +176,9 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           setOscilloscope(_graphState);
 
                           //Start channel
-                          if (_graphState) startChannel();
+                          if (_graphState) {
+                            startChannel();
+                          }
                         }))
               ])
             ]))));
@@ -186,32 +199,30 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
     //Parse value for voltmeter
     double _value = 0;
 
-    //Iterator
-    int iter = 0;
-
     if (candle.isDeviceConnected() && _graphState) {
       candle.port.inputStream.listen((Uint8List data) {
         //Decode bytes to string
         _packet = ascii.decode(data);
 
-        //Remove tail : Packet received = 1000!, After tail remove = 1000
-        if (_packet != null && _packet.isNotEmpty) {
-          _packet = _packet.substring(0, _packet.length - 1);
-        }
-
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
         _value = double.tryParse(_packet);
-        if (_value != null) _value = (_value / 102.4) - 20.0;
-        print(_value);
 
-        setState(() {
-          _channelData.plot[iter] = PlotValue(iter.toDouble(), _value);
-        });
-
-        if (iter == 99) {
-          iter = 0;
+        if (_value != null) {
+          _value = (_value / 102.4) - 20.0;
         } else {
-          iter++;
+          _value = 0;
+        }
+
+        if (mounted) {
+          setState(() {
+            _channelData.plot[plotPointer] =
+                PlotValue(plotPointer.toDouble(), _value);
+            if (plotPointer == MAX_X_RANGE) {
+              plotPointer = 0;
+            } else {
+              plotPointer++;
+            }
+          });
         }
       });
     }
