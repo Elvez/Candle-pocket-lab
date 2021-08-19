@@ -89,7 +89,6 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               series: <ChartSeries>[
                                 //Channel 1 plot
                                 LineSeries<PlotValue, double>(
-                                    animationDuration: 10,
                                     dataSource: _channelData.plot,
                                     color: _channelData.color,
                                     xValueMapper: (PlotValue _plot, _) =>
@@ -145,11 +144,11 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                     height: SizeConfig.blockSizeVertical * 15.0,
                     child: FloatingActionButton(
                         child: new Icon(
-                          widget.chActive
+                          _graphState
                               ? Icons.pause_rounded
                               : Icons.play_arrow_rounded,
                           size: SizeConfig.blockSizeHorizontal * 8.5,
-                          color: widget.chActive
+                          color: _graphState
                               ? Color.fromARGB(255, 52, 152, 199)
                               : Color.fromARGB(255, 152, 52, 100),
                         ),
@@ -160,14 +159,13 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                         onPressed: () {
                           setState(() {
                             _graphState = !_graphState;
-                            widget.chActive = !widget.chActive;
                           });
 
                           //Turn On/off oscilloscope
-                          setOscilloscope(widget.chActive);
+                          setOscilloscope(_graphState);
 
                           //Start channel
-                          if (widget.chActive) startChannel();
+                          if (_graphState) startChannel();
                         }))
               ])
             ]))));
@@ -181,24 +179,40 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * @params : none
    * @return : none 
    */
-  void startChannel() {
+  void startChannel() async {
     //Packet receive buffer
     String _packet = "";
 
     //Parse value for voltmeter
     double _value = 0;
 
-    if (candle.isDeviceConnected()) {
+    //Iterator
+    int iter = 0;
+
+    if (candle.isDeviceConnected() && _graphState) {
       candle.port.inputStream.listen((Uint8List data) {
         //Decode bytes to string
         _packet = ascii.decode(data);
 
         //Remove tail : Packet received = 1000!, After tail remove = 1000
-        _packet = _packet.substring(0, _packet.length - 1);
+        if (_packet != null && _packet.isNotEmpty) {
+          _packet = _packet.substring(0, _packet.length - 1);
+        }
 
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
         _value = double.tryParse(_packet);
-        _value = (_value / 102.4) - 20.0;
+        if (_value != null) _value = (_value / 102.4) - 20.0;
+        print(_value);
+
+        setState(() {
+          _channelData.plot[iter] = PlotValue(iter.toDouble(), _value);
+        });
+
+        if (iter == 99) {
+          iter = 0;
+        } else {
+          iter++;
+        }
       });
     }
   }
