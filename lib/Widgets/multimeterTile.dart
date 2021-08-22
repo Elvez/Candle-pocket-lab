@@ -8,6 +8,14 @@ import 'package:candle_pocketlab/Device/deviceUSB.dart';
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 
+//Global Tiles
+MultimeterTile channelTile1 = new MultimeterTile(1);
+MultimeterTile channelTile2 = new MultimeterTile(2);
+
+//Global switch states
+bool isVoltmeterOn = false;
+bool isAmmeterOn = false;
+
 /*
  * Class name - MultimeterTile
  * 
@@ -16,37 +24,22 @@ import 'package:auto_size_text/auto_size_text.dart';
  * @members : Channel name, unit area, value area,  on/off switch. 
  */
 class MultimeterTile extends StatefulWidget {
-  //Channel name
-  String channelName;
-
   //Tile on/off state
   bool isTurnedOn = false;
 
   //Value of the multimeter
   double fieldValue = 0;
 
-  //Unit
-  final String unit;
+  //Channel name
+  final int channelNumber;
 
   //Value formater - (004.400v) -> (04.40V)
   var valueM = NumberFormat("##00.00", "en-US");
 
   //Constructor
-  MultimeterTile(this.channelName, this.unit);
+  MultimeterTile(this.channelNumber);
 
   _MultimeterTileState createState() => _MultimeterTileState();
-
-  /*
-   * Get channel name
-   * 
-   * Returns the channel name.
-   * 
-   * @params : none
-   * @return : String 
-   */
-  String getChannelName() {
-    return channelName;
-  }
 
   /*
    * Get channel state
@@ -73,42 +66,20 @@ class MultimeterTile extends StatefulWidget {
   }
 
   /*
-   * Get tile unit
+   * Turn Off tile
    * 
-   * Returns the Unit of the tile
+   * Turns tile switch off and sends stop command 
    * 
    * @params : none
-   * @return : String 
+   * @return : none
    */
-  String getUnit() {
-    return unit;
-  }
-
-  /*
-   * Set channel name
-   * 
-   * Sets passed argument as the channel name.
-   * 
-   * @params : Name(String)
-   * @return : none 
-   */
-  void setChannelName(String name) {
-    channelName = name;
-  }
-
-  /*
-   * Set channel state
-   * 
-   * Sets passed argument as the channel state.
-   * 
-   * @params : State(bool)
-   * @return : none 
-   */
-  void kill() {
-    //Send 'Multimeter state = off' command for current channel.
-    channelName == "Channel 1"
-        ? candle.sendMulCommand(1, "L")
-        : candle.sendMulCommand(2, "L");
+  void turnOff() {
+    isTurnedOn = false;
+    if (channelNumber == 1) {
+      candle.sendMulCommand(1, "L");
+    } else {
+      candle.sendMulCommand(2, "L");
+    }
   }
 }
 
@@ -161,7 +132,7 @@ class _MultimeterTileState extends State<MultimeterTile> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    new AutoSizeText(widget.channelName,
+                    new AutoSizeText("Channel ${widget.channelNumber}",
                         style: _channelNameStyle),
 
                     //On-off switch
@@ -173,12 +144,13 @@ class _MultimeterTileState extends State<MultimeterTile> {
                         value: widget.isTurnedOn,
                         onToggle: (value) {
                           //Set the switch state of tile
-                          setState(() {
-                            widget.isTurnedOn = value;
-                          });
+                          onSwitch(value);
 
-                          //Set multimeter state on device.
-                          setMultimeter(value);
+                          //Process state
+                          if (widget.isTurnedOn) {
+                            //Receive values and update.
+                            loopValues();
+                          }
 
                           //Process state
                           if (!widget.isTurnedOn) {
@@ -186,9 +158,6 @@ class _MultimeterTileState extends State<MultimeterTile> {
                             setState(() {
                               widget.fieldValue = 0;
                             });
-                          } else {
-                            //Receive values and update.
-                            loopValues();
                           }
                         })
                   ])),
@@ -215,10 +184,54 @@ class _MultimeterTileState extends State<MultimeterTile> {
                           left: SizeConfig.blockSizeVertical * 1.20,
                           top: SizeConfig.blockSizeVertical * 1.50,
                           right: SizeConfig.blockSizeVertical * 3.60),
-                      child: new AutoSizeText(widget.unit, style: _unitFont),
+                      child: new AutoSizeText(
+                          widget.channelNumber == 1 ? "V" : "mA",
+                          style: _unitFont),
                     )
                   ]))
         ]));
+  }
+
+  /*
+   * Set multimeter state
+   * 
+   * Call on button pressed
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void onSwitch(bool value) {
+    //Set initial states
+    setState(() {
+      widget.isTurnedOn = value;
+
+      if (widget.channelNumber == 1) {
+        isVoltmeterOn = value;
+      } else {
+        isAmmeterOn = value;
+      }
+    });
+
+    //Change state only if all tiles are IDLE
+    if (widget.channelNumber == 1) {
+      if (isAmmeterOn) {
+        setState(() {
+          widget.isTurnedOn = false;
+          isVoltmeterOn = false;
+        });
+      } else {
+        switchVoltmeter(widget.isTurnedOn);
+      }
+    } else if (widget.channelNumber == 2) {
+      if (isVoltmeterOn) {
+        setState(() {
+          widget.isTurnedOn = false;
+          isAmmeterOn = false;
+        });
+      } else {
+        switchAmmeter(widget.isTurnedOn);
+      }
+    }
   }
 
   /*
@@ -246,41 +259,41 @@ class _MultimeterTileState extends State<MultimeterTile> {
 
         //Parse and convert to voltage, MinValue = 0, MaxValue = 4096 | ResultMin = -20.0, ResultMax = 20.0
         _value = double.tryParse(_packet);
-        _value = (_value / 102.4) - 20.0;
+        if (_value != null) {
+          _value = (_value / 102.4) - 20.0;
+        }
 
         //Loop values
-        setState(() {
-          widget.fieldValue = _value;
-        });
+        if (mounted && widget.isTurnedOn) {
+          setState(() {
+            widget.fieldValue = _value;
+          });
+        }
       });
     }
   }
 
   /*
-   * Send multimeter command
+   * Switch on/off voltmeter
    * 
-   * Sends the multimeter command to bluetooth device.
+   * Sends on/off command for channel 1.
    * 
-   * @params : State(bool)
+   * @params : State(Bool)
    * @return : none 
    */
-  void setMultimeter(bool state) {
-    if (state) {
-      if (widget.channelName == "Channel 1") {
-        //Send multimeter 'channel 1 = on'.
-        candle.sendMulCommand(1, "H");
-      } else if (widget.channelName == "Channel 2") {
-        //Send multimeter 'channel 2 = on'.
-        candle.sendMulCommand(2, "H");
-      }
-    } else {
-      if (widget.channelName == "Channel 1") {
-        //Send multimeter 'channel 1 = off'.
-        candle.sendMulCommand(1, "L");
-      } else if (widget.channelName == "Channel 2") {
-        //Send multimeter 'channel 2 = off'.
-        candle.sendMulCommand(2, "L");
-      }
-    }
+  void switchVoltmeter(bool state) {
+    state ? candle.sendMulCommand(1, "H") : candle.sendMulCommand(1, "L");
+  }
+
+  /*
+   * Switch on/off ammeter
+   * 
+   * Sends on/off command for channel 2.
+   * 
+   * @params : State(Bool)
+   * @return : none 
+   */
+  void switchAmmeter(bool state) {
+    state ? candle.sendMulCommand(2, "H") : candle.sendMulCommand(2, "L");
   }
 }

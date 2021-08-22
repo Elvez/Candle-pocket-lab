@@ -21,12 +21,6 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
   //Appbar shadow colour
   final int _marginColor = 13948116;
 
-  //Channel 1 Tile
-  var _channelTile1 = MultimeterTile("Channel 1", "V");
-
-  //Channel 2 Tile
-  var _channelTile2 = MultimeterTile("Channel 2", "mA");
-
   //Back button icon
   final _backButton =
       new Icon(Icons.arrow_back_ios, color: Color.fromARGB(255, 52, 152, 199));
@@ -56,8 +50,13 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
                 icon: _backButton,
                 onPressed: () {
                   //Set both channels as 'off' on back press.
-                  _channelTile1.kill();
-                  _channelTile2.kill();
+                  channelTile1.turnOff();
+                  channelTile2.turnOff();
+
+                  //Reset switches
+                  isAmmeterOn = false;
+                  isVoltmeterOn = false;
+
                   Navigator.pop(context);
                 },
               ),
@@ -71,7 +70,7 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
 
           //Body
           body: SingleChildScrollView(
-            child: Column(children: [_header, _channelTile1, _channelTile2]),
+            child: Column(children: [_header, channelTile1, channelTile2]),
           ),
         ));
   }
@@ -84,8 +83,13 @@ class _MultimeterScreenState extends State<MultimeterScreen> {
    */
   Future<bool> _onWillPop() {
     //Set both channels as 'off' on navigator back press.
-    _channelTile2.kill();
-    _channelTile1.kill();
+    channelTile1.turnOff();
+    channelTile2.turnOff();
+
+    //Reset switches
+    isAmmeterOn = false;
+    isVoltmeterOn = false;
+
     Navigator.of(context).pop(true);
 
     return Future.value(true);
