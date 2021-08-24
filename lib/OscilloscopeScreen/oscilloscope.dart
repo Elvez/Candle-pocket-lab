@@ -62,7 +62,6 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
   var _channelData = new GraphData(Colors.green);
   String yTitle = "V";
   String xTitle = "ms";
-  ChartSeriesController _chartSeriesController;
 
   Widget build(BuildContext context) {
     //Debug
@@ -93,19 +92,16 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                               series: <ChartSeries>[
                                 //Channel 1 plot
                                 LineSeries<PlotValue, double>(
-                                    width: 3.5,
-                                    dataSource: _channelData.plot,
-                                    color: _channelData.color,
-                                    xValueMapper: (PlotValue _plot, _) =>
-                                        _plot.xVal,
-                                    yValueMapper: (PlotValue _plot, _) =>
-                                        _plot.yVal,
+                                  width: 3.5,
+                                  dataSource: _channelData.plot,
+                                  color: _channelData.color,
+                                  xValueMapper: (PlotValue _plot, _) =>
+                                      _plot.xVal,
+                                  yValueMapper: (PlotValue _plot, _) =>
+                                      _plot.yVal,
 
-                                    //Control chart plot
-                                    onRendererCreated:
-                                        (ChartSeriesController controller) {
-                                      _chartSeriesController = controller;
-                                    })
+                                  //Control chart plot
+                                )
                               ],
 
                               //X axis customization
@@ -177,7 +173,16 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
                           //Start channel
                           if (_graphState) {
+                            setState(() {
+                              _channelData.reset();
+                              plotPointer = 0;
+                            });
                             startChannel();
+                          } else {
+                            setState(() {
+                              _channelData.reset();
+                              plotPointer = 0;
+                            });
                           }
                         }))
               ])
@@ -209,15 +214,14 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
 
         if (_value != null) {
           _value = (_value / 102.4) - 20.0;
-        } else {
-          _value = 0;
         }
 
         if (mounted) {
           setState(() {
             _channelData.plot[plotPointer] =
-                PlotValue(plotPointer.toDouble(), _value);
-            if (plotPointer == MAX_X_RANGE) {
+                PlotValue(plotPointer.toDouble() * 20, _value);
+
+            if (plotPointer == MAX_PLOT_LENGTH) {
               plotPointer = 0;
             } else {
               plotPointer++;
@@ -234,10 +238,10 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
    * This function is called at the constructor, sets default values. 
    */
   void initState() {
-    //Set default x axis range to 100ms
+    //Set default x axis range to 4000ms
     widget.xAxis.range = MAX_X_RANGE;
 
-    //Set default y axis range to 5.0V
+    //Set default y axis range to 30V
     widget.yAxis.range = MAX_Y_RANGE;
 
     super.initState();

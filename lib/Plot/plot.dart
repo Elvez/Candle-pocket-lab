@@ -116,7 +116,7 @@ class GraphData {
   void reset() {
     //Reset
     for (int iter = 0; iter < plot.length; iter++) {
-      plot[iter] = PlotValue(0, 0);
+      plot[iter] = PlotValue(null, null);
     }
   }
 }

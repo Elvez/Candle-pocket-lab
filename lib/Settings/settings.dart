@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 
 //Plot maximum length
-const int MAX_PLOT_LENGTH = 100;
+const int MAX_PLOT_LENGTH = 200;
 
 //Plot maximum Y range
 const double MAX_Y_RANGE = 50.0;
 
 //Plot maximum X range ms
-const double MAX_X_RANGE = 200;
+const double MAX_X_RANGE = 4000;
 
 //Debug mode, turn this off for release
 const bool debugEnabled = true;
