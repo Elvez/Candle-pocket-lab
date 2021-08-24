@@ -171,18 +171,11 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
                           //Turn On/off oscilloscope
                           setOscilloscope(_graphState);
 
-                          //Start channel
+                          //Start or stop channel
                           if (_graphState) {
-                            setState(() {
-                              _channelData.reset();
-                              plotPointer = 0;
-                            });
                             startChannel();
                           } else {
-                            setState(() {
-                              _channelData.reset();
-                              plotPointer = 0;
-                            });
+                            stopChannel();
                           }
                         }))
               ])
@@ -230,6 +223,25 @@ class _OscilloscopeScreenState extends State<OscilloscopeScreen> {
         }
       });
     }
+  }
+
+  /*
+   * Stop channel
+   * 
+   * Workaround for a bug where refresh rates magnifies on each play/pause. This functions resets 
+   * the screen with a hack.
+   * TODO: To be fixed in future.
+   * 
+   * @params : none
+   * @return : none 
+   */
+  void stopChannel() {
+    //Go back one page
+    Navigator.pop(context);
+
+    //Come back to Oscilloscope screen, resetting the screen.
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => OscilloscopeScreen()));
   }
 
   /*
